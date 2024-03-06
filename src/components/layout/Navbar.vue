@@ -1,5 +1,5 @@
 <script setup>
-
+import { navbar_routes } from '@/router/routes';
 </script>
 
 <template>
@@ -7,6 +7,9 @@
   <div class="navbar navbar__box">
     <nav>
       <ul class="navbar__items">
+        <li class="navbar__item" v-for="route in navbar_routes">
+          <router-link :to="route.path">{{ route.meta.name }}</router-link>
+        </li>
         <li class="navbar__item">item1</li>
         <li class="navbar__item">item2</li>
         <li class="navbar__item">item3</li>

@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import {routes} from './routes'
 
-let router = createRouter({
+export const router = createRouter({
   routes: routes,
   history: createWebHistory()
 })
 
-export default router;
+export const onPage = (name)=>name == router.currentRoute.value.name

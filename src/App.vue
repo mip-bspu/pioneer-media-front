@@ -33,6 +33,7 @@ import Sidebar from "./components/layout/Sidebar.vue"
 
   &__main{
     height: 100%;
+    flex-wrap: nowrap;
   }
 
   &__view{
