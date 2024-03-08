@@ -12,7 +12,7 @@ body, html{
 
   font-size: 16px;
 
-  background-color: #fbf4fe;
+  background-color: #fefcff;
 }
 
 button{
@@ -36,4 +36,9 @@ a{
 
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+.q-stepper{
+  background: inherit;
+  box-shadow: none;
 }
