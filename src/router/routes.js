@@ -10,7 +10,8 @@ export const routes = [
     component: Content,
     meta: {
       name: "Контент",
-      layout: ["sidebar"]
+      layout: ["sidebar"],
+      icon: "mdi-motion-play"
     }
   },
 
@@ -20,7 +21,8 @@ export const routes = [
     component: Device,
     meta: {
       name: "Устройства",
-      layout: ["sidebar"]
+      layout: ["sidebar"],
+      icon: "mdi-cellphone-link"
     }
   },
 ]

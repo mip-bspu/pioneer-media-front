@@ -14,7 +14,15 @@ import {router, onPage} from '@/router'
         :class="'sidebar__item' + (onPage(route.name) ? ' sidebar__item_active' : '')" 
         v-for="route in sidebar_routes"
       >
-        <router-link :to="route.path">{{ route.meta.name }}</router-link>
+        <router-link :to="route.path">
+          <div class="row no-wrap items-center" style="gap: 0.4rem;">
+            <q-icon :name="route.meta.icon" v-if="route.meta.icon"/>
+
+            <span>
+              {{ route.meta.name }}
+            </span>
+          </div>
+        </router-link>
       </li>
     </ul>
   </nav>
@@ -47,11 +55,11 @@ import {router, onPage} from '@/router'
   &__items{
     padding-top: 8vh;
 
-    font-size: 1.52rem;
+    font-size: 1.4rem;
   }
 
   &__item:not(:first-child){
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
   }
 
   &__item{
@@ -64,7 +72,7 @@ import {router, onPage} from '@/router'
       border-left: 3px solid white;
       padding-left: 1rem;
 
-      font-size: 1.6rem;
+      font-size: 1.56rem;
     }
   }
 }
