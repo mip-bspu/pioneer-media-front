@@ -1,0 +1,42 @@
+<script setup>
+import { ref } from 'vue'
+
+defineProps({
+  selected: {type: Object, default: null}
+})
+
+const tags = ref([
+  'school', 'city',
+  'sectionA'
+])
+</script>
+
+<template>
+<form class="form-set">
+  <div class="form-set__wrapper">
+    <label class="form-set__input">
+      <span class="form-set__label">Название:</span>
+      <q-input outlined dense/>
+    </label>
+
+    <label class="form-set__input">
+      <span class="form-set__label">Дата окончания:</span>
+      <ui-date-input outlined dense/>
+    </label>
+
+    <label class="form-set__input">
+      <span class="form-set__label">Дата окончания:</span>
+        <q-select
+            outlined dense
+            :options="tags"
+            multiple
+            use-chips
+        />
+    </label>
+  </div>
+</form>
+</template>
+
+<style lang="scss" scoped>
+
+</style>
