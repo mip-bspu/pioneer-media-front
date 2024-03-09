@@ -3,6 +3,7 @@ import { Quasar } from 'quasar'
 import quasarLang from 'quasar/lang/ru'
 import quasarIconSet from "quasar/icon-set/mdi-v6";
 import { router } from "@/router"
+import ComponentsUI from "@/components/UI"
 
 import App from './App.vue'
 
@@ -21,5 +22,9 @@ app.use(Quasar, {
 })
 
 app.use(router)
+
+Object.keys(ComponentsUI).forEach(component=>{
+  app.component(component, ComponentsUI[component])
+})
 
 app.mount('#app')
