@@ -8,9 +8,9 @@ const emit = defineEmits([])
 
 
 const contents = ref([
-  {name: 'content 1', from: '', to: '', file: null, isSetup: true},
-  {name: 'content 2', from: '', to: '', file: null, isSetup: true},
-  {name: 'content 3', from: '', to: '', file: null, isSetup: true}
+  {name: 'content 1', from: '', to: '', file: null, isSetup: false, type: 'изображение'},
+  {name: 'content 2', from: '', to: '', file: null, isSetup: false, type: 'видео'},
+  {name: 'content 3', from: '', to: '', file: null, isSetup: false}
 ])
 </script>
 
@@ -20,12 +20,14 @@ const contents = ref([
     <thead>
       <tr>
         <th>Название</th>
+        <th>Тип</th>
         <th>Настроен</th>
       </tr>
     </thead>
     <tbody>
       <tr class="content__row" v-for="content in contents" v-ripple>
         <td>{{ content.name }}</td>
+        <td>{{ content.type }}</td>
         <td>{{ content.isSetup }}</td>
       </tr>
     </tbody>
@@ -51,7 +53,6 @@ const contents = ref([
       border: 1px solid rgba(0,0,0,0.1);
     }
     td:first-child{
-      border-right: 0;
       border-radius: 0.6rem 0 0 0.6rem;
     }
     td:last-child{
@@ -59,6 +60,9 @@ const contents = ref([
     }
     td:not(:first-child){
       border-left: 0;
+    }
+    td:not(:last-child){
+      border-right: 0;
     }
   }
 
