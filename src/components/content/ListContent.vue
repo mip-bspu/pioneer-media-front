@@ -2,43 +2,76 @@
 import { ref } from 'vue'
 
 defineProps({
-  contents: {type: Array, default: []},
-  selected: {type: Object, default: null}
 })
 
-const emit = defineEmits(['update:selected'])
+const emit = defineEmits([])
 
 
 const contents = ref([
-  {name: 'content 1', isSetup: true},
-  {name: 'content 2'},
-  {name: 'content 3'}
+  {name: 'content 1', from: '', to: '', file: null, isSetup: true},
+  {name: 'content 2', from: '', to: '', file: null, isSetup: true},
+  {name: 'content 3', from: '', to: '', file: null, isSetup: true}
 ])
 </script>
 
 <template>
 <div class="content">
-  <div class="content__items">
-    <div class="content__item card" v-for="content in contents">
-      <span>{{ content.name }}</span>
-    </div>
-  </div>
+  <table class="content__table">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th>Настроен</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="content__row" v-for="content in contents" v-ripple>
+        <td>{{ content.name }}</td>
+        <td>{{ content.isSetup }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </template>
 
 <style lang="scss" scoped>
 .content{
-  &__items{
-    margin-top: 1rem;
+  &__table{
     width: 100%;
+
+    border-spacing: 0 0.5rem;
+    th{
+      font-weight: normal;
+      text-align: left;
+
+      padding: 0.5rem 1rem 0rem 1rem;
+    }
+
+    td{
+      padding: 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    td:first-child{
+      border-right: 0;
+      border-radius: 0.6rem 0 0 0.6rem;
+    }
+    td:last-child{
+      border-radius: 0 0.6rem 0.6rem 0;
+    }
+    td:not(:first-child){
+      border-left: 0;
+    }
   }
 
-  &__item{
-    padding: 1rem;
-    width: 100%;
+  &__row{
+    position: relative;
+    overflow: hidden;
 
-    &:not(:first-child){
-      margin-top: 0.4rem;
+    cursor: pointer;
+    background-color: white;
+
+    transition: all 0.2s ease;
+    &:hover{
+      background-color: rgb(239, 239, 239);
     }
   }
 }

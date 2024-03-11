@@ -12,7 +12,7 @@ let sidebarActive = ref(true)
 <div class="content">
   <div class="content__body page">
     <ContentToolBar/>
-    <list-content/>
+    <list-content class="q-mt-md"/>
   </div>
 
   <div :class="'content__sidebar' + (sidebarActive ? ' content__sidebar_active' : '')">

@@ -39,14 +39,6 @@ a{
   padding: 0 1rem;
 }
 
-.q-stepper{
-  background: inherit;
-  box-shadow: none;
-}
-.q-stepper__step-inner{
-  padding: 0px !important;
-}
-
 .page{
   margin: 1rem 1.2rem;
 }
