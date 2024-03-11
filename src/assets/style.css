@@ -12,7 +12,8 @@ body, html{
 
   font-size: 16px;
 
-  background-color: #fefcff;
+  background-color: #fdfbfb;
+  color: rgb(68, 68, 68);
 }
 
 button{
@@ -41,4 +42,24 @@ a{
 .q-stepper{
   background: inherit;
   box-shadow: none;
+}
+.q-stepper__step-inner{
+  padding: 0px !important;
+}
+
+.page{
+  margin: 1rem 1.2rem;
+}
+.card{
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+.card__header{
+  padding: 1rem;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.card__body{
+  padding: 1rem;
 }
