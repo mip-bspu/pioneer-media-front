@@ -3,22 +3,24 @@ import { navbar_routes } from '@/router/routes';
 </script>
 
 <template>
-<div class="container">
-  <div class="navbar navbar__box">
-    <nav>
-      <ul class="navbar__items">
-        <li class="navbar__item" v-for="route in navbar_routes">
-          <router-link :to="route.path">{{ route.meta.name }}</router-link>
-        </li>
-        <li class="navbar__item">item1</li>
-        <li class="navbar__item">item2</li>
-        <li class="navbar__item">item3</li>
-      </ul>
-    </nav>
+<div class="navbar">
+  <div class="container">
+    <div class="navbar__box">
+      <nav>
+        <ul class="navbar__items">
+          <li class="navbar__item" v-for="route in navbar_routes">
+            <router-link :to="route.path">{{ route.meta.name }}</router-link>
+          </li>
+          <li class="navbar__item">item1</li>
+          <li class="navbar__item">item2</li>
+          <li class="navbar__item">item3</li>
+        </ul>
+      </nav>
 
-    <div class="navbar__profile">
-      <div class="profile__icon"></div>
-      <div class="profile__name">test</div>
+      <div class="navbar__profile">
+        <div class="profile__icon"></div>
+        <div class="profile__name">test</div>
+      </div>
     </div>
   </div>
 </div>
@@ -28,21 +30,19 @@ import { navbar_routes } from '@/router/routes';
 .navbar{
   font-size: 1.3rem;
 
-  background-color: $primary;
-  background: linear-gradient(125deg, $secondary 0%, $primary 30%, $primary 90%);
-  border-radius: 1rem;
-
-  color: white;
+  background-color: white;
+  color: black;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
 
   &__box{
     height: 80px;
-
-    margin-top: 0.5rem;
+    
     padding: 1rem 2rem;
 
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
   }
 
   &__items{

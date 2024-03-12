@@ -7,13 +7,11 @@ import Sidebar from "./components/layout/Sidebar.vue"
 <div class="app">
   <navbar/>
 
-  <div class="container app__content">
-    <div class="row app__main">
-      <Sidebar/>
+  <div class="app__content">
+    <Sidebar/>
 
-      <div class="app__view">
-        <router-view/>
-      </div>
+    <div class="app__view">
+      <router-view/>
     </div>
   </div>
 </div>
@@ -29,17 +27,16 @@ import Sidebar from "./components/layout/Sidebar.vue"
 
   &__content{
     flex: 1 1 0;
-  }
+    display: flex;
 
-  &__main{
-    height: 100%;
     flex-wrap: nowrap;
   }
 
   &__view{
-    margin: 1rem;
-
     flex: 1 1 0;
+
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>
