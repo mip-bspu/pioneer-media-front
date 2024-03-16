@@ -6,17 +6,19 @@ import ContentSetup from '@/components/content/ContentSetup.vue'
 import { ref } from 'vue';
 
 let sidebarActive = ref(true)
+
+let selectedContent = ref(null)
 </script>
 
 <template>
 <div class="content">
   <div class="content__body page">
     <ContentToolBar/>
-    <list-content class="q-mt-md"/>
+    <list-content class="q-mt-md" v-model:active="selectedContent"/>
   </div>
 
   <div :class="'content__sidebar' + (sidebarActive ? ' content__sidebar_active' : '')">
-    <ContentSetup/>
+    <ContentSetup :content="selectedContent"/>
   </div>
 </div>
 </template>
