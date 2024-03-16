@@ -2,7 +2,7 @@
 import InputSetContent from '@/components/content/InputSetContent.vue';
 
 import { ref, watch } from 'vue'
-import { updateContent } from '@/services/content.service';
+import { updateContent, deleteContent } from '@/services/content.service';
 import { useAsync } from '@/composables/useAsync';
 
 const props = defineProps({
@@ -13,6 +13,11 @@ const {
   state: stateUpdate,
   exec: execUpdate
 } = useAsync(updateContent)
+
+const {
+  state: stateDelete,
+  exec: execDelete
+} = useAsync(deleteContent)
 
 let data = ref(null)
 
@@ -25,6 +30,10 @@ watch(
 async function saveChanges(){
   const response = await execUpdate(data.value.id, data.value)
 }
+
+async function removeContent(){
+  const response = await execDelete(data.value.id)
+}
 </script>
 
 <template>
@@ -35,7 +44,7 @@ async function saveChanges(){
 
       <div class="setup-form__btns">
         <q-btn outline color="primary" class="setup-form__btn" @click="saveChanges">Сохранить изменения</q-btn>
-        <q-btn color="primary" class="setup-form__btn q-mt-md">Удалить</q-btn>
+        <q-btn color="primary" class="setup-form__btn q-mt-md" @click="removeContent">Удалить</q-btn>
       </div>
     </form>
     

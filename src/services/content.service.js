@@ -12,7 +12,7 @@ export function getListContent(tags = [], page = 0, page_size = 20){
 
 export function updateContent(contentId, {name = "", from = "", to = "", tags = [], file = null}){
   let form = new FormData()
-  
+
   form.append("name", name || "")
   form.append("from", from || "")
   form.append("to", to || "")
@@ -27,4 +27,8 @@ export function updateContent(contentId, {name = "", from = "", to = "", tags = 
       "Content-Type": "multipart/form-data"
     }
   })
+}
+
+export function deleteContent(contentId){
+  return client.delete(`/content/${contentId}`)
 }
