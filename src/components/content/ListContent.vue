@@ -1,37 +1,56 @@
 <script setup>
 import { ref } from 'vue'
+import { getListContent } from '@/services/content.service';
+import { useAsync } from '@/composables/useAsync';
 
-defineProps({
-})
+defineProps({})
 
-const emit = defineEmits([])
+const emit = defineEmits(["update:active"])
 
+const {
+  state: stateGetList, // TODO: loading
+  exec: execGetList
+} = useAsync(getListContent)
 
-const contents = ref([
-  {name: 'content 1', from: '', to: '', file: null, isSetup: false, type: 'изображение'},
-  {name: 'content 2', from: '', to: '', file: null, isSetup: false, type: 'видео'},
-  {name: 'content 3', from: '', to: '', file: null, isSetup: false}
-])
+let contents = ref([])
+
+async function getList(){
+  let response = await execGetList(["city", "blg"]) // TODO: dev tags
+
+  if( response ){
+    contents.value = response.data.content || []
+  }
+}
+getList();
 </script>
 
 <template>
 <div class="content">
-  <table class="content__table">
+  <table class="content__table" v-if="contents.length > 0">
     <thead>
       <tr>
         <th>Название</th>
-        <th>Тип</th>
-        <th>Настроен</th>
+        <th>Дата добавления</th>
+        <th>Формат</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="content__row" v-for="content in contents" v-ripple>
+      <tr 
+          class="content__row" 
+          v-for="content in contents"
+          @click="emit('update:active', content)"
+          v-ripple
+      >
         <td>{{ content.name }}</td>
-        <td>{{ content.type }}</td>
-        <td>{{ content.isSetup }}</td>
+        <td>{{ content.date_create }}</td>
+        <td>{{ content.extention }}</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="content__banner banner" v-else>
+    <div class="banner__text">Необходимо добавить контент</div>
+  </div>
 </div>
 </template>
 
@@ -77,6 +96,13 @@ const contents = ref([
     &:hover{
       background-color: rgb(239, 239, 239);
     }
+  }
+}
+.banner{
+  width: 100%;
+
+  &__text{
+    text-align: center;
   }
 }
 </style>
