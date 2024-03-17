@@ -13,7 +13,7 @@ export function useAsync(func){
       state.isError = false;
       state.isLoading = true;
 
-      return await func(args)
+      return await func(...args)
     }catch(e){
       state.isError = true;
       state.error = e;
