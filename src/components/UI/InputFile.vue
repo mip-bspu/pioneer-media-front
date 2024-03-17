@@ -1,12 +1,12 @@
 <script setup>
-
+const emit = defineEmits('update:change')
 </script>
 
 <template>
 <button class="file-btn" v-ripple>
   <span>Добавить файл</span>
   <q-icon name="mdi-plus" class="file-btn__icon"/>
-  <input type="file">
+  <input type="file" @change="(e)=>emit('update:change', e)">
 </button>
 </template>
 
