@@ -49,7 +49,7 @@ async function removeContent(){
     </form>
     
     <div class="setup__banner banner" v-else>
-      <div class="banner__text">Выберите контент для редактирования</div>
+      <div class="banner__text">Выберите контент для <br/> редактирования</div>
     </div>
   </div>
 </div>
@@ -68,6 +68,16 @@ async function removeContent(){
 
     background-color: white;
     border-left: 1px solid rgba(0,0,0,0.1);
+  }
+
+  &__banner{
+    position: relative;
+    top: 30vh;
+  }
+}
+.banner{
+  &__text{
+    text-align: center;
   }
 }
 .setup-form{

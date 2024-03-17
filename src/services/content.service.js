@@ -10,7 +10,7 @@ export function getListContent(tags = [], page = 0, page_size = 20){
   })
 }
 
-export function updateContent(contentId, {name = "", from = "", to = "", tags = [], file = null}){
+export function updateContent(contentId, {name, from, to, tags = [], file = null}){
   let form = new FormData()
 
   form.append("name", name || "")
