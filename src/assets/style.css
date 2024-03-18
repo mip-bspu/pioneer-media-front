@@ -18,7 +18,7 @@ body, html{
 
 button{
   outline: none;
-
+  border: inherit;
   background-color: inherit;
 }
 
