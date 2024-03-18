@@ -3,6 +3,7 @@ import InputSetContent from '@/components/content/InputSetContent.vue';
 
 import { ref, watch } from 'vue'
 import { updateContent, deleteContent } from '@/services/content.service';
+import { getTags } from '@/services/tags.service';
 import { useAsync } from '@/composables/useAsync';
 
 const props = defineProps({
@@ -34,13 +35,22 @@ async function saveChanges(){
 async function removeContent(){
   const response = await execDelete(data.value.id)
 }
+
+let tags = ref([])
+
+async function getTagsForOptions(){
+  const response = await getTags({})
+  tags.value = response.data
+}
+
+getTagsForOptions()
 </script>
 
 <template>
 <div class="setup">
   <div class="setup__wrapper">
     <form v-if="data" class="setup__form setup-form">
-      <InputSetContent v-model:content="data"/>
+      <InputSetContent v-model:content="data" :tags="tags"/>
 
       <div class="setup-form__btns">
         <q-btn outline color="primary" class="setup-form__btn" @click="saveChanges">Сохранить изменения</q-btn>

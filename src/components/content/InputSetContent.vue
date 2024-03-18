@@ -2,13 +2,11 @@
 import { ref, watch } from 'vue'
 
 let props = defineProps({
-  content: {type: Object, default: null}
+  content: {type: Object, default: null},
+  tags: {type: Array, default: []}
 })
 
-const tags = ref([
-  'school', 'city',
-  'sectionA'
-]) // TODO: get all tags
+const getNameOfTag = (tag)=>tag.name
 </script>
 
 <template>
@@ -34,6 +32,7 @@ const tags = ref([
         <q-select
             outlined dense
             :options="tags"
+            :option-label="getNameOfTag"
             v-model="content.tags"
             multiple
             use-chips
