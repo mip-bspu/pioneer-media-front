@@ -10,11 +10,9 @@
   </label>
 
   <div class="block">
-    <div class="block__title">Период работы</div>
-
     <div class="block__body"> 
       <label class="set-action__input">
-        <span class="set-action__label">От:</span>
+        <span class="set-action__label">Начало жизни:</span>
         <ui-date-input outlined dense/>
       </label>
 
@@ -36,7 +34,7 @@
 .set-action{
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.6rem;
 
   &__input{
     width: 100%;
@@ -52,7 +50,7 @@
 }
 .block{
   &__title{
-    color: rgb(142, 142, 142);
+    color: rgba(0, 0, 0, 0.4);
   }
 
   &__body{

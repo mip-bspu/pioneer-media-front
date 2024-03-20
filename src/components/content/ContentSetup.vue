@@ -52,6 +52,8 @@ getTagsForOptions()
     <form v-if="data" class="setup__form setup-form">
       <InputSetContent v-model:content="data" :tags="tags"/>
 
+      <q-separator class="q-mt-lg"/>
+
       <div class="setup-form__btns">
         <q-btn outline color="primary" class="setup-form__btn" @click="saveChanges">Сохранить изменения</q-btn>
         <q-btn color="primary" class="setup-form__btn q-mt-md" @click="removeContent">Удалить</q-btn>
@@ -67,6 +69,8 @@ getTagsForOptions()
 
 <style lang="scss" scoped>
 .setup{ 
+  position: relative;
+
   height: 100%;
   width: 100%;
 
@@ -92,7 +96,7 @@ getTagsForOptions()
 }
 .setup-form{
   &__btns{
-    margin-top: 2.4rem;
+    margin-top: 1.5rem;
   }
 
   &__btn{

@@ -32,21 +32,41 @@ import {router, onPage} from '@/router'
 
 <style lang="scss" scoped>
 .sidebar{
-  min-width: 160px;
-  
-  max-width: 280px;
-  width: 20vw;
+  width: 280px;
   height: 100%;
 
   display: flex;
   
   &__content{
     width: 100%;
-
+    position: relative;
 
     color: white;
-    background-color: rgb(39, 48, 58);
+    background: radial-gradient(circle, #272c3c 10%,#1E2230 60%);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+    &::before, &::after{
+      content: '';
+      width: 20%;
+      height: 2px;
+
+      position: absolute;
+
+      border-radius: 1rem;
+      background-color: $primary;
+    }
+
+    &:after{
+      top: 20px;
+      left: 50%;
+      transform: translate(-50%);
+    }
+
+    &:before{
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%);
+    }
   }
 
   &__items{
@@ -61,13 +81,16 @@ import {router, onPage} from '@/router'
 
   &__item{
     padding: 0.6rem 1.4rem;
+    margin: 0 1rem;
 
     color: rgba(255,255,255,0.6);
 
+    border: 4px solid rgba(255, 255, 255, 0);
+    border-radius: 1rem;
     &_active{
      color: white;
 
-     background: linear-gradient(110deg,rgb(39, 48, 58, 0.5) 5%, rgb(225, 41, 68, 0.5) 20%, rgb(39, 48, 58, 0.5) 70%, rgb(225, 41, 68, 0.4) 80%, rgb(39, 48, 58, 0.5));
+     border: 4px solid white;
     }
   }
 }

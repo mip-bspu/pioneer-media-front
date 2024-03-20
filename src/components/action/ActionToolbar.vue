@@ -14,7 +14,7 @@ let visible = ref(false)
         Создание события
       </div>
 
-      <q-icon name="mdi-chevron-up" class="toolbar__arrow"/>
+      <q-icon name="mdi-chevron-up" :class="'arrow' + (visible ? ' arrow_active': '')"/>
     </div>
   </div>
 
@@ -22,6 +22,16 @@ let visible = ref(false)
     <div class="toolbar__body card__body outer" v-show="visible">
       <div class="inner">
         <input-set-action/>
+
+        <q-separator class="q-mt-md"/>
+
+        <div class="q-mt-lg row justify-end">
+          <q-btn 
+            outline 
+            label="создать событие" 
+            color="primary" 
+          />
+        </div>
       </div>
     </div>
   </transition>
@@ -47,7 +57,7 @@ let visible = ref(false)
     font-size: 1.2rem;
   }
   &__arrow{
-    font-size: 2rem;
+    
   }
   &__body{
   }
@@ -62,5 +72,13 @@ let visible = ref(false)
 .nested-leave-to .inner {
   transform: translateX(30px);
   opacity: 0;
+}
+.arrow{
+  font-size: 2rem;
+  transition: all 0.3s ease;
+
+  &_active{
+    transform: rotate(180deg);
+  }
 }
 </style>

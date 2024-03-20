@@ -40,15 +40,19 @@ function uploadFile(event){
 <style lang="scss" scoped>
 .uploader{
   position: relative;
+  height: 100%;
+  width: 100%;
+
 
   &__wrapper{
     height: 100%;
+    width: 100%;
 
     padding: 1rem;
 
-    border: 3px dashed $primary;
-    border-radius: 1rem;
-    background-color: $background-primary;
+    border: 2px dashed $primary;
+    border-radius: 0.5rem;
+    background-color: white;
 
     display: flex;
     align-items: center;
@@ -75,7 +79,7 @@ function uploadFile(event){
   }
 
   &__text{
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: $primary;
   }
 
@@ -85,7 +89,7 @@ function uploadFile(event){
 
   &__subtext{
     margin-top: 0.4rem;
-    
+    font-size: 0.9rem;
     color: $primary;
     opacity: 0.6;
   } 
