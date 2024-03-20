@@ -1,17 +1,34 @@
 <script setup>
+import ListActions from '@/components/action/ListActions.vue'
 import SplitPage from '@/components/layout/SplitPage.vue';
 import ActionSetup from '@/components/action/ActionSetup.vue';
 
 import { ref } from 'vue'
 
 let tab = ref('create-action')
+
+
+let actions = ref([
+  {
+    name: 'action 1',
+    tags: [{name: 'blg'}, {name: 'city'}],
+    from: '13.10.2023',
+    to: '15.10.2023'
+  },
+  {
+    name: 'action 2',
+    tags: [{name: 'office'}, {name: 'hole'}, {name: 'school'}],
+    from: '13.10.2023',
+    to: '15.10.2023'
+  }
+])
 </script>
 
 <template>
 
 <split-page>
   <template #default>
-
+    <list-actions :actions="actions"/>
   </template>
 
   <template #sidebar>
