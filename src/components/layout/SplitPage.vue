@@ -1,5 +1,6 @@
 <script setup>
 // TODO: active
+// TODO: get width with props
 </script>
 
 <template>
@@ -24,7 +25,7 @@
   }
 
   &__sidebar{
-    width: 25vw;
+    width: 40vw;
     
     &_active{
       width: 25vw;
