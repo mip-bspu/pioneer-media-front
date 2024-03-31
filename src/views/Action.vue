@@ -3,39 +3,70 @@ import ListActions from '@/components/action/ListActions.vue'
 import SplitPage from '@/components/layout/SplitPage.vue';
 import ActionSetup from '@/components/action/ActionSetup.vue';
 
-import { ref } from 'vue'
+import { useAsync } from '@/composables/useAsync';
+import { getListActions } from '@/services/action.service';
+import { ref, watch, reactive } from 'vue'
 
 let tab = ref('create-action')
 
+let {
+  exec: execGetListActions,
+  state: stateListActions
+} = useAsync(getListActions)
 
-let actions = ref([
-  {
-    name: 'action 1',
-    tags: [{name: 'blg'}, {name: 'city'}],
-    from: '13.10.2023',
-    to: '15.10.2023'
+let isChangeActions = ref(true)
+let actions = ref([]);
+
+let paggination = reactive({
+  currentPage: 1,
+  maxPages: 0
+})
+
+watch(
+  ()=>[isChangeActions.value, paggination.currentPage],
+  async (newV, oldV)=>{
+    if( oldV && oldV[1] != newV[1] || isChangeActions.value ){
+      isChangeActions.value = false
+      let data = (await execGetListActions({tags: ['blg'], page: newV[1]-1, page_size: 8})).data
+
+      actions.value = data.actions
+      paggination.maxPages = Math.ceil(data.total_items / data.page_size)
+    }
   },
-  {
-    name: 'action 2',
-    tags: [{name: 'office'}, {name: 'hole'}, {name: 'school'}],
-    from: '13.10.2023',
-    to: '15.10.2023'
-  }
-])
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
 
 <split-page>
   <template #default>
-    <list-actions :actions="actions"/>
+    <q-card flat class="actions">
+      <q-card-section class="actions__list">
+        <div class="actions__items">
+          <list-actions :actions="actions"/>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <q-pagination 
+            v-model="paggination.currentPage" 
+            :max="paggination.maxPages" input
+        />
+      </q-card-section>
+        
+      <q-inner-loading :showing="stateListActions.isLoading">
+        <q-spinner-ball size="70px" color="primary"/>
+        <span class="q-mt-lg">Идёт загрузка событий...</span>
+      </q-inner-loading>
+    </q-card>
   </template>
 
   <template #sidebar>
     <div class="sidebar">
       <q-tabs
           v-model="tab"
-          dense align="justify-start" class="tabs"
+          dense class="tabs justify-start"
           color="primary" active-color="primary" indicator-color="primary"
       >
         <q-tab name="create-action" label="Создание события"/>
@@ -67,5 +98,29 @@ let actions = ref([
 }
 .tabs{
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.actions{
+  background-color: inherit;
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__list{
+    position: relative;
+
+    flex: 1 1 100%;
+  }
+  &__items{
+    padding: 1rem;
+
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+
+    overflow-y: scroll;
+    scrollbar-color:  rgba(0,0,0,0.1) rgba(0,0,0,0);
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
 }
 </style>

@@ -1,5 +1,4 @@
 import client from '@/client'
-import { createAction } from './action.service';
 
 export function createAction({name, from, to, tags = [], priority = 0, files}){
   let data = createFormForAction({name, from, to, priority, tags, files})
@@ -11,7 +10,7 @@ export function createAction({name, from, to, tags = [], priority = 0, files}){
   })
 }
 
-export function getListActions({tags, page, page_size}){
+export function getListActions({tags, page, page_size = 20}){
   return client.get('/action', {
     params: {
       page: page,

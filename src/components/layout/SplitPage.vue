@@ -5,7 +5,7 @@
 
 <template>
 <div class="split-page">
-  <div class="split-page__body page">
+  <div class="split-page__body">
     <slot></slot>
   </div>
   <div class="split-page__sidebar">
@@ -22,6 +22,8 @@
 
   &__body{
     flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
   }
 
   &__sidebar{
