@@ -35,13 +35,12 @@ export function deleteAction(id){
 }
 
 function createFormForAction({name, from, to, priority, tags = [], files = []}){
-  let form = new FormData()
+  let data = new FormData()
 
-  form.append("name", name)
-  form.append('from', from)
-  form.append('to', to)
-  form.append('tags', JSON.stringify(tags))
-  form.append('priority', priority)
+  data.append("name", name)
+  data.append('from', from)
+  data.append('to', to)
+  data.append('priority', priority)
 
   for(let file of files){
     data.append('files[]', file)
@@ -51,5 +50,5 @@ function createFormForAction({name, from, to, priority, tags = [], files = []}){
     data.append('tags[]', tag)
   }
 
-  return form
+  return data
 }

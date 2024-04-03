@@ -3,12 +3,14 @@ const props = defineProps({
   actions: {type: Array, default: []}
 })
 
-const getPeriod = (action)=>`${action.from} - ${action.to}`
+const emit = defineEmits(['update:selected'])
+
+const getPeriod = (action)=> `${Date.formatDateIso(action.from)} \u2013 ${Date.formatDateIso(action.to)}`
 </script>
 
 <template>
 <div class="actions actions__list">
-  <div class="actions__item action" v-for="action in actions">
+  <div class="actions__item action" v-for="action in actions" @click="emit('update:selected', action)">
     <div class="action__wrapper" v-ripple>
 
       <div class="action__column">
@@ -25,7 +27,7 @@ const getPeriod = (action)=>`${action.from} - ${action.to}`
     
       <div class="action__column">
         <div class="action__life">
-          <span>Время жизни:</span>
+          <span>Время жизни</span>
           <span>{{ getPeriod(action) }}</span>
         </div>
       </div>
@@ -81,6 +83,13 @@ const getPeriod = (action)=>`${action.from} - ${action.to}`
     flex-direction: column;
     align-items: end;
     justify-content: end;
+
+    span:first-child{
+      margin-bottom: 0.3em;
+    }
+    span:not(:first-child){
+      font-size: 0.84em;
+    }
   }
 
   &__tags{

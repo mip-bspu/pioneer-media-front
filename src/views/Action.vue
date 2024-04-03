@@ -4,8 +4,11 @@ import SplitPage from '@/components/layout/SplitPage.vue';
 import ActionSetup from '@/components/action/ActionSetup.vue';
 
 import { useAsync } from '@/composables/useAsync';
+import { useStore } from '@/composables/useStore'
 import { getListActions } from '@/services/action.service';
 import { ref, watch, reactive } from 'vue'
+
+let { store } = useStore()
 
 let tab = ref('create-action')
 
@@ -27,14 +30,22 @@ watch(
   async (newV, oldV)=>{
     if( oldV && oldV[1] != newV[1] || isChangeActions.value ){
       isChangeActions.value = false
-      let data = (await execGetListActions({tags: ['blg'], page: newV[1]-1, page_size: 8})).data
+      let data = (await execGetListActions({
+        tags: store.localStorage.user.tags, 
+        page: newV[1]-1, 
+        page_size: 8
+      }))?.data
 
-      actions.value = data.actions
-      paggination.maxPages = Math.ceil(data.total_items / data.page_size)
+      if(data){
+        actions.value = data.actions
+        paggination.maxPages = Math.ceil(data.total_items / data.page_size)
+      }
     }
   },
   { immediate: true, deep: true }
 )
+
+let selectedAction = ref(null)
 </script>
 
 <template>
@@ -44,7 +55,7 @@ watch(
     <q-card flat class="actions">
       <q-card-section class="actions__list">
         <div class="actions__items">
-          <list-actions :actions="actions"/>
+          <list-actions :actions="actions" v-model:selected="selectedAction"/>
         </div>
       </q-card-section>
 
@@ -71,15 +82,16 @@ watch(
       >
         <q-tab name="create-action" label="Создание события"/>
         <q-tab name="edit-action" label="Изменение события"/>
+        <q-tab name="preview-content" label="Просмотр контента"/>
       </q-tabs>
 
       <q-tab-panels v-model="tab">
         <q-tab-panel name="create-action">
-          <action-setup/>
+          <action-setup v-model:changed="isChangeActions"/>
         </q-tab-panel>
 
         <q-tab-panel name="edit-action">
-            <h6>test2</h6>
+          <h6>test2</h6>
         </q-tab-panel>
       </q-tab-panels>
     </div>

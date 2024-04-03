@@ -1,21 +1,36 @@
 <script setup>
 import InputActionProperties from '@/components/action/InputActionProperties.vue';
 
-
 import { reactive, ref, watch } from 'vue'
+import { createAction } from '@/services/action.service.js'
+import { useAsync } from '@/composables/useAsync';
+import { priorityMessage } from '@/utils/map.util.js'
+
+const emit = defineEmits(['update:changed'])
+
+let {
+  exec: execCreateAction,
+  state: stateCreateAction
+} = useAsync(createAction)
 
 let nullSetup = {
   name: '',
   tags: [],
-  from: '',
-  to: '',
-  priority: 0,
+  from: Date.today(),
+  to: Date.today(),
+  priority: "0",
   files: []
 }
 
 let setup = reactive({...nullSetup})
 
 const reset = ()=>Object.assign(setup, nullSetup)
+
+const addAction = async ()=>{
+  const data = (await execCreateAction(setup))
+  reset()
+  emit('update:changed', true)
+}
 </script>
 
 <template>
@@ -27,7 +42,7 @@ const reset = ()=>Object.assign(setup, nullSetup)
 
     <div class="setup__actions">
       <q-btn outline color="primary" @click="reset">Сброс</q-btn>
-      <q-btn color="primary">Добавить событие</q-btn>
+      <q-btn color="primary" @click="addAction">Добавить событие</q-btn>
     </div>
   </div>
 </div>

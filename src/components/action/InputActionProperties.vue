@@ -1,9 +1,17 @@
 <script setup>
 import FileItem from '@/components/FileItem.vue';
 
+import { priorityMessage } from '@/utils/map.util.js'
+import { useStore } from '@/composables/useStore.js'
+
+const { store } = useStore()
+
 const props = defineProps({
   setup: {type: Object, required: true}
 })
+
+const tagOptions = store.localStorage.user.tags
+const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: priorityMessage[key], value: key }})
 </script>
 
 <template>
@@ -19,12 +27,23 @@ const props = defineProps({
   <div class="properties__block">
     <label class="properties__input">
       <span>Тэги</span>
-      <q-select dense outlined/>
+      <q-select
+          :options="tagOptions"
+          dense outlined
+          multiple use-chips
+          v-model="setup.tags"
+      />
     </label>
 
     <label class="properties__input">
       <span>Приоритет воспроизведения</span>
-      <q-select dense outlined/>
+      <q-select 
+          dense outlined 
+          :options="priorityOptions" 
+          v-model="setup.priority" 
+          emit-value map-options
+          option-label="label"
+      />
     </label>
   </div>
 
@@ -32,12 +51,12 @@ const props = defineProps({
   <div class="properties__block">
     <label class="properties__input">
       <span>От</span>
-      <ui-date-input outlined dense/>
+      <ui-date-input outlined dense v-model="setup.from"/>
     </label>
   
     <label class="properties__input">
       <span>До</span>
-      <ui-date-input outlined dense/>
+      <ui-date-input outlined dense v-model="setup.to"/>
     </label>
   </div>
 

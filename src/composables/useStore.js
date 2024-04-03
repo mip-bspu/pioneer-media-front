@@ -4,7 +4,9 @@ const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
   localStorage: {
-    
+    user: {
+      tags: ['blg']
+    }
   },
   
   sessionStorage: {}
@@ -24,7 +26,7 @@ Object.assign(
 
 watch(
   ()=>store.localStorage,
-  ()=>{console.log(store); localStorage.setItem(STORAGE_KEY, JSON.stringify(store.localStorage))},
+  ()=>localStorage.setItem(STORAGE_KEY, JSON.stringify(store.localStorage)),
   {deep: true}
 )
 
