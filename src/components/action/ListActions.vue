@@ -24,6 +24,12 @@ const getPeriod = (action)=> `${Date.formatDateIso(action.from)} \u2013 ${Date.f
           </div>
         </div>
       </div>
+
+      <div class="action__column">
+        <div class="action__size">
+          <span>Кол-во элементов {{ action.files.length }}</span>
+        </div>
+      </div>
     
       <div class="action__column">
         <div class="action__life">
@@ -64,13 +70,11 @@ const getPeriod = (action)=> `${Date.formatDateIso(action.from)} \u2013 ${Date.f
     cursor: pointer;
 
     padding: 1rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
   }
 
   &__column{
-    &:not(:last-child){
-      flex: 1 1 60%;
-    }
   }
 
   &__life{
@@ -97,6 +101,18 @@ const getPeriod = (action)=> `${Date.formatDateIso(action.from)} \u2013 ${Date.f
 
     display: flex;
     gap: 0.4rem;
+  }
+
+  &__size{
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+
+    color: rgb(97, 97, 97);
+
+    font-size: 0.8rem;
   }
 
   &__tag{

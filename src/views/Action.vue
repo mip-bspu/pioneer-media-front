@@ -2,6 +2,7 @@
 import ListActions from '@/components/action/ListActions.vue'
 import SplitPage from '@/components/layout/SplitPage.vue';
 import ActionSetup from '@/components/action/ActionSetup.vue';
+import PreviewContents from '@/components/action/PreviewContents.vue'
 
 import { useAsync } from '@/composables/useAsync';
 import { useStore } from '@/composables/useStore'
@@ -92,6 +93,10 @@ let selectedAction = ref(null)
 
         <q-tab-panel name="edit-action">
           <h6>test2</h6>
+        </q-tab-panel>
+
+        <q-tab-panel name="preview-content">
+          <preview-contents :selectedAction="selectedAction"/>
         </q-tab-panel>
       </q-tab-panels>
     </div>
