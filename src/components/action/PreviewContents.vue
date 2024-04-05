@@ -1,14 +1,20 @@
 <script setup>
 import PreviewContentItem from '@/components/PreviewContentItem.vue';
+import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
 
 import { getFile } from '@/services/files.service.js'
-import { ref, onUnmounted, watch } from 'vue'
+import { ref, onUnmounted, watch, reactive } from 'vue'
 
 const props = defineProps({
   selectedAction: {type: [Object, null], default: null}
 })
 
 let images = ref([])
+
+let player = reactive({
+  play: false,
+  file: null
+})
 
 async function getImage(uuid){
   let res = await getFile(uuid)
@@ -29,7 +35,6 @@ watch(
     for(let file of props.selectedAction.files){
       imgs.push({src: await getImage(file.id), file: file}) 
     }
-
     images.value = imgs
   },
   { immediate: true }
@@ -52,6 +57,10 @@ onUnmounted(()=>images.value.forEach(img=>URL.revokeObjectURL(img)))
             :src-image="image.src"
             :data-file="image.file"
             v-for="image in images"
+            @click="()=>{
+              player.play = true
+              player.file = image.file
+            }"
         />
       </div>
     </template>
@@ -64,6 +73,14 @@ onUnmounted(()=>images.value.forEach(img=>URL.revokeObjectURL(img)))
   <template v-else>
     Необходимо выбрать событие
   </template>
+
+
+  <q-dialog v-model="player.play" full-width>
+    <image-and-video-player 
+        :file="player.file" 
+        :content-type="player.file.content_type"
+    />
+  </q-dialog>
 </div>
 </template>
 
