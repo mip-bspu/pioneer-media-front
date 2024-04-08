@@ -28,16 +28,16 @@ export const routes = [
     }
   },
 
-  // {
-  //   name: "schedule",
-  //   path: "/schedule",
-  //   component: Schedule,
-  //   meta: {
-  //     name: "Расписание",
-  //     layout: ["sidebar"],
-  //     icon: "mdi-calendar-range-outline"
-  //   }
-  // },
+  {
+    name: "schedule",
+    path: "/schedule",
+    component: Schedule,
+    meta: {
+      name: "Расписание",
+      layout: ["sidebar"],
+      icon: "mdi-calendar-range-outline"
+    }
+  },
 ]
 
 export const sidebar_routes = computed(()=>{
