@@ -9,9 +9,20 @@ let store = reactive({
     }
   },
   
-  sessionStorage: {}
+  sessionStorage: {},
 })
 
+let getter = {
+  "user": {
+    getUserTags: ()=>store.localStorage.user.tags
+  }
+}
+
+let setter = {
+  "user": {
+    setUserTags: (tags)=>store.localStorage.user.tags = tags
+  }
+}
 
 Object.assign(
   store.localStorage, 
@@ -37,10 +48,13 @@ watch(
 )
 
 
-export function useStore(){
+export function useStore(scope){
+  if(scope === undefined) return { store }
 
+  let scopeStore = {...getter[scope], ...setter[scope]}
+ 
   return {
-    store
+    store: scopeStore
   }
 }
 

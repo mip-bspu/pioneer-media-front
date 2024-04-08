@@ -17,6 +17,10 @@ let month = ref(null)
 
     <ui-monthly-switch class="schedule__switch-month" @update:month="(v)=>month = v"/>
   </q-card-section>
+
+  <q-card-section class="schedule__calendar">
+    <schedule-timeline-actions v-model:month="month"/>
+  </q-card-section>
 </q-card>
 </template>
 
@@ -31,6 +35,9 @@ let month = ref(null)
   &__toolbar{
     display: flex;
     align-items: center;
+  }
+  &__calendar{
+    flex: 1 1 100%;
   }
   &__title{
     display: inline-block;
