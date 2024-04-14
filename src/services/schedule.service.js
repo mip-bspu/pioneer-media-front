@@ -1,6 +1,9 @@
 import client from '@/client'
 import { monthName } from '@/utils/map.util.js'
 
+
+const GAP_TIMELINES = 4;
+
 export const createPeriodMonths = (year, month)=>{
   return ({
     begin: new Date(year, month, 1),
@@ -10,13 +13,13 @@ export const createPeriodMonths = (year, month)=>{
 
 const getRandomColor = ()=>{
   const colors = [
-    "#8d7676",
-    "#815F9E",
+    "#C1A3A3",
+    "#AB84CD",
     "#5841C0",
     "#37914F",
-    "#A92E4B",
-    "#B38B1C",
-    "#D16A15"
+    "#DB5675",
+    "#EAAC04",
+    "#E4802E"
   ]
   let index = Math.floor(Math.random()*colors.length)
 
@@ -36,7 +39,7 @@ const createDataActionForRender = (period, action, index)=>{
       tags: action["tags"]
     },
     style: {
-      top: 40 * index + 'px',
+      top: (36 + GAP_TIMELINES) * index + 'px',
       width: diff * 40 + 'px',
       backgroundColor: getRandomColor()
     }

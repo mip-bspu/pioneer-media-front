@@ -11,7 +11,7 @@ let month = ref(null)
 <template>
 <q-card class="schedule">
   <q-card-section class="schedule__toolbar">
-    <div class="schedule__title">Расписание</div>
+    <div class="schedule__title title">Расписание</div>
 
     <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
 
@@ -41,7 +41,6 @@ let month = ref(null)
   }
   &__title{
     display: inline-block;
-    font-size: 1.7rem;
   }
   &__switch-month{
     font-size: 1.5rem;

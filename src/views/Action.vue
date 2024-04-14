@@ -54,17 +54,19 @@ let selectedAction = ref(null)
 <split-page>
   <template #default>
     <q-card flat class="actions">
-      <q-card-section class="actions__list">
-        <div class="actions__items">
-          <list-actions :actions="actions" v-model:selected="selectedAction"/>
-        </div>
-      </q-card-section>
-
-      <q-card-section>
+      <q-card-section class="actions__toolbar">
+        <div class="actions__title title" >События</div>
+        <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
         <q-pagination 
             v-model="paggination.currentPage" 
             :max="paggination.maxPages" input
         />
+      </q-card-section>
+
+      <q-card-section class="actions__list q-py-xs q-mb-md">
+        <div class="actions__items">
+          <list-actions :actions="actions" v-model:selected="selectedAction"/>
+        </div>
       </q-card-section>
         
       <q-inner-loading :showing="stateListActions.isLoading">
@@ -122,6 +124,12 @@ let selectedAction = ref(null)
   display: flex;
   flex-direction: column;
 
+  &__toolbar{
+    display: flex;
+  }
+  &__title{
+    display: inline-block;
+  }
   &__list{
     position: relative;
 
@@ -135,7 +143,7 @@ let selectedAction = ref(null)
     left: 0; right: 0;
 
     overflow-y: scroll;
-    scrollbar-color:  rgba(0,0,0,0.1) rgba(0,0,0,0);
+    scrollbar-color:  rgba(0, 0, 0, 0.04) rgba(0,0,0,0);
     scrollbar-gutter: stable;
     scrollbar-width: thin;
   }
