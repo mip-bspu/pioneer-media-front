@@ -3,15 +3,17 @@ const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
   modelValue: {type: String, default: ""},
-  mask: {type: String, default: "DD.MM.YYYY"}
+  mask: {type: String, default: "YYYY-MM-DD"}
 })
 // TODO: mask
-// TODO: date utils default today
-// TODO: + time hh:mm:ss
 </script>
 
 <template>
-<q-input :modelValue="modelValue" @update:model-value="(event)=>emit('update:modelValue', event)">
+<q-input 
+  :modelValue="modelValue" 
+  @update:model-value="(event)=>emit('update:modelValue', event)"
+  :mask="mask?.replace(/[a-zA-Z]/g, '#') || ''"
+>
   <template v-slot:append>
     <q-btn icon="mdi-calendar-today" size="md" round flat color="primary">
       <q-popup-proxy>

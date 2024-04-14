@@ -1,47 +1,48 @@
 <script setup>
-import { ref } from 'vue'
+import InputActionProperties from '@/components/action/InputActionProperties.vue';
 
-let files = ref([])
+import { reactive, ref, watch } from 'vue'
+import { createAction } from '@/services/action.service.js'
+import { useAsync } from '@/composables/useAsync';
+import { priorityMessage } from '@/utils/map.util.js'
 
+const emit = defineEmits(['update:changed'])
+
+let {
+  exec: execCreateAction,
+  state: stateCreateAction
+} = useAsync(createAction)
+
+let nullSetup = {
+  name: '',
+  tags: [],
+  from: Date.today(),
+  to: Date.today(),
+  priority: "0",
+  files: []
+}
+
+let setup = reactive({...nullSetup})
+
+const reset = ()=>Object.assign(setup, nullSetup)
+
+const addAction = async ()=>{
+  const data = (await execCreateAction(setup))
+  reset()
+  emit('update:changed', true)
+}
 </script>
 
 <template>
-<div class="setup card">
-  <div class="card__header">
-    <h6>Создание события</h6>
-  </div>
+<div class="setup">
+  <div class="setup__wrapper">
+    <input-action-properties v-model:setup="setup"/>
 
-  <div class="setup__wrapper card__body">
-    <div class="setup__row">
-      <label class="setup__input">
-        <span class="setup__label">Название:</span>
-        <q-input outlined dense background/>
-      </label>
+    <q-separator class="q-mt-lg"/>
 
-      <label class="setup__input">
-        <span class="setup__label">Тэги:</span>
-        <q-select dense outlined multiple use-chips/>
-      </label>
-    </div>
-   
-    <div class="setup__row">
-      <label class="setup__input">
-        <span class="setup__label">Начало жизни:</span>
-        <ui-date-input outlined dense/>
-      </label>
-
-      <label class="setup__input">
-        <span class="setup__label">До:</span>
-        <ui-date-input outlined dense/>
-      </label>
-    </div>
-
-    <div class="setup__row">
-      <ui-area-uploader v-model="files" class="setup__uploader">
-        <div v-for="file in files">
-          <span>{{ file.name }}</span>
-        </div>
-      </ui-area-uploader>
+    <div class="setup__actions">
+      <q-btn outline color="primary" @click="reset">Сброс</q-btn>
+      <q-btn color="primary" @click="addAction">Добавить событие</q-btn>
     </div>
   </div>
 </div>
@@ -49,30 +50,15 @@ let files = ref([])
 
 <style lang="scss" scoped>
 .setup{
-  height: 100%;
-  width: 100%;
-
   &__wrapper{
+
+  }
+  &__actions{
+    margin-top: 1.5rem;
+
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  &__row{
-    display: flex;
-    gap: 1rem;
-  }
-
-  &__input{
-    width: 100%;
-    max-width: 300px;
-  }
-  &__label{
-
-  }
-
-  &__uploader{
-    height: 200px;
+    justify-content: end;
+    gap: 0.8rem;
   }
 }
 </style>

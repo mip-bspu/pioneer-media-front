@@ -12,6 +12,7 @@ import 'quasar/src/css/index.sass'
 
 import '@/assets/style.css'
 
+import '@/utils/date.util.js'
 
 const app = createApp(App)
 

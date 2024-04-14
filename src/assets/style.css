@@ -11,24 +11,26 @@ body, html{
   overflow-x: hidden;
 
   font-size: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
   background-color: #fdfbfb;
   color: rgb(68, 68, 68);
 }
-
 button{
   outline: none;
   border: inherit;
   background-color: inherit;
 }
-
 ul{
   list-style: none;
 }
-
 a{
   color: inherit;
   text-decoration: none;
+}
+
+.q-btn:before{
+  box-shadow: none;
 }
 
 .container{
@@ -54,4 +56,9 @@ a{
 }
 .card__body{
   padding: 1rem;
+}
+.ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

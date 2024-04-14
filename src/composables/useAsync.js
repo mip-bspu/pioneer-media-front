@@ -7,12 +7,14 @@ export function useAsync(func){
     isLoading: false
   })
 
+  const delay = (ms)=>new Promise((res)=>setTimeout(res, ms))
+
   async function exec(...args){
     try{
       state.error = null;
       state.isError = false;
       state.isLoading = true;
-
+      // await delay(4000)
       return await func(...args)
     }catch(e){
       state.isError = true;

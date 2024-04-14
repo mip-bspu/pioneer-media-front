@@ -4,12 +4,25 @@ const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
   localStorage: {
-    
+    user: {
+      tags: ['blg']
+    }
   },
   
-  sessionStorage: {}
+  sessionStorage: {},
 })
 
+let getter = {
+  "user": {
+    getUserTags: ()=>store.localStorage.user.tags
+  }
+}
+
+let setter = {
+  "user": {
+    setUserTags: (tags)=>store.localStorage.user.tags = tags
+  }
+}
 
 Object.assign(
   store.localStorage, 
@@ -24,7 +37,7 @@ Object.assign(
 
 watch(
   ()=>store.localStorage,
-  ()=>{console.log(store); localStorage.setItem(STORAGE_KEY, JSON.stringify(store.localStorage))},
+  ()=>localStorage.setItem(STORAGE_KEY, JSON.stringify(store.localStorage)),
   {deep: true}
 )
 
@@ -35,10 +48,13 @@ watch(
 )
 
 
-export function useStore(){
+export function useStore(scope){
+  if(scope === undefined) return { store }
 
+  let scopeStore = {...getter[scope], ...setter[scope]}
+ 
   return {
-    store
+    store: scopeStore
   }
 }
 
