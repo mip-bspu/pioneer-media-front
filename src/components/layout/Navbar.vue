@@ -1,5 +1,5 @@
 <script setup>
-import { navbar_routes } from '@/router/routes';
+import { navbar_routes } from '@/router/routes/user.routes';
 </script>
 
 <template>

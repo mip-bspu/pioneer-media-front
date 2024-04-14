@@ -1,19 +1,30 @@
 <script setup>
 import Navbar from "@/components/layout/Navbar.vue"
 import Sidebar from "./components/layout/Sidebar.vue"
+
+import { ref } from 'vue'
+
+let role = ref("admin")
+
 </script>
 
 <template>
 <div class="app">
-  <navbar/>
+  <template v-if="role == 'user'">
+    <navbar/>
 
-  <div class="app__content">
-    <Sidebar/>
+    <div class="app__content">
+      <Sidebar/>
 
-    <div class="app__view">
-      <router-view/>
+      <div class="app__view">
+        <router-view/>
+      </div>
     </div>
-  </div>
+  </template>
+
+  <template v-else>
+    <router-view/>
+  </template>
 </div>
 </template>
 
