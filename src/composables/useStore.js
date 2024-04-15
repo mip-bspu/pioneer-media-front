@@ -3,26 +3,36 @@ import { watch, reactive } from 'vue'
 const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
-  localStorage: {
-    user: {
-      tags: ['blg']
-    }
-  },
+  localStorage: {},
   
   sessionStorage: {},
 })
 
-let getter = {
-  "user": {
-    getUserTags: ()=>store.localStorage.user.tags
+
+const users = {
+  getters: {
+    getUserTags: ()=>store.sessionStorage.user?.tags || null,
+  
+    isUser: ()=>!!store.sessionStorage.user,
+  },
+
+  setters: {
+    setUserTags: (tags)=>{
+      if(getters.isUser()){ 
+        store.sessionStorage.user.tags = tags 
+      }
+    },
+
+    setUser: (user)=>{
+      console.log(getters.isUser())
+    }
   }
 }
 
-let setter = {
-  "user": {
-    setUserTags: (tags)=>store.localStorage.user.tags = tags
-  }
+const scopes = {
+  "users": users
 }
+
 
 Object.assign(
   store.localStorage, 
@@ -50,11 +60,11 @@ watch(
 
 export function useStore(scope){
   if(scope === undefined) return { store }
+  
+  let localStore = {...scopes[scope].getters, ...scopes[scope].setters}
 
-  let scopeStore = {...getter[scope], ...setter[scope]}
- 
   return {
-    store: scopeStore
+    store: localStore
   }
 }
 

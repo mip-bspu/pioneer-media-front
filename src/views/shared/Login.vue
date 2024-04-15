@@ -1,22 +1,35 @@
 <script setup>
+import { useAuth } from '@/composables/useAuth'
+import { useAsync } from '@/composables/useAsync'
 import { ref } from 'vue'
+
+const { onLogin } = useAuth()
+
+const {  
+  exec: execOnLogin,
+  state: stateLogin
+} = useAsync( onLogin )
 
 let form = ref({
   login: '',
   password: ''
 })
+
+function onSubmit(){
+  execOnLogin(form.value)
+}
 </script>
 
 <template>
 <div class="login">
   <div class="login__wrapper">
-    <q-form class="form">
+    <q-form class="form" @submit.prevent="onSubmit">
       <q-card class="form__wrapper">
         <q-card-section class="q-px-none q-pt-none q-pb-xs">
           <div class="form__title">Вход</div>
         </q-card-section>
 
-        <q-card-section class="q-px-none form__inputs">
+        <q-card-section class="q-px-none q-pb-none form__inputs">
           <label class="form__input-box">
             <div class="form__label">Логин</div>
             <q-input dense outlined v-model="form.login"/>
@@ -28,8 +41,19 @@ let form = ref({
           </label>
         </q-card-section>
         
-        <q-card-actions class="q-px-none q-pt-lg justify-center">
-          <q-btn class="form__btn" color="primary">Войти</q-btn>
+        <q-card-section class="q-py-sm">
+          <div class="form__message">
+            <div class="form__error" v-if="stateLogin.isError">
+              <q-icon name="mdi-alert-circle-outline"/>
+              <span class="q-pl-xs">
+                {{ stateLogin.error }}
+              </span>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions class="q-px-none q-pt-none justify-center">
+          <q-btn class="form__btn" color="primary" type="submit">Войти</q-btn>
         </q-card-actions>
         
         <div class="form__footer">
@@ -73,6 +97,22 @@ let form = ref({
   &__label{
     padding-left: 0.2rem;
     padding-bottom: 0.1rem;
+
+    font-size: 0.9rem;
+  }
+  &__message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 1.6rem;
+
+    font-size: 0.8rem;
+
+  }
+  &__error{
+    color: $negative;
   }
   &__btn{
     width: 100%;

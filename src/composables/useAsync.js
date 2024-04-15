@@ -1,4 +1,7 @@
 import {reactive} from 'vue';
+import { getMessageError } from '@/utils/format.util.js'
+
+const delay = (ms)=>new Promise((res)=>setTimeout(res, ms))
 
 export function useAsync(func){
   let state = reactive({
@@ -6,8 +9,6 @@ export function useAsync(func){
     isError: false,
     isLoading: false
   })
-
-  const delay = (ms)=>new Promise((res)=>setTimeout(res, ms))
 
   async function exec(...args){
     try{
@@ -18,8 +19,7 @@ export function useAsync(func){
       return await func(...args)
     }catch(e){
       state.isError = true;
-      state.error = e;
-
+      state.error = getMessageError(e);
       return null;
     }finally{
       state.isLoading = false;
