@@ -1,36 +1,40 @@
-import { watch, reactive } from 'vue'
+import { watch, reactive, toRef } from 'vue'
 
 const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
   localStorage: {},
   
-  sessionStorage: {},
+  sessionStorage: {
+    user: null
+  },
 })
 
 
-const users = {
-  getters: {
-    getUserTags: ()=>store.sessionStorage.user?.tags || null,
-  
-    isUser: ()=>!!store.sessionStorage.user,
-  },
+class Users{
+  constructor(user){
+    this.user = user;
+  }
 
-  setters: {
-    setUserTags: (tags)=>{
-      if(getters.isUser()){ 
-        store.sessionStorage.user.tags = tags 
-      }
-    },
+  getTags(){ return this.user.value?.tags || null }
+  getGroups(){ return this.user.value?.groups || null }
+  isUser(){ return !!this.user.value }
 
-    setUser: (user)=>{
-      console.log(getters.isUser())
+
+  setTags(tags){
+    if(this.isUser()){ 
+      this.user.value.tags = tags 
     }
+  }
+
+  setUser(user){
+    this.user.value = user    
   }
 }
 
+
 const scopes = {
-  "users": users
+  "users": new Users( toRef(store.sessionStorage, 'user') )
 }
 
 
@@ -60,11 +64,9 @@ watch(
 
 export function useStore(scope){
   if(scope === undefined) return { store }
-  
-  let localStore = {...scopes[scope].getters, ...scopes[scope].setters}
 
   return {
-    store: localStore
+    store: scopes[scope]
   }
 }
 

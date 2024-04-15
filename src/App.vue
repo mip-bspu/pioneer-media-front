@@ -3,14 +3,25 @@ import Navbar from "@/components/layout/Navbar.vue"
 import Sidebar from "./components/layout/Sidebar.vue"
 
 import { ref } from 'vue'
+import { useStore } from '@/composables/useStore'
+import { router, onPage } from '@/router'
 
-let role = ref("admin")
+const { store: UserStore } = useStore("users")
+
+
+if( !UserStore.isUser() ){
+  router.replace("/auth")
+}
 
 </script>
 
 <template>
 <div class="app">
-  <template v-if="role == 'user'">
+  <template v-if="onPage('login')">
+    <router-view/>
+  </template>
+
+  <template v-else>
     <navbar/>
 
     <div class="app__content">
@@ -20,10 +31,6 @@ let role = ref("admin")
         <router-view/>
       </div>
     </div>
-  </template>
-
-  <template v-else>
-    <router-view/>
   </template>
 </div>
 </template>

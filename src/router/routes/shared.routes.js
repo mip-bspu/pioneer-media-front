@@ -1,8 +1,14 @@
 import { computed } from 'vue'
 
 import Login from '@/views/shared/Login.vue'
+import Home from '@/views/shared/Home.vue'
 
-export const shared_routes = [
+export const routes = [
+  {
+    name: "home",
+    path: "/",
+    component: Home
+  },
   {
     name: "login",
     path: "/auth",

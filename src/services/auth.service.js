@@ -6,3 +6,16 @@ export function login({login, password}){
       password
   })
 }
+
+
+export function logout(){
+  
+}
+
+export function inAnyGroup(userGroups, groups){
+  for(let group of groups){
+    if( userGroups.find(g=>g === group) ) return true 
+  }
+
+  return false
+}

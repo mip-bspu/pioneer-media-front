@@ -1,6 +1,5 @@
 <script setup>
-import { sidebar_routes } from '@/router/routes/user.routes';
-import {router, onPage} from '@/router'
+import {router, onPage, sidebar_routes} from '@/router'
 
 
 </script>

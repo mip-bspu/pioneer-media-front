@@ -9,7 +9,7 @@ import { useStore } from '@/composables/useStore'
 import { getListActions } from '@/services/action.service';
 import { ref, watch, reactive } from 'vue'
 
-let { store } = useStore()
+let { store: UserStore } = useStore("users")
 
 let tab = ref('create-action')
 
@@ -32,7 +32,7 @@ watch(
     if( oldV && oldV[1] != newV[1] || isChangeActions.value ){
       isChangeActions.value = false
       let data = (await execGetListActions({
-        tags: store.localStorage.user.tags, 
+        tags: UserStore.getTags(), 
         page: newV[1]-1, 
         page_size: 8
       }))?.data

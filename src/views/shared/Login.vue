@@ -3,7 +3,7 @@ import { useAuth } from '@/composables/useAuth'
 import { useAsync } from '@/composables/useAsync'
 import { ref } from 'vue'
 
-const { onLogin } = useAuth()
+const { onLogin, onLogout } = useAuth()
 
 const {  
   exec: execOnLogin,
@@ -18,6 +18,9 @@ let form = ref({
 function onSubmit(){
   execOnLogin(form.value)
 }
+
+onLogout()
+
 </script>
 
 <template>
@@ -32,12 +35,12 @@ function onSubmit(){
         <q-card-section class="q-px-none q-pb-none form__inputs">
           <label class="form__input-box">
             <div class="form__label">Логин</div>
-            <q-input dense outlined v-model="form.login"/>
+            <q-input dense outlined v-model="form.login" type="text"/>
           </label>
 
           <label class="form__input-box">
             <div class="form__label">Пароль</div>
-            <q-input dense outlined v-model="form.password"/>
+            <q-input dense outlined v-model="form.password" type="password"/>
           </label>
         </q-card-section>
         
@@ -109,7 +112,6 @@ function onSubmit(){
     min-height: 1.6rem;
 
     font-size: 0.8rem;
-
   }
   &__error{
     color: $negative;

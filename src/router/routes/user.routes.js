@@ -1,12 +1,25 @@
-import { computed } from 'vue' 
-
 import Device from '@/views/Device.vue'
 import Action from '@/views/Action.vue'
 import Schedule from '@/views/Schedule.vue'
 
-import Main from '@/views/admin/Main.vue'
+import { computed } from 'vue' 
+import { useAuth } from '@/composables/useAuth'
+import { availableRoutes } from '@/utils/routes.util.js'
 
-const routes = [
+const { inAnyGroup } = useAuth()
+
+export const routes = [
+  {
+    name: "actions",
+    path: "/actions",
+    component: Action,
+    meta: {
+      name: "События",
+      layout: ["sidebar"],
+      icon: "mdi-book-edit-outline",
+      isAuth: ()=>inAnyGroup(['USER'])
+    }
+  },
 
   {
     name: "devices",
@@ -16,19 +29,7 @@ const routes = [
       name: "Устройства",
       layout: ["sidebar"],
       icon: "mdi-cellphone-link",
-      show: ()=>true
-    }
-  },
-
-  {
-    name: "actions",
-    path: "/actions",
-    component: Action,
-    meta: {
-      name: "События",
-      layout: ["sidebar"],
-      icon: "mdi-book-edit-outline",
-      show: ()=>true
+      isAuth: ()=>inAnyGroup(['USER'])
     }
   },
 
@@ -40,30 +41,9 @@ const routes = [
       name: "Расписание",
       layout: ["sidebar"],
       icon: "mdi-calendar-range-outline",
-      show: ()=>true
-    }
-  },
-
-  {
-    name: "main",
-    path: "/",
-    component: Main,
-    meta: {
-      name: "Расписание",
-      layout: ["sidebar"],
-      icon: "mdi-calendar-range-outline",
-      show: ()=>true
+      isAuth: ()=>inAnyGroup(['USER'])
     }
   },
 ]
 
-export const user_routes = computed(()=>routes.filter(item=>item.meta.show()))
-
-
-export const sidebar_routes = computed(()=>{
-  return user_routes.filter(item=>item.meta.layout.includes("sidebar"))
-})
-
-export const navbar_routes = computed(()=>{
-  return user_routes.filter(item=>item.meta.layout.includes("navbar"))
-})
+export const user_routes_available = computed(()=>availableRoutes(routes))
