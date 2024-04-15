@@ -18,7 +18,8 @@ export const router = createRouter({
 })
 
 router.beforeEach((to, from, next)=>{
-  if( to.meta?.isAuth() === false ){
+  if( to.meta?.isAuth && !to.meta.isAuth() ){
+    router.replace('/')
     return next(false)
   }
 
