@@ -10,8 +10,7 @@ async function onLogin({login, password}){
     const { data } = await AuthService.login({login, password})
 
     await UserStore.setUser(data)
-    await router.replace("/")  
-    router.go(0)
+    await router.replace("/")
   }catch(e){
     throw e
   }
