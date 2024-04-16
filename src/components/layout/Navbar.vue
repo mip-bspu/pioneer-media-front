@@ -1,5 +1,11 @@
 <script setup>
 import { navbar_routes } from '@/router';
+import { useStore } from '@/composables/useStore'
+import { useAuth } from '@/composables/useAuth'
+
+const { store: UserStore } = useStore("users")
+
+const { onLogout } = useAuth()
 </script>
 
 <template>
@@ -17,10 +23,23 @@ import { navbar_routes } from '@/router';
         </ul>
       </nav>
 
-      <div class="navbar__profile">
-        <div class="profile__icon"></div>
-        <div class="profile__name">test</div>
+      <div class="navbar__right">
+        <div class="navbar__profile">
+          <div class="profile__icon">
+            <q-icon name="mdi-account-circle-outline"/>
+          </div>
+          <div class="profile__name">{{ UserStore.getLogin() }}</div>
+        </div>
+
+        <q-separator vertical class="q-mx-md"/>
+
+        <q-btn 
+            icon="mdi-logout-variant" 
+            dense flat
+            @click="onLogout"
+        >Выход</q-btn>
       </div>
+
     </div>
   </div>
 </div>
@@ -37,7 +56,7 @@ import { navbar_routes } from '@/router';
   &__box{
     height: 80px;
     
-    padding: 1rem 2rem;
+    padding: 1rem 1rem 1rem 2rem;
 
     display: flex;
     flex-direction: row;
@@ -52,18 +71,33 @@ import { navbar_routes } from '@/router';
   &__item:not(:first-child){
     margin-left: 1rem;
   }
-
+  &__right{
+    display: flex;
+    flex-direction: row;
+  }
+  &__icon{
+    
+  }
   &__profile{
     display: flex;
     align-items: center;
-        
-    gap: 1rem;
+
+    gap: 0.2rem;
+
+    text-transform: capitalize;
+    color: $grey-9;
   }
 }
 .profile{
   &__icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 40px;
     height: 40px;
+
+    font-size: 2rem;
 
     border-radius: 50%;
     background-color: white;

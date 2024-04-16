@@ -14,7 +14,7 @@ export const routes = [
     meta: {
       icon: "mdi-account-group",
       name: "Users",
-      isAuth: ()=>inAnyGroup(['ADMIN']),
+      isAvailable: ()=>inAnyGroup(['ADMIN']),
       layout: ["sidebar"]
     }
   }

@@ -9,7 +9,7 @@ export function login({login, password}){
 
 
 export function logout(){
-  
+  return client.post('/auth/logout')
 }
 
 export function inAnyGroup(userGroups, groups){

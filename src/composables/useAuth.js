@@ -17,8 +17,10 @@ async function onLogin({login, password}){
   }
 }
 
-function onLogout(){
-  UserStore.setUser(null)
+async function onLogout(){
+  AuthService.logout()
+  await UserStore.setUser(null)
+  router.replace("/auth")
 }
 
 function inAnyGroup(groups){

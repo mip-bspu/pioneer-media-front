@@ -18,6 +18,7 @@ class Users{
 
   getTags(){ return this.user.value?.tags || null }
   getGroups(){ return this.user.value?.groups || null }
+  getLogin(){ return this.user.value?.login || null }
   isUser(){ return !!this.user.value }
 
 
@@ -61,10 +62,13 @@ watch(
   {deep: true}
 )
 
+export function isAuth(){
+  return scopes["users"].isUser()
+}
 
 export function useStore(scope){
   if(scope === undefined) return { store }
-
+ 
   return {
     store: scopes[scope]
   }

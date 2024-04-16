@@ -17,7 +17,7 @@ export const routes = [
       name: "События",
       layout: ["sidebar"],
       icon: "mdi-book-edit-outline",
-      isAuth: ()=>inAnyGroup(['USER'])
+      isAvailable: ()=>inAnyGroup(['USER'])
     }
   },
 
@@ -29,7 +29,7 @@ export const routes = [
       name: "Устройства",
       layout: ["sidebar"],
       icon: "mdi-cellphone-link",
-      isAuth: ()=>inAnyGroup(['USER'])
+      isAvailable: ()=>inAnyGroup(['USER'])
     }
   },
 
@@ -41,7 +41,7 @@ export const routes = [
       name: "Расписание",
       layout: ["sidebar"],
       icon: "mdi-calendar-range-outline",
-      isAuth: ()=>inAnyGroup(['USER'])
+      isAvailable: ()=>inAnyGroup(['USER'])
     }
   },
 ]
