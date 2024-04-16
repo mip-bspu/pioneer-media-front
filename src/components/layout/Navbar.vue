@@ -37,6 +37,7 @@ const { onLogout } = useAuth()
             icon="mdi-logout-variant" 
             dense flat
             @click="onLogout"
+            color="grey-9"
         >Выход</q-btn>
       </div>
 
@@ -75,14 +76,11 @@ const { onLogout } = useAuth()
     display: flex;
     flex-direction: row;
   }
-  &__icon{
-    
-  }
   &__profile{
     display: flex;
     align-items: center;
 
-    gap: 0.2rem;
+    padding: 0 0.33em;
 
     text-transform: capitalize;
     color: $grey-9;
@@ -101,6 +99,12 @@ const { onLogout } = useAuth()
 
     border-radius: 50%;
     background-color: white;
+  }
+  &__name{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.715em;
+    text-transform: uppercase;
   }
 }
 </style>

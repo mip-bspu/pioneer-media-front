@@ -1,4 +1,4 @@
-import Main from '@/views/admin/Main.vue'
+import Users from '@/views/admin/Users.vue'
 
 import { computed } from 'vue'
 import { useAuth } from '@/composables/useAuth'
@@ -10,7 +10,7 @@ export const routes = [
   {
     name: "users",
     path: "/users",
-    component: Main,
+    component: Users,
     meta: {
       icon: "mdi-account-group",
       name: "Users",

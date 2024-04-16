@@ -1,10 +1,9 @@
 <script setup>
 import InputActionProperties from '@/components/action/InputActionProperties.vue';
 
-import { reactive, ref, watch } from 'vue'
+import { reactive } from 'vue'
 import { createAction } from '@/services/action.service.js'
 import { useAsync } from '@/composables/useAsync';
-import { priorityMessage } from '@/utils/map.util.js'
 
 const emit = defineEmits(['update:changed'])
 
@@ -50,9 +49,6 @@ const addAction = async ()=>{
 
 <style lang="scss" scoped>
 .setup{
-  &__wrapper{
-
-  }
   &__actions{
     margin-top: 1.5rem;
 

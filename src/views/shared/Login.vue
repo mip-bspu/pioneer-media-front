@@ -21,6 +21,7 @@ function onSubmit(){
 
 onLogout()
 
+// TODO: clear history
 </script>
 
 <template>

@@ -1,34 +1,15 @@
 <script setup>
 import { dayOfWeek } from '@/utils/map.util.js'
-import { watch, ref } from 'vue';
+import { createCalendar } from '@/services/schedule.service.js'
+import { computed } from 'vue';
 
 const props = defineProps({
   month: {type: Object, default: null}
 })
 
  // TODO: toLocaleString ru
-let days = ref([])
 
-watch(
-  ()=>props.month,
-  ()=>createCalendar(props.month.current, props.month.year),
-  { deep: true, immediate: true }
-)
-
-function createCalendar(month, year){
-  let date = new Date(year, month, 1)
-
-  let daysOfMonth = new Array(date.getDay()).fill(null)
-
-  for(let i = 1; i <= 31; i++){
-    date.setDate(i)
-    if( date.getMonth() != month ) break;
-
-    daysOfMonth.push(i)
-  }
-
-  days.value = daysOfMonth;
-}
+let days = computed(()=>createCalendar(props.month.current, props.month.year))
 </script>
 
 <template>
@@ -49,8 +30,6 @@ function createCalendar(month, year){
 .calendar{
   height: 100%;
 
-  &__wrapper{
-  }
   &__grid{
     height: 100%;
 
