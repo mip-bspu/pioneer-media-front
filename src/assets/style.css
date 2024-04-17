@@ -48,6 +48,11 @@ a{
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: white;
 }
+.scroll-style{
+  scrollbar-color:  rgba(0, 0, 0, 0.04) rgba(0,0,0,0);
+  scrollbar-gutter: stable;
+  scrollbar-width: th
+}
 .card__header{
   padding: 1rem;
 
