@@ -1,7 +1,3 @@
-import Device from '@/views/Device.vue'
-import Action from '@/views/Action.vue'
-import Schedule from '@/views/Schedule.vue'
-
 import { computed } from 'vue' 
 import { useAuth } from '@/composables/useAuth'
 import { availableRoutes } from '@/utils/routes.util.js'
@@ -12,7 +8,7 @@ export const routes = [
   {
     name: "actions",
     path: "/actions",
-    component: Action,
+    component: ()=>import('@/views/Action.vue'),
     meta: {
       name: "События",
       layout: ["sidebar"],
@@ -24,7 +20,7 @@ export const routes = [
   {
     name: "devices",
     path: "/devices",
-    component: Device,
+    component: ()=>import('@/views/Device.vue'),
     meta: {
       name: "Устройства",
       layout: ["sidebar"],
@@ -36,7 +32,7 @@ export const routes = [
   {
     name: "schedule",
     path: "/schedule",
-    component: Schedule,
+    component: ()=>import('@/views/Schedule.vue'),
     meta: {
       name: "Расписание",
       layout: ["sidebar"],

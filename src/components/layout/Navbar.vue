@@ -17,9 +17,6 @@ const { onLogout } = useAuth()
           <li class="navbar__item" v-for="route in navbar_routes">
             <router-link :to="route.path">{{ route.meta.name }}</router-link>
           </li>
-          <li class="navbar__item">item1</li>
-          <li class="navbar__item">item2</li>
-          <li class="navbar__item">item3</li>
         </ul>
       </nav>
 
