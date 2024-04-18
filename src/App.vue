@@ -2,16 +2,27 @@
 import Navbar from "@/components/layout/Navbar.vue"
 import Sidebar from "./components/layout/Sidebar.vue"
 
-import { ref } from 'vue'
-import { useStore } from '@/composables/useStore'
+import { ref, watch } from 'vue'
+import { useStore } from '@/store/useStore'
 import { router, onPage } from '@/router'
+import { showError } from "@/services/notification.service"
 
-const { store: UserStore } = useStore("users")
-
+const { store: UserStore } = useStore("user")
+const { store: NotificationStore } = useStore("notification")
 
 if( !UserStore.isUser() ){
   router.replace("/auth")
 }
+
+watch(
+  ()=>NotificationStore.getMessageError(),
+  async (err)=>{
+    if( err !== "" ){
+      await showError(err)
+      NotificationStore.setMessageError("")
+    }
+  }
+)
 
 </script>
 
