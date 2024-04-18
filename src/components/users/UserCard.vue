@@ -123,6 +123,8 @@ const onUpdate = ()=>{
 
 <style lang="scss" scoped>
 .user{
+  position: relative;
+
   &__wrapper{
     height: 100%;
     position: relative;
