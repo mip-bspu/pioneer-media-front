@@ -36,8 +36,12 @@ watch(
   }
 )
 
-const onActive = ()=>onSetActive(props.user.id, !props.user.active)
-const onUpdate = ()=>onUpdateUser(props.user.id, {groups: updates.groups, tags: updates.tags})
+const onActive = ()=>{
+  onSetActive(props.user.id, !props.user.active)
+}
+const onUpdate = ()=>{
+  onUpdateUser(props.user.id, {groups: updates.groups, tags: updates.tags})
+}
 </script>
 
 <template>
@@ -68,7 +72,7 @@ const onUpdate = ()=>onUpdateUser(props.user.id, {groups: updates.groups, tags: 
       />
     </q-card-section>
 
-    <q-card-section class="user__tags q-py-sm">
+    <q-card-section :class="['user__tags', !isEdit ? 'q-py-sm' : 'q-py-none']">
       <template v-if="!isEdit">
         <div class="user__label">Тэги</div>
 
@@ -83,6 +87,13 @@ const onUpdate = ()=>onUpdateUser(props.user.id, {groups: updates.groups, tags: 
           :options="options.tags" 
           v-model="updates.tags" 
       />
+    </q-card-section>
+
+    <q-card-section class="user__info q-pt-sm" v-if="isEdit">
+      <div class="user__error" v-if="stateUpdateUser.isError">
+        <q-icon name="mdi-alert-circle-outline"/>
+        <span>{{ stateUpdateUser.error }}</span>
+      </div>
     </q-card-section>
 
     <q-card-section class="user__btns q-pt-md q-pb-lg">
@@ -152,6 +163,14 @@ const onUpdate = ()=>onUpdateUser(props.user.id, {groups: updates.groups, tags: 
   }
   &__loading{
     font-size: 0.8rem;
+  }
+  &__info{
+    font-size: 0.9rem;
+
+    padding-left: 10%;
+  }
+  &__error{
+    color: $negative;
   }
   &__btn{
     font-size: 0.9em;

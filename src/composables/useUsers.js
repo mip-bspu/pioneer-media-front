@@ -49,10 +49,10 @@ async function onUpdateUser(userId, {tags, groups}){
   })
 
   if( !stateUpdateUser.isError ){
-    const { nUser } = res;
+    const { data: nUser } = res;
 
     let user = toRef(getUserById(userId))
-    user.value = nUser
+    user.value = Object.assign(user.value, nUser)
   }
 }
 
@@ -60,6 +60,7 @@ export function useUsers(){
 
   return {
     users,
+    stateGetUsers,
     setActive: { exec: onSetActive, state: stateSetActive },
     updateUser: { exec: onUpdateUser, state: stateUpdateUser }
   }
