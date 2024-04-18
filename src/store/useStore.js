@@ -1,3 +1,6 @@
+import Notification from './models/Notification'
+import User from './models/User'
+
 import { watch, reactive, toRef } from 'vue'
 
 const STORAGE_KEY = "pioneer_manage_media"
@@ -6,38 +9,12 @@ let store = reactive({
   localStorage: {},
   
   sessionStorage: {
+    notification: {
+      error: ""
+    },
     user: null
   },
 })
-
-
-class Users{
-  constructor(user){
-    this.user = user;
-  }
-
-  getTags(){ return this.user.value?.tags || null }
-  getGroups(){ return this.user.value?.groups || null }
-  getLogin(){ return this.user.value?.login || null }
-  isUser(){ return !!this.user.value }
-
-
-  setTags(tags){
-    if(this.isUser()){ 
-      this.user.value.tags = tags 
-    }
-  }
-
-  setUser(user){
-    this.user.value = user    
-  }
-}
-
-
-const scopes = {
-  "users": new Users( toRef(store.sessionStorage, 'user') )
-}
-
 
 Object.assign(
   store.localStorage, 
@@ -61,6 +38,11 @@ watch(
   ()=>sessionStorage.setItem(STORAGE_KEY, JSON.stringify(store.sessionStorage)),
   {deep: true}
 )
+
+const scopes = {
+  "user": new User( toRef(store.sessionStorage, 'user') ),
+  "notification": new Notification( toRef(store.sessionStorage, 'notification')) 
+}
 
 export function isAuth(){
   return scopes["users"].isUser()
