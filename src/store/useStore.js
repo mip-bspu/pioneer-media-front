@@ -45,7 +45,7 @@ const scopes = {
 }
 
 export function isAuth(){
-  return scopes["users"].isUser()
+  return scopes["user"].isUser()
 }
 
 export function useStore(scope){
