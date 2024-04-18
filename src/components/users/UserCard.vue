@@ -45,12 +45,12 @@ const onUpdate = ()=>{
 </script>
 
 <template>
-<q-card bordered flat class="user">
-  <div class="user__wrapper">
+<div class="user">
+  <div :class="{'user__wrapper': true, 'user__wrapper_edit': isEdit }">
     <q-card-section class="user__header q-pb-sm">
-      <div 
-          :class="['user__text', 'user__title', user.active ? 'user__title_active' : '']"
-      >{{ user.login }}</div>
+      <div :class="['user__text', 'user__title', user.active ? 'user__title_active' : '']">
+        {{ user.login }}
+      </div>
 
       <q-toggle @update:model-value="onActive" :model-value="user.active" color="green"/>
     </q-card-section>
@@ -99,6 +99,7 @@ const onUpdate = ()=>{
     <q-card-section class="user__btns q-pt-md q-pb-lg">
       <template v-if="!isEdit">
         <q-btn dense outline color="primary" class="q-px-md" @click="isEdit = true">Изменить</q-btn>
+        <q-btn dense outline class="q-px-md" disable>все настройки</q-btn>
       </template>
       <template v-else>
         <q-btn dense outline class="q-px-md" @click="isEdit = false">отмена</q-btn>
@@ -106,6 +107,7 @@ const onUpdate = ()=>{
       </template>
     </q-card-section>
   </div>
+
 
   <q-inner-loading
       :showing="stateSetActive.isLoading || stateUpdateUser.isLoading"
@@ -115,7 +117,8 @@ const onUpdate = ()=>{
       {{ user.active ? "Деактивация...": "Активация..." }}
     </div>
   </q-inner-loading>
-</q-card>
+
+</div>
 </template>
 
 <style lang="scss" scoped>
@@ -127,7 +130,11 @@ const onUpdate = ()=>{
     background-color: rgb(255, 255, 255) !important;
     
     border-radius: 0.4rem;
-    border: 1px solid $grey-5;
+    border: 1px solid $grey-4;
+
+    &_edit{
+      border: 2px dashed $grey-6;
+    }
   }
   &__label{
     color: $grey-7;
@@ -181,8 +188,8 @@ const onUpdate = ()=>{
     bottom: 0;
     left: 0; right: 0;
 
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
 }
