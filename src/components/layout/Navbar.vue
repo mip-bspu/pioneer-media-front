@@ -1,9 +1,9 @@
 <script setup>
 import { navbar_routes } from '@/router';
-import { useStore } from '@/composables/useStore'
+import { useStore } from '@/store/useStore'
 import { useAuth } from '@/composables/useAuth'
 
-const { store: UserStore } = useStore("users")
+const { store: UserStore } = useStore("user")
 
 const { onLogout } = useAuth()
 </script>

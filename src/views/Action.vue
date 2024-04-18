@@ -5,11 +5,11 @@ import ActionSetup from '@/components/action/ActionSetup.vue';
 import PreviewContents from '@/components/action/PreviewContents.vue'
 
 import { useAsync } from '@/composables/useAsync';
-import { useStore } from '@/composables/useStore'
+import { useStore } from '@/store/useStore'
 import { getListActions } from '@/services/action.service';
 import { ref, watch, reactive } from 'vue'
 
-let { store: UserStore } = useStore("users")
+let { store: UserStore } = useStore("user")
 
 let tab = ref('create-action')
 

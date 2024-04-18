@@ -3,9 +3,9 @@ import TimelineAction from '@/components/schedule/TimelineAction.vue';
 
 import { ref, watch } from 'vue'
 import { createTimeline, getActionsFromPeriod, createPeriodMonths } from '@/services/schedule.service';
-import { useStore } from '@/composables/useStore.js'
+import { useStore } from '@/store/useStore.js'
 
-const { store: UserStore } = useStore("users")
+const { store: UserStore } = useStore("user")
 
 const props = defineProps({
   month: {type: Object, default: { 

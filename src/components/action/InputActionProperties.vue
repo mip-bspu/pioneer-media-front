@@ -2,9 +2,9 @@
 import FileItem from '@/components/FileItem.vue';
 
 import { priorityMessage } from '@/utils/map.util.js'
-import { useStore } from '@/composables/useStore.js'
+import { useStore } from '@/store/useStore.js'
 
-const { store: UserStore } = useStore("users")
+const { store: UserStore } = useStore("user")
 
 const props = defineProps({
   setup: {type: Object, required: true}

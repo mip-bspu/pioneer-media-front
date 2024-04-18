@@ -1,9 +1,9 @@
 import * as AuthService from '@/services/auth.service.js'
-import { useStore } from '@/composables/useStore'
+import { useStore } from '@/store/useStore'
 import { ref } from 'vue'
 import { router } from '@/router'
 
-let { store: UserStore } = useStore("users")
+let { store: UserStore } = useStore("user")
 
 async function onLogin({login, password}){
   try{
