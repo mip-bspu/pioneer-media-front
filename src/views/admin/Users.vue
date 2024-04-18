@@ -2,31 +2,30 @@
 // TODO: check async if return null
 // TODO: add in async global notification about error
 import ListUsers from '@/components/users/ListUsers.vue'
+import UsersToolbar from '@/components/users/UsersToolbar.vue'
 
-import { ref, watch } from 'vue'
-import { getUsers } from '@/services/admin.service.js'
-import { useAsync } from '@/composables/useAsync';
+import { watch } from 'vue'
+import { useUsers } from '@/composables/useUsers';
 
-const {
-  exec: execGetUsers,
-  state: stateGetUsers
-} = useAsync(getUsers)
-
-let users = ref([])
+const { users } = useUsers()
 
 
-async function onGetUsers(){
-  const response = await execGetUsers()
-
-  users.value = !stateGetUsers.isError ? response.data : [];
-}
-
-onGetUsers()
+watch(()=>users.value.length,
+  ()=>{
+    if(users.value.length != 0){
+      users.value = Array(10).fill(users.value[0])
+    }
+  }
+)
 </script>
 
 <template>
-<q-card class="users">
-  <q-card-section class="users__list">
+<q-card flat class="users">
+  <q-card-section>
+    <users-toolbar/>
+  </q-card-section>
+
+  <q-card-section flat class="users__list q-px-none q-pt-none">
     <list-users :users="users"/>
   </q-card-section>
 </q-card>
@@ -35,9 +34,13 @@ onGetUsers()
 <style lang="scss" scoped>
 .users{
   height: 100%;
+  background-color: inherit;
+
+  display: flex;
+  flex-direction: column;
 
   &__list{
-    height: 100%;
+    flex: 1 1 100%;
   }
 }
 </style>
