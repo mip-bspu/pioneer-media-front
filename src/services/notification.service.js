@@ -10,7 +10,8 @@ function showError(message){
   Notify.create({
     message,
     type: "negative",
-    ...defaultSetup
+    ...defaultSetup,
+    color: 'red-5'
   })
 }
 
@@ -18,7 +19,8 @@ function showSuccess(message){
   Notify.create({
     message,
     type: "positive",
-    ...defaultSetup
+    ...defaultSetup,
+    color: 'green-6'
   })
 }
 
@@ -26,7 +28,11 @@ function showInfo(message){
   Notify.create({
     message,
     type: "info",
-    ...defaultSetup
+    ...defaultSetup,
+    actions: [{ icon: "mdi-close", color: "white" }],
+    color: 'grey-8',
+    textColor: 'white',
+    icon: 'mdi-message-alert-outline'
   })
 }
 

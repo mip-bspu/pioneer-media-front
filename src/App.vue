@@ -5,7 +5,7 @@ import Sidebar from "./components/layout/Sidebar.vue"
 import { ref, watch } from 'vue'
 import { useStore } from '@/store/useStore'
 import { router, onPage } from '@/router'
-import { showError } from "@/services/notification.service"
+import { showError, showSuccess, showInfo } from "@/services/notification.service"
 
 const { store: UserStore } = useStore("user")
 const { store: NotificationStore } = useStore("notification")
@@ -15,11 +15,24 @@ if( !UserStore.isUser() ){
 }
 
 watch(
-  ()=>NotificationStore.getMessageError(),
-  async (err)=>{
+  ()=>[NotificationStore.getMessageError(), NotificationStore.getMessageSuccess(), NotificationStore.getMessageInfo()],
+  async ([err, success, info])=>{
     if( err !== "" ){
       await showError(err)
       NotificationStore.setMessageError("")
+      return;
+    }
+
+    if( success !== "" ){
+      await showSuccess(success)
+      NotificationStore.setMessageSuccess("")
+      return;
+    }
+
+    if( info !== "" ){
+      await showInfo(info)
+      await NotificationStore.setMessageInfo("")
+      return;
     }
   }
 )

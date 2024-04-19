@@ -1,5 +1,5 @@
-import Notification from './models/Notification'
-import User from './models/User'
+import Notification from './interfaces/Notification'
+import User from './interfaces/User'
 
 import { watch, reactive, toRef } from 'vue'
 
@@ -10,7 +10,9 @@ let store = reactive({
   
   sessionStorage: {
     notification: {
-      error: ""
+      error: "",
+      success: "",
+      info: ""
     },
     user: null
   },
