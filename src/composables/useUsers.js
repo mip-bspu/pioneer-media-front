@@ -52,7 +52,7 @@ async function onUpdateUser(userId, {tags, groups}){
     const { data: nUser } = res;
 
     let user = toRef(getUserById(userId))
-    user.value = Object.assign(user.value, nUser)
+    Object.assign(user.value, nUser)
   }
 }
 

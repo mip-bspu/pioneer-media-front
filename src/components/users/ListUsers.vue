@@ -1,28 +1,31 @@
 <script setup>
 import UserCard from '@/components/users/UserCard.vue';
 
-import { getTags, getGroups } from '@/services/admin.service.js'
+import { useAsync } from '@/composables/useAsync';
+import { getOptions } from '@/services/admin.service.js'
 import { ref, reactive } from 'vue'
 
 defineProps({
   users: {type: Object, default: []}
 })
 
+const {
+  exec: execGetOptions
+} = useAsync(getOptions, {globalError: true})
+
 let options = reactive({
   tags: [],
   groups: []
 })
 
-async function getOptions(){
-  try{
-    options.tags = (await getTags({})).data
-    options.groups = (await getGroups()).data
-  }catch(e){
-    
+
+const onGetOptions = async ()=>{
+  const nOptions = await execGetOptions()
+  if(nOptions){
+    Object.assign(options, nOptions)
   }
 }
-
-getOptions()
+onGetOptions()
 </script>
 
 <template>
@@ -42,7 +45,7 @@ getOptions()
 
   &__list{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 
     gap: 1rem;
   }
