@@ -33,8 +33,8 @@ export function useAsync(func, opts = { delay: 0, globalError: false, msgSuccess
       return null;
     }finally{
       state.isLoading = false;
-
-      if(!state.isError && opts["msgSuccess"] != "")
+  
+      if(!state.isError && opts["msgSuccess"] && opts["msgSuccess"] !== "")
         NotificationStore.setMessageSuccess(opts["msgSuccess"]);
     }
   }
