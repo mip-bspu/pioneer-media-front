@@ -15,7 +15,19 @@ export const routes = [
       isAvailable: ()=>inAnyGroup(['ADMIN']),
       layout: ["sidebar"]
     }
-  }
+  },
+
+  {
+    name: "edit-devices",
+    path: "/edit-devices",
+    component: ()=>import('@/views/admin/EditDevices.vue'),
+    meta: {
+      icon: "mdi-monitor-multiple",
+      name: "Devices",
+      isAvailable: ()=>inAnyGroup(['ADMIN']),
+      layout: ["sidebar"]
+    }
+  },
 ]
 
 export const admin_routes_available = computed(()=>availableRoutes(routes))
