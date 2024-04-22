@@ -4,7 +4,7 @@ import { monthName } from '@/utils/map.util.js'
 
 const GAP_TIMELINES = 4;
 
-export const createPeriodMonths = (year, month)=>{
+const createPeriodMonths = (year, month)=>{
   return ({
     begin: new Date(year, month, 1),
     end: new Date(year, month + 1, Date.lastDateOfMonth(year, month + 1))
@@ -56,7 +56,7 @@ const createDataDayForRender = (curDate, dataActions = [])=>{
   })
 }
 
-export function createTimeline(year, month, actions){
+function createTimeline(year, month, actions){
   const period = createPeriodMonths(year, month)
 
   let mapActions = {}
@@ -81,7 +81,7 @@ export function createTimeline(year, month, actions){
   return range
 }
 
-export function getActionsFromPeriod({tags, from, to}){
+function getActionsFromPeriod({tags, from, to}){
   return client.get('/action/period', {
     params: {
       from: Date.formatDateIso(from),
@@ -89,4 +89,26 @@ export function getActionsFromPeriod({tags, from, to}){
       tags: tags.join(",")
     }
   })
+}
+
+function createCalendar(month, year){
+  let date = new Date(year, month, 1)
+
+  let daysOfMonth = new Array(date.getDay()).fill(null)
+
+  for(let i = 1; i <= 31; i++){
+    date.setDate(i)
+    if( date.getMonth() != month ) break;
+
+    daysOfMonth.push(i)
+  }
+
+  return daysOfMonth;
+}
+
+export {
+  getActionsFromPeriod,
+  createTimeline,
+  createPeriodMonths,
+  createCalendar
 }

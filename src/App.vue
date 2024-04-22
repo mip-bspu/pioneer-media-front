@@ -1,19 +1,61 @@
 <script setup>
 import Navbar from "@/components/layout/Navbar.vue"
 import Sidebar from "./components/layout/Sidebar.vue"
+
+import { ref, watch } from 'vue'
+import { useStore } from '@/store/useStore'
+import { router, onPage } from '@/router'
+import { showError, showSuccess, showInfo } from "@/services/notification.service"
+
+const { store: UserStore } = useStore("user")
+const { store: NotificationStore } = useStore("notification")
+
+if( !UserStore.isUser() ){
+  router.replace("/auth")
+}
+
+watch(
+  ()=>[NotificationStore.getMessageError(), NotificationStore.getMessageSuccess(), NotificationStore.getMessageInfo()],
+  async ([err, success, info])=>{
+    if( err !== "" ){
+      await showError(err)
+      NotificationStore.setMessageError("")
+      return;
+    }
+
+    if( success !== "" ){
+      await showSuccess(success)
+      NotificationStore.setMessageSuccess("")
+      return;
+    }
+
+    if( info !== "" ){
+      await showInfo(info)
+      await NotificationStore.setMessageInfo("")
+      return;
+    }
+  }
+)
+
 </script>
 
 <template>
 <div class="app">
-  <navbar/>
+  <template v-if="onPage('login')">
+    <router-view/>
+  </template>
 
-  <div class="app__content">
-    <Sidebar/>
+  <template v-else>
+    <navbar/>
 
-    <div class="app__view">
-      <router-view/>
+    <div class="app__content">
+      <Sidebar/>
+
+      <div class="app__view">
+        <router-view/>
+      </div>
     </div>
-  </div>
+  </template>
 </div>
 </template>
 

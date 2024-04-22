@@ -3,9 +3,9 @@ import TimelineAction from '@/components/schedule/TimelineAction.vue';
 
 import { ref, watch } from 'vue'
 import { createTimeline, getActionsFromPeriod, createPeriodMonths } from '@/services/schedule.service';
-import { useStore } from '@/composables/useStore.js'
+import { useStore } from '@/store/useStore.js'
 
-const { store } = useStore("user")
+const { store: UserStore } = useStore("user")
 
 const props = defineProps({
   month: {type: Object, default: { 
@@ -21,7 +21,7 @@ watch(
   async (month)=>{
     const period = createPeriodMonths(month.year, month.current)
     const { data } = await getActionsFromPeriod({
-        tags: store.getUserTags(), 
+        tags: UserStore.getTags(), 
         from: period.begin, 
         to: period.end
     }) // TODO: async request

@@ -2,15 +2,15 @@
 import FileItem from '@/components/FileItem.vue';
 
 import { priorityMessage } from '@/utils/map.util.js'
-import { useStore } from '@/composables/useStore.js'
+import { useStore } from '@/store/useStore.js'
 
-const { store } = useStore()
+const { store: UserStore } = useStore("user")
 
 const props = defineProps({
   setup: {type: Object, required: true}
 })
 
-const tagOptions = store.localStorage.user.tags
+const tagOptions = UserStore.getTags()
 const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: priorityMessage[key], value: key }})
 </script>
 

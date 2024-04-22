@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { Quasar } from 'quasar'
+import { Quasar, Notify } from 'quasar'
 import quasarLang from 'quasar/lang/ru'
 import quasarIconSet from "quasar/icon-set/mdi-v6";
 import { router } from "@/router"
@@ -14,10 +14,14 @@ import '@/assets/style.css'
 
 import '@/utils/date.util.js'
 
+import { isAuth } from '@/store/useStore'
+
 const app = createApp(App)
 
 app.use(Quasar, {
-  plugins: {},
+  plugins: {
+    Notify
+  },
   lang: quasarLang,
   iconSet: quasarIconSet
 })
@@ -27,5 +31,10 @@ app.use(router)
 Object.keys(ComponentsUI).forEach(component=>{
   app.component(component, ComponentsUI[component])
 })
+
+export const $$ = {
+  isAuth
+}
+app.config.globalProperties.$$ = $$;
 
 app.mount('#app')

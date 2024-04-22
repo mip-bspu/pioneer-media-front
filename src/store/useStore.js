@@ -1,28 +1,22 @@
-import { watch, reactive } from 'vue'
+import Notification from './interfaces/Notification'
+import User from './interfaces/User'
+
+import { watch, reactive, toRef } from 'vue'
 
 const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
-  localStorage: {
-    user: {
-      tags: ['blg']
-    }
-  },
+  localStorage: {},
   
-  sessionStorage: {},
+  sessionStorage: {
+    notification: {
+      error: "",
+      success: "",
+      info: ""
+    },
+    user: null
+  },
 })
-
-let getter = {
-  "user": {
-    getUserTags: ()=>store.localStorage.user.tags
-  }
-}
-
-let setter = {
-  "user": {
-    setUserTags: (tags)=>store.localStorage.user.tags = tags
-  }
-}
 
 Object.assign(
   store.localStorage, 
@@ -47,14 +41,20 @@ watch(
   {deep: true}
 )
 
+const scopes = {
+  "user": new User( toRef(store.sessionStorage, 'user') ),
+  "notification": new Notification( toRef(store.sessionStorage, 'notification')) 
+}
+
+export function isAuth(){
+  return scopes["user"].isUser()
+}
 
 export function useStore(scope){
   if(scope === undefined) return { store }
-
-  let scopeStore = {...getter[scope], ...setter[scope]}
  
   return {
-    store: scopeStore
+    store: scopes[scope]
   }
 }
 
