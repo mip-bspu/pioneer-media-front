@@ -1,7 +1,15 @@
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
   data: {type: Object}
 })
+
+let showMenu = ref(false)
+
+const close = ()=>{
+  showMenu.value = false
+}
 </script>
 
 <template>
@@ -10,7 +18,7 @@ const props = defineProps({
     <div :class="['device__status']"></div>
 
     <div class="device__column">
-      <q-icon name="mdi-dots-vertical" class="device__btn-edit"/>
+      <q-icon name="mdi-dots-vertical" class="device__btn-edit" @click="showMenu = !showMenu"/>
     </div>
     <div class="device__column">
       <div class="device__description ellipsis">{{ data.description + "School 13 asdf  office asdf" }}</div>
@@ -27,6 +35,13 @@ const props = defineProps({
         </div>
       </div>
     </div>
+
+    <slot 
+        name="menu" 
+        :show="showMenu" 
+        :data="data" 
+        :close="close"
+    ></slot>
   </div>
 </div>
 </template>
@@ -79,7 +94,6 @@ const props = defineProps({
     border-radius: 50%;
 
     transition: all 0.1s ease;
-
     &:hover{
       background-color: $grey-3;
     }
@@ -97,11 +111,13 @@ const props = defineProps({
   }
 
   &__label{
+    user-select: none;
     font-size: 0.9em;
     color: $grey-8;
   }
 
   &__text{
+    user-select: none;
     line-height: 1.1em;
     color: $grey-9;
 
@@ -112,14 +128,14 @@ const props = defineProps({
 
   &__status{
     position: absolute;
-    top: 0.4rem; right: 0.4rem;
+    top: 6px; right: 8px;
 
     width: 12px;
     height: 12px;
 
     border-radius: 50%;
 
-    background-color: $negative;
+    background-color: $red-5;
 
     &_active{
       background-color: $positive;

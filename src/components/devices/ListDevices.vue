@@ -1,4 +1,5 @@
 <script setup>
+import DeviceItemEditMenu from '@/components/devices/DeviceItemEditMenu.vue'
 import DeviceItem from '@/components/devices/DeviceItem.vue'
 
 defineProps({
@@ -9,7 +10,11 @@ defineProps({
 <template>
 <div class="devices">
   <div class="devices__wrapper">
-    <device-item v-for="device in devices" :data="device"/>
+    <device-item v-for="device in devices" :data="device" >
+      <template #menu="{show, data, close}">
+        <device-item-edit-menu :show="show" :data="data" :close="close"/>
+      </template>
+    </device-item>
   </div>
 </div>
 </template>
