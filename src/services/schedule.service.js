@@ -39,7 +39,7 @@ const createDataActionForRender = (period, action, index)=>{
       tags: action["tags"]
     },
     style: {
-      top: (36 + GAP_TIMELINES) * index + 'px',
+      top: 20 + (36 + GAP_TIMELINES) * index + 'px',
       width: diff * 40 + 'px',
       backgroundColor: getRandomColor()
     }
