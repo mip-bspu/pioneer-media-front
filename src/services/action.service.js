@@ -15,7 +15,7 @@ export function getListActions({tags, page, page_size = 20}){
     params: {
       page: page,
       page_size: page_size,
-      tags: tags.join(",")
+      tags: tags.map(t=>t.name).join(",")
     }
   })
 }
@@ -47,7 +47,7 @@ function createFormForAction({name, from, to, priority, tags = [], files = []}){
   }
 
   for(let tag of tags){
-    data.append('tags[]', tag)
+    data.append('tags[]', tag.name)
   }
 
   return data

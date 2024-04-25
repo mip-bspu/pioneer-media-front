@@ -30,6 +30,7 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
       <q-select
           :options="tagOptions"
           dense outlined
+          option-label="name"
           multiple use-chips
           v-model="setup.tags"
       />
