@@ -76,31 +76,42 @@ let selectedAction = ref(null)
     </q-card>
   </template>
 
-  <template #sidebar>
-    <div class="sidebar">
-      <q-tabs
+  <template #sidebar="{show, close, open}">
+    <div class="sidebar q-py-sm">
+      <div class="sidebar__header">
+        <q-btn
+            :flat="show" dense class="sidebar__btn q-ml-sm q-mb-sm"
+            color="primary" 
+            :icon="show ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'"
+            @click="show ? close() : open()"
+        />
+      </div>
+      
+      <div :class="['sidebar__body', show || 'sidebar__body_hidden']">
+        <q-tabs
           v-model="tab"
           dense class="tabs justify-start"
           color="primary" active-color="primary" indicator-color="primary"
-      >
-        <q-tab name="create-action" label="Создание события"/>
-        <q-tab name="edit-action" label="Изменение события"/>
-        <q-tab name="preview-content" label="Просмотр контента"/>
-      </q-tabs>
+        >
+          <q-tab name="create-action" label="Создание события"/>
+          <q-tab name="edit-action" label="Изменение события"/>
+          <q-tab name="preview-content" label="Просмотр контента"/>
+        </q-tabs>
 
-      <q-tab-panels v-model="tab">
-        <q-tab-panel name="create-action">
-          <action-setup v-model:changed="isChangeActions"/>
-        </q-tab-panel>
+        <q-tab-panels v-model="tab">
+          <q-tab-panel name="create-action">
+            <action-setup v-model:changed="isChangeActions"/>
+          </q-tab-panel>
 
-        <q-tab-panel name="edit-action">
-          <h6>test2</h6>
-        </q-tab-panel>
+          <q-tab-panel name="edit-action">
+            <h6>test2</h6>
+          </q-tab-panel>
 
-        <q-tab-panel name="preview-content">
-          <preview-contents :selectedAction="selectedAction"/>
-        </q-tab-panel>
-      </q-tab-panels>
+          <q-tab-panel name="preview-content">
+            <preview-contents :selectedAction="selectedAction"/>
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
     </div>
   </template>
 </split-page>
@@ -112,8 +123,16 @@ let selectedAction = ref(null)
 
   background-color: white;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
-  
-  padding: 1rem 0;
+  &__btn{
+    transition: all 0.2s ease-in-out;
+  }
+  &__body{
+    &_hidden{
+      transition: all 0.1s ease-in-out;
+      opacity: none;
+      visibility: hidden;
+    }
+  }
 }
 .tabs{
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
