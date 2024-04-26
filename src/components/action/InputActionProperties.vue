@@ -7,7 +7,8 @@ import { useStore } from '@/store/useStore.js'
 const { store: UserStore } = useStore("user")
 
 const props = defineProps({
-  setup: {type: Object, required: true}
+  setup: {type: Object, required: true},
+  addFiles: {type: Boolean}
 })
 
 const tagOptions = UserStore.getTags()
@@ -61,18 +62,20 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
     </label>
   </div>
 
-  <div class="properties__title">Контент</div>
-  <div class="properties__block">
-    <ui-area-uploader class="properties__area-upload" v-model:files="setup.files">
-      <div class="properties__content">
-        <file-item 
-            v-for="file in setup.files" 
-            :file="file"
-            class="properties__file-item"
-        />
-      </div>
-    </ui-area-uploader>
-  </div>
+  <template v-if="addFiles">
+    <div class="properties__title">Контент</div>
+    <div class="properties__block">
+      <ui-area-uploader class="properties__area-upload" v-model:files="setup.files">
+        <div class="properties__content">
+          <file-item 
+              v-for="file in setup.files" 
+              :file="file"
+              class="properties__file-item"
+          />
+        </div>
+      </ui-area-uploader>
+    </div>
+  </template>
 </div>
 </template>
 

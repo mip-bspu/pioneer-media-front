@@ -2,6 +2,7 @@
 import ListActions from '@/components/action/ListActions.vue'
 import SplitPage from '@/components/layout/SplitPage.vue';
 import ActionSetup from '@/components/action/ActionSetup.vue';
+import ActionEdit from '@/components/action/ActionEdit.vue';
 import PreviewContents from '@/components/action/PreviewContents.vue'
 
 import { useAsync } from '@/composables/useAsync';
@@ -21,13 +22,13 @@ let {
 let isChangeActions = ref(true)
 let actions = ref([]);
 
-let paggination = reactive({
+let pagination = reactive({
   currentPage: 1,
   maxPages: 0
 })
 
 watch(
-  ()=>[isChangeActions.value, paggination.currentPage],
+  ()=>[isChangeActions.value, pagination.currentPage],
   async (newV, oldV)=>{
     if( oldV && oldV[1] != newV[1] || isChangeActions.value ){
       isChangeActions.value = false
@@ -39,7 +40,7 @@ watch(
 
       if(data){
         actions.value = data.actions
-        paggination.maxPages = Math.ceil(data.total_items / data.page_size)
+        pagination.maxPages = Math.ceil(data.total_items / data.page_size)
       }
     }
   },
@@ -47,6 +48,28 @@ watch(
 )
 
 let selectedAction = ref(null)
+
+watch(
+  ()=>[selectedAction.value, pagination.currentPage],
+  ([selected, curPage], old)=>{
+    if(selected && tab.value != 'preview-content'){
+      tab.value = 'edit-action'
+    }
+
+    if( curPage !== old[1] ){
+      tab.value = 'create-action'
+    }
+  }
+)
+
+watch(
+  ()=>tab.value,
+  (val)=>{
+    if(val === 'create-action'){
+      selectedAction.value = null
+    }
+  }
+)
 </script>
 
 <template>
@@ -58,8 +81,8 @@ let selectedAction = ref(null)
         <div class="actions__title title" >События</div>
         <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
         <q-pagination 
-            v-model="paggination.currentPage" 
-            :max="paggination.maxPages" input
+            v-model="pagination.currentPage" 
+            :max="pagination.maxPages" input
         />
       </q-card-section>
 
@@ -94,8 +117,8 @@ let selectedAction = ref(null)
           color="primary" active-color="primary" indicator-color="primary"
         >
           <q-tab name="create-action" label="Создание события"/>
-          <q-tab name="edit-action" label="Изменение события"/>
-          <q-tab name="preview-content" label="Просмотр контента"/>
+          <q-tab name="edit-action" label="Изменение события" :disable="!selectedAction"/>
+          <q-tab name="preview-content" label="Просмотр контента" :disable="!selectedAction"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab">
@@ -104,11 +127,19 @@ let selectedAction = ref(null)
           </q-tab-panel>
 
           <q-tab-panel name="edit-action">
-            <h6>test2</h6>
+            <action-edit v-model:changed="isChangeActions" :selectedAction="selectedAction" v-if="selectedAction"/>
+
+            <div v-else>
+              Необходимо выбрать событие
+            </div>
           </q-tab-panel>
 
           <q-tab-panel name="preview-content">
-            <preview-contents :selectedAction="selectedAction"/>
+            <preview-contents :selectedAction="selectedAction" v-if="selectedAction"/>
+
+            <div v-else>
+              Необходимо выбрать событие
+            </div>
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -128,8 +159,8 @@ let selectedAction = ref(null)
   }
   &__body{
     &_hidden{
-      transition: all 0.1s ease-in-out;
-      opacity: none;
+      transition: all 0.05s ease-in-out;
+      opacity: 0;
       visibility: hidden;
     }
   }

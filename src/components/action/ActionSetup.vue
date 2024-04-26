@@ -35,7 +35,7 @@ const addAction = async ()=>{
 <template>
 <div class="setup">
   <div class="setup__wrapper">
-    <input-action-properties v-model:setup="setup"/>
+    <input-action-properties v-model:setup="setup"  :add-files="true"/>
 
     <q-separator class="q-mt-lg"/>
 

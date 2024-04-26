@@ -6,7 +6,7 @@ import { getFile } from '@/services/files.service.js'
 import { ref, onUnmounted, watch, reactive } from 'vue'
 
 const props = defineProps({
-  selectedAction: {type: [Object, null], default: null}
+  selectedAction: {type: Object, required: true}
 })
 
 let images = ref([])
@@ -45,35 +45,29 @@ onUnmounted(()=>images.value.forEach(img=>URL.revokeObjectURL(img)))
 
 <template>
 <div class="content">
-  <template v-if="selectedAction !== null">
-    <div class="content__action">
-      {{ selectedAction.name }}:
+  <div class="content__action">
+    {{ selectedAction.name }}:
+  </div>
+
+  <q-separator class="q-mb-lg q-mt-md"/>
+
+  <template v-if="images.length > 0">
+    <div class="content__images">
+      <preview-content-item 
+          :src-image="image.src"
+          :data-file="image.file"
+          v-for="image in images"
+          @click="()=>{
+            player.play = true
+            player.file = image.file
+          }"
+      />
     </div>
-    <q-separator class="q-mb-lg"/>
-
-    <template v-if="images.length > 0">
-      <div class="content__images">
-        <preview-content-item 
-            :src-image="image.src"
-            :data-file="image.file"
-            v-for="image in images"
-            @click="()=>{
-              player.play = true
-              player.file = image.file
-            }"
-        />
-      </div>
-    </template>
-
-    <template v-else>
-      К текущему событию не привязан контент
-    </template>
   </template>
 
   <template v-else>
-    Необходимо выбрать событие
+    К текущему событию не привязан контент
   </template>
-
 
   <q-dialog v-model="player.play" full-width>
     <image-and-video-player 
