@@ -1,6 +1,6 @@
 import client from '@/client'
 import { monthName } from '@/utils/map.util.js'
-
+import { getNameFromTag } from '../utils/format.util';
 
 const GAP_TIMELINES = 4;
 
@@ -27,14 +27,15 @@ const getRandomColor = ()=>{
 }
 
 const createDataActionForRender = (period, action, index)=>{
-  // TODO: if action before 'from'
   let from = new Date(action["from"]); from.setHours(0)
   let to =   new Date(action["to"]);   to.setHours(0)
 
+  from = from < period.begin ? period.begin : from;
   let diff = to > period.end ? Date.diff(period.end, from) + 1: Date.diff(to, from) + 1;
-
+  
   return {
     data: {
+      from: from,
       name: action["name"],
       tags: action["tags"]
     },
@@ -63,10 +64,10 @@ function createTimeline(year, month, actions){
   let range = []
 
   actions.forEach((action, index)=>{
-    let data = createDataActionForRender(period, action, index)
-    let from = Date.formatDateIso(action["from"])
-
-    mapActions[from] =  mapActions[from] ? [...mapActions[from], data]  : [data]
+    let transformAction = createDataActionForRender(period, action, index)
+    let from = Date.formatDateIso(transformAction.data["from"])
+    
+    mapActions[from] =  mapActions[from] ? [...mapActions[from], transformAction]  : [transformAction]
   })
 
   let iterDate = new Date(period.begin)
@@ -86,7 +87,7 @@ function getActionsFromPeriod({tags, from, to}){
     params: {
       from: Date.formatDateIso(from),
       to: Date.formatDateIso(to),
-      tags: tags.join(",")
+      tags: tags.map(t=>getNameFromTag(t)).join(",")
     }
   })
 }
