@@ -1,13 +1,12 @@
 <script setup>
 const props = defineProps({
-  show: {type: Boolean},
   data: {type: Object},
   close: {type: Function}
 })
 </script>
 
 <template>
-<q-menu :model-value="show" no-parent-event fit persistent class="menu device-menu" :offset="[0, -5]">
+<div class="menu">
   <div class="menu__wrapper q-pb-md q-pt-md">
     <q-card-section class="q-pb-none">
       <div class="menu__title">
@@ -24,7 +23,7 @@ const props = defineProps({
       <q-btn size="sm" color="primary" class="menu__btn">Принять изменения</q-btn>
     </q-card-actions>
   </div>
-</q-menu>
+</div>
 </template>
 
 <style lang="scss" scoped>
@@ -40,14 +39,5 @@ const props = defineProps({
 
     font-weight: 600 !important;
   }
-}
-</style>
-
-<style>
-.device-menu.q-menu{
-  box-shadow: 0 0 0 0 black !important;
-
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-width: 0px 1px 1px 4px;
 }
 </style>

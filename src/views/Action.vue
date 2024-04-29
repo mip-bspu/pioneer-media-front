@@ -70,6 +70,8 @@ watch(
     }
   }
 )
+
+// TODO: update Content
 </script>
 
 <template>
@@ -136,7 +138,6 @@ watch(
 
           <q-tab-panel name="preview-content">
             <preview-contents :selectedAction="selectedAction" v-if="selectedAction"/>
-
             <div v-else>
               Необходимо выбрать событие
             </div>

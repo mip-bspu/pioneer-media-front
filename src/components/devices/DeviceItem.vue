@@ -21,7 +21,7 @@ const close = ()=>{
       <q-icon name="mdi-dots-vertical" class="device__btn-edit" @click="showMenu = !showMenu"/>
     </div>
     <div class="device__column">
-      <div class="device__description ellipsis">{{ data.description + "School 13 asdf  office asdf" }}</div>
+      <div class="device__description ellipsis q-mt-sm">{{ data.description + "School 13 asdf  office asdf" }}</div>
 
       <div class="device__row">
         <div class="device__tags ellipsis">
@@ -36,12 +36,15 @@ const close = ()=>{
       </div>
     </div>
 
-    <slot 
-        name="menu" 
-        :show="showMenu" 
-        :data="data" 
-        :close="close"
-    ></slot>
+    <q-menu 
+        :model-value="showMenu" 
+        no-parent-event 
+        fit persistent 
+        class="device__menu" 
+        :offset="[0, -5]"
+    >
+      <slot name="menu" :data="data" :close="close"></slot>
+    </q-menu>
   </div>
 </div>
 </template>
@@ -54,12 +57,12 @@ const close = ()=>{
     flex-direction: row;
 
     min-width: 340px;
-    height: 100px;
+    height: 120px;
 
     padding: 0.6rem 0 0.6rem 0;
 
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-width: 1px 1px 1px 4px;
     border-radius: 0.3em;
 
@@ -141,5 +144,13 @@ const close = ()=>{
       background-color: $positive;
     }
   }
+}
+</style>
+<style>
+.device__menu.q-menu{
+  box-shadow: 0 0 0 0 black !important;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-width: 0px 1px 1px 4px;
 }
 </style>

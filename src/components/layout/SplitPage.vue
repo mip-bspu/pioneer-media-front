@@ -5,8 +5,6 @@ let showSidebar = ref(false)
 
 const close = ()=>showSidebar.value = false
 const open = ()=>showSidebar.value = true
-// TODO: active
-// TODO: get width with props
 </script>
 
 <template>
@@ -37,7 +35,7 @@ const open = ()=>showSidebar.value = true
 .sidebar{
   position: relative;
   width: 40vw;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   &__wrapper{
     position: absolute;
     top: 0; bottom: 0;

@@ -11,8 +11,8 @@ defineProps({
 <div class="devices">
   <div class="devices__wrapper">
     <device-item v-for="device in devices" :data="device" >
-      <template #menu="{show, data, close}">
-        <device-item-edit-menu :show="show" :data="data" :close="close"/>
+      <template #menu="{data, close}">
+        <device-item-edit-menu :data="data" :close="close"/>
       </template>
     </device-item>
   </div>

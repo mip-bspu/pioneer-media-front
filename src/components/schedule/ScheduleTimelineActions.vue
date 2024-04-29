@@ -38,7 +38,7 @@ watch(
       <div 
           v-for="day in rangeDays"
           class="schedule__day"
-          :class="{'schedule__weekend': day.day == 6 || day.day == 0, 'schedule__day_active': day.isToday}" 
+          :class="{'schedule__weekend': day.day == 6 || day.day == 0, 'schedule__day_active': day.isToday}"
       >
         <div 
             class="schedule__name"
