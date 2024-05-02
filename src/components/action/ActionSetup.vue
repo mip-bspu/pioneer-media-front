@@ -17,7 +17,7 @@ let nullSetup = {
   tags: [],
   from: Date.today(),
   to: Date.today(),
-  priority: "0",
+  priority: "1",
   files: []
 }
 
