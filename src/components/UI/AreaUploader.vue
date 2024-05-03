@@ -20,10 +20,21 @@ const uploadFile = (event)=>{
       nFiles.push(file)
     }
   }
-  console.log(nFiles)
 
   emit('update:files', nFiles)
   event.target.value = ''
+}
+
+const unselectFile = (deleteFile)=>{
+  let nFiles = [];  
+  
+  for(let file of Array.from(props.files)){
+    if(file !== deleteFile){
+      nFiles.push(file)      
+    }
+  }
+
+  emit('update:files', nFiles)
 }
 </script>
 
@@ -37,7 +48,7 @@ const uploadFile = (event)=>{
         @dragleave="dragLeaveOrDrop" 
         @drop="dragLeaveOrDrop"
     >
-    <slot></slot>
+      <slot name="default" :unselect="unselectFile"></slot>
   </div>
 </div>
 </template>

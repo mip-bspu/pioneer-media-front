@@ -65,11 +65,11 @@ defineProps({
   }
 
   &__image{
+    width: 100%;
+    height: 140px;
+
     position: relative;
     z-index: 1;
-
-    height: 150px;
-    width: 200px;
 
     img{
       transition: all 0.2s ease;

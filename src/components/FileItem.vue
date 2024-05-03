@@ -2,7 +2,8 @@
 import { toSrc, getName } from '@/utils/file.util.js'
 
 const props = defineProps({
-  file: {type: Object, required: true}
+  file: {type: Object, required: true},
+  unselect: {type: Function}
 })
 </script>
 
@@ -14,6 +15,10 @@ const props = defineProps({
     </div>
 
     <div class="file__info">
+      <div class="file__unselect" v-if="unselect">
+        <q-icon name="mdi-close-circle" @click="()=>unselect(file)"/>
+      </div>
+
       <div class="file__title">
         <span>{{ getName(file.name) }}</span>
       </div>
@@ -36,6 +41,22 @@ const props = defineProps({
     border-radius: 0.4rem;
   }
 
+  &__unselect{
+    position: absolute;
+    z-index: 2;
+    top: 2px;
+    right: 5px;
+
+    cursor: pointer;
+
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.4);
+
+    &:hover{
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
   &__info{
     position: absolute;
     top: 0; bottom: 0;
@@ -44,7 +65,7 @@ const props = defineProps({
     padding: 0.4rem;
 
     opacity: 0.3;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6) 50%);
+    background: rgba(0, 0, 0, 0.6);
 
     transition: all 0.3s ease;
     &:hover{

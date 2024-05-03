@@ -66,13 +66,16 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
     <div class="properties__title">Контент</div>
     <div class="properties__block">
       <ui-area-uploader class="properties__area-upload" v-model:files="setup.files">
-        <div class="properties__content">
-          <file-item 
-              v-for="file in setup.files" 
-              :file="file"
-              class="properties__file-item"
-          />
-        </div>
+        <template #default="{ unselect }">
+          <div class="properties__content">
+            <file-item 
+                v-for="file in setup.files" 
+                :file="file"
+                class="properties__file-item"
+                :unselect="unselect"
+            />
+          </div>
+        </template>
       </ui-area-uploader>
     </div>
   </template>
@@ -101,7 +104,7 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
   }
 
   &__file-item{
-    width: 180px;
+    width: 100%;
     height: 100px;
   }
 
@@ -131,7 +134,8 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
   &__content{
     padding: 0.5rem;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
     gap: 0.5rem;
   }
 }
