@@ -17,22 +17,19 @@ const close = ()=>{
   <div class="device__wrapper">
     <div :class="['device__status',  Date.diffWithNow(new Date(data?.last_active)) < 120 ? 'device__status_active' : '']"></div>
 
-    <div class="device__column">
-      <q-icon name="mdi-dots-vertical" class="device__btn-edit" @click="showMenu = !showMenu"/>
-    </div>
-    <div class="device__column">
-      <div class="device__description ellipsis q-mt-sm">{{ data.description + "School 13 asdf  office asdf" }}</div>
+    <q-icon name="mdi-dots-vertical" class="device__btn-edit device__icon" @click="showMenu = !showMenu"/>
 
-      <div class="device__row">
-        <div class="device__tags ellipsis">
-          <div class="device__label">Тэги:</div>
-          <div class="device__text ellipsis">{{data.tags.map(i=>i.name).join(", ")}}</div>
-        </div>
+    <div class="device__description ellipsis q-mt-sm">{{ data.description + "School 13 asdf  office asdf" }}</div>
 
-        <div class="device__ping">
-          <div class="device__label">{{data?.last_active ? 'Активность:' : 'Статус:'}}</div>
-          <div class="device__text device__text_small">{{data?.last_active ? Date.toLocale(data.last_active) : 'Не подключён'}}</div>
-        </div>
+    <div class="device__row">
+      <div class="device__tags ellipsis">
+        <div class="device__label">Тэги:</div>
+        <div class="device__text ellipsis">{{data.tags.map(i=>i.name).join(", ")}}</div>
+      </div>
+
+      <div class="device__ping">
+        <div class="device__label">{{data?.last_active ? 'Активность:' : 'Статус:'}}</div>
+        <div class="device__text device__text_small">{{data?.last_active ? Date.toLocale(data.last_active) : 'Не подключён'}}</div>
       </div>
     </div>
 
@@ -53,11 +50,6 @@ const close = ()=>{
 .device{
   &__wrapper{
     position: relative;
-    display: flex;
-    flex-direction: row;
-
-    min-width: 340px;
-    height: 120px;
 
     padding: 0.6rem 0 0.6rem 0;
 
@@ -69,18 +61,8 @@ const close = ()=>{
     font-size: 0.9rem;
   }
 
-  &__column{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    &:last-child{
-      justify-content: space-between;
-      flex: 1 1 100%;
-    }
-  }
-
   &__row{
+    width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 0.6em;
@@ -88,15 +70,17 @@ const close = ()=>{
     padding: 0 1rem;
   }
 
+  &__icon{
+    font-size: 1.4rem;
+  }
+
   &__btn-edit{
-    margin-left: 0.1em;
+    margin-left: 0.4em;
 
-    font-size: 2rem;
     cursor: pointer;
-
     border-radius: 50%;
-
     transition: all 0.1s ease;
+
     &:hover{
       background-color: $grey-3;
     }
@@ -106,6 +90,7 @@ const close = ()=>{
   }
 
   &__description{
+    width: 100%;
     padding: 0 2rem 0 1rem;
 
     font-size: 1.24em;
