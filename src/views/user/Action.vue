@@ -34,7 +34,8 @@ watch(
       isChangeActions.value = false
       let data = (await execGetListActions({
         tags: UserStore.getTags(), 
-        page: newV[1]-1, 
+        page: newV[1]-1,
+        page: 20, 
         page_size: 8
       }))?.data
 
@@ -83,6 +84,7 @@ watch(
         <div class="actions__title title" >События</div>
         <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
         <q-pagination 
+            v-if="actions.length > 0"
             v-model="pagination.currentPage" 
             :max="pagination.maxPages" input
         />
@@ -91,6 +93,10 @@ watch(
       <q-card-section class="actions__list q-py-xs q-mb-md">
         <div class="actions__items">
           <list-actions :actions="actions" v-model:selected="selectedAction"/>
+        </div>
+
+        <div class="actions__banner banner" v-if="actions.length === 0 && !stateListActions.isLoading">
+          Список событий пуст <q-icon name="mdi-card-bulleted-off-outline" style="font-size: 1.8rem"/>
         </div>
       </q-card-section>
         
@@ -185,6 +191,11 @@ watch(
     position: relative;
 
     flex: 1 1 100%;
+  }
+  .actions__banner{
+    max-width: 500px;
+    margin: 7vh auto;
+    height: 80px;
   }
   &__items{
     padding: 1rem;
