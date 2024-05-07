@@ -19,6 +19,7 @@ export function useDevices({intervalUpdate = 15000}) {
   }
   onGetDevices();
 
+  const updateDevicesList = () => onGetDevices()
 
   let intervalId = null;
 
@@ -34,6 +35,7 @@ export function useDevices({intervalUpdate = 15000}) {
 
   return {
     devices,
-    stateGetDevices
+    stateGetDevices,
+    updateDevicesList
   }
 }

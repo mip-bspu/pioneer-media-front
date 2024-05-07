@@ -27,6 +27,8 @@ async function onGetUsers(){
 }
 onGetUsers() 
 
+const updateUsersList = ()=>onGetUsers()
+
 const getUserById = (userId) => users.value.find(u=>u.id == userId)
 
 async function onSetActive(userId, val){
@@ -60,6 +62,7 @@ export function useUsers(){
     users,
     stateGetUsers,
     setActive: { exec: onSetActive, state: stateSetActive },
-    updateUser: { exec: onUpdateUser, state: stateUpdateUser }
+    updateUser: { exec: onUpdateUser, state: stateUpdateUser },
+    updateUsersList
   }
 }
