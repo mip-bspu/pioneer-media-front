@@ -4,7 +4,7 @@ import { ref } from 'vue'
 let props = defineProps({
   files: {type: Array, default: []}
 })
-
+// TODO: add many files drag and drop
 let emit = defineEmits(['update:files']);
 
 let isDrag = ref(false)

@@ -1,6 +1,10 @@
 Date.applyOffset = (date) =>{
   const offset = date.getTimezoneOffset() * 60 * 1000;
-  date.setTime(date.getTime() - offset);
+  date.setTime(date.getTime() + offset);
+}
+
+Date.toLocale = (date) => {
+  return new Date(date).toLocaleString();
 }
 
 Date.formatDateIso = (date, keepOffset = true) => {
@@ -30,6 +34,8 @@ Date.lastDateOfMonth = (year, month)=>{
   return count;
 }
 
+Date.diffWithNow = (date, level = "minutes") => Date.diff(new Date(), date, level)
+
 Date.diff = (toDate, fromDate, level = "days") => {
   let precision = 1;
 
@@ -48,5 +54,3 @@ Date.diff = (toDate, fromDate, level = "days") => {
 
   return Math.abs(toDate - fromDate) / precision
 }
-
-console.log(Date.today())

@@ -24,10 +24,8 @@ async function onGetUsers(){
   const response = await execGetUsers()
 
   users.value = !stateGetUsers.isError ? response.data : [];
-
-  console.log("get users")
 }
-onGetUsers() // get users
+onGetUsers() 
 
 const getUserById = (userId) => users.value.find(u=>u.id == userId)
 

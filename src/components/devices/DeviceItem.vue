@@ -7,7 +7,7 @@ const props = defineProps({
 
 let showMenu = ref(false)
 
-const close = ()=>{
+const close = ()=>{ 
   showMenu.value = false
 }
 </script>
@@ -15,7 +15,7 @@ const close = ()=>{
 <template>
 <div class="device">
   <div class="device__wrapper">
-    <div :class="['device__status']"></div>
+    <div :class="['device__status',  Date.diffWithNow(new Date(data?.last_active)) < 120 ? 'device__status_active' : '']"></div>
 
     <div class="device__column">
       <q-icon name="mdi-dots-vertical" class="device__btn-edit" @click="showMenu = !showMenu"/>
@@ -26,12 +26,12 @@ const close = ()=>{
       <div class="device__row">
         <div class="device__tags ellipsis">
           <div class="device__label">Тэги:</div>
-          <div class="device__text ellipsis">{{data.tags.map(i=>Array(5).fill(i.name))[0].join(", ")}}</div>
+          <div class="device__text ellipsis">{{data.tags.map(i=>i.name).join(", ")}}</div>
         </div>
 
         <div class="device__ping">
-          <div class="device__label">Статус:</div>
-          <div class="device__text device__text_small">Не подключён</div>
+          <div class="device__label">{{data?.last_active ? 'Активность:' : 'Статус:'}}</div>
+          <div class="device__text device__text_small">{{data?.last_active ? Date.toLocale(data.last_active) : 'Не подключён'}}</div>
         </div>
       </div>
     </div>

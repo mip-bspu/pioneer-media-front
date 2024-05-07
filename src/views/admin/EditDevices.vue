@@ -1,32 +1,23 @@
 <script setup>
-import ListDevices from '@/components/devices/ListDevices.vue';
+import ListDevicesWrapper from '@/components/devices/ListDevicesWrapper.vue';
+import DeviceItem from '@/components/devices/DeviceItem.vue'
+import DeviceItemEditMenu from '@/components/devices/DeviceItemEditMenu.vue'
 
-import { watch, ref } from 'vue'
-import { useAsync } from '@/composables/useAsync';
-import { getListDevices } from '@/services/devices.service.js';
+import { useDevices } from '@/composables/useDevices';
 
-const {
-  exec: execGetDevices,
-  state: stateGetDevices
-} = useAsync(getListDevices, {globalError: true});
-
-let devices = ref([]);
-
-async function onGetDevices(){
-  const res = await execGetDevices()
-
-  if( !stateGetDevices.isError ){
-    devices.value = res.data
-  }
-}
-
-onGetDevices();
+const { devices } = useDevices({intervalUpdate: 15000})
 </script>
 
 <template>
 <q-card flat class="devices">
   <q-card-section>
-    <list-devices :devices="devices"/>
+    <list-devices-wrapper>
+      <device-item v-for="device in devices" :data="device" >
+        <template #menu="{data, close}">
+          <device-item-edit-menu :data="data" :close="close"/>
+        </template>
+      </device-item>
+    </list-devices-wrapper>
   </q-card-section>
 </q-card>
 </template>

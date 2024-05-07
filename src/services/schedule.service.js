@@ -46,7 +46,7 @@ const createDataActionForRender = (period, action, index)=>{
     }
   }
 }
-
+// TODO: bug in show actions
 const createDataDayForRender = (curDate, dataActions = [])=>{
   return ({
     actions: dataActions,
