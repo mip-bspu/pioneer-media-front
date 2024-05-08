@@ -1,6 +1,7 @@
 <script setup>
 import FileItem from '@/components/FileItem.vue';
 
+import { ref, computed } from 'vue'
 import { priorityMessage } from '@/utils/map.util.js'
 import { useStore } from '@/store/useStore.js'
 
@@ -13,6 +14,17 @@ const props = defineProps({
 
 const tagOptions = UserStore.getTags()
 const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: priorityMessage[key], value: key }})
+
+let showSetupImages = ref(false)
+
+const imageFiles = computed(()=>props.setup.files.filter(f=>f.type.includes("image")).map(f=>{  
+  f.time ??= ref('00:05')
+  return f
+}))
+
+const setTimeForImageFile = (v, file)=>{
+  file.time.value = v
+}
 </script>
 
 <template>
@@ -64,7 +76,29 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
 
   <template v-if="addFiles">
     <div class="properties__title">Контент</div>
-    <div class="properties__block">
+
+    <q-toggle
+        v-model="showSetupImages" 
+        class="q-my-sm"
+        :disable="!imageFiles.length"
+    > 
+      <span class="properties__span">Настроить время показа изображений</span>
+    </q-toggle>
+
+    <div class="properties__block" v-show="showSetupImages">
+      <div class="properties__set-images set-images__wrapper">
+        <div v-for="file in imageFiles" class="set-images__item">
+          <span class="ellipsis">{{ file.name }}</span>
+          <q-input 
+              @update:modelValue="(v)=>setTimeForImageFile(v, file)" 
+              :modelValue="file.time"  
+              dense outlined type="time"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="properties__block" v-show="!showSetupImages">
       <ui-area-uploader class="properties__area-upload area-upload" v-model:files="setup.files">
         <template #default="{ unselect, activate, isDrag }">
           <div :class="{'area-upload__wrapper': true, 'scroll-style': true, 'active': isDrag}" @click="activate">
@@ -112,9 +146,13 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
       margin-left: 0.2rem;
     }
   }
+  &__span{
+    font-size: 0.9rem;
+    letter-spacing: 0.02rem;
+  }
 
   &__title{
-    margin-top: 1.6rem;
+    margin-top: 0.8rem;
     
     font-size: 1rem;
     color: rgb(130, 130, 130);
@@ -127,12 +165,9 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
     align-items: center;
     gap: 1rem;
   }
-
   &__area-upload{
     width: 100%;
     min-height: 180px;
-
- 
   }
 }
 .area-upload{
@@ -191,6 +226,19 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
   &__description{
     color: rgba(0, 0, 0, 0.4);
     font-size: 1rem;
+  }
+}
+.set-images{
+  &__wrapper{
+    display: flex;
+    flex-direction: column;
+  }
+  &__item{
+    margin-bottom: 0.4rem;
+
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
   }
 }
 </style>

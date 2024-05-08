@@ -14,14 +14,14 @@ const close = ()=>{
 
 <template>
 <div class="device">
-  <div class="device__wrapper">
+  <div :class="['device__wrapper', showMenu ? 'active' : '']">
     <div :class="['device__status',  Date.diffWithNow(new Date(data?.last_active)) < 120 ? 'device__status_active' : '']"></div>
 
     <q-icon name="mdi-dots-vertical" class="device__btn-edit device__icon" @click="showMenu = !showMenu"/>
 
-    <div class="device__description ellipsis q-mt-sm">{{ data.description + "School 13 asdf  office asdf" }}</div>
+    <div class="device__description ellipsis q-mt-sm">{{ data.description }}</div>
 
-    <div class="device__row">
+    <div class="device__row q-mt-sm">
       <div class="device__tags ellipsis">
         <div class="device__label">Тэги:</div>
         <div class="device__text ellipsis">{{data.tags.map(i=>i.name).join(", ")}}</div>
@@ -59,8 +59,13 @@ const close = ()=>{
     border-radius: 0.3em;
 
     font-size: 0.9rem;
-  }
 
+    transition: box-shadow 0.1s ease;
+
+    &.active{
+      box-shadow: 0 5px 15px 5px rgba(0, 0, 0, 0.13) !important;
+    }
+  }
   &__row{
     width: 100%;
     display: flex;
@@ -93,9 +98,10 @@ const close = ()=>{
     width: 100%;
     padding: 0 2rem 0 1rem;
 
-    font-size: 1.24em;
+    font-size: 1.2em;
+    letter-spacing: 0.5px;
     color: $primary;
-    text-transform: capitalize;
+    text-transform: lowercase;
   }
 
   &__label{
@@ -133,7 +139,7 @@ const close = ()=>{
 </style>
 <style>
 .device__menu.q-menu{
-  box-shadow: 0 0 0 0 black !important;
+  box-shadow: 0 20px 10px 5px rgba(0, 0, 0, 0.13) !important;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-width: 0px 1px 1px 4px;

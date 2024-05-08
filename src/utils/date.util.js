@@ -7,6 +7,12 @@ Date.toLocale = (date) => {
   return new Date(date).toLocaleString();
 }
 
+Date.getSecondsFromTime = (time)=>{
+  let times = time.split(":").map((i)=>parseInt(i))
+
+  return times[0]*60 + times[1];
+}
+
 Date.formatDateIso = (date, keepOffset = true) => {
   date = new Date(date);
 
