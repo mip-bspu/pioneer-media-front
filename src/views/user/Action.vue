@@ -128,13 +128,17 @@ watch(
           <q-tab name="preview-content" label="Просмотр" :disable="!selectedAction"/>
         </q-tabs>
 
-        <q-tab-panels v-model="tab">
+        <q-tab-panels v-model="tab" style="flex: 1 1 100%">
           <q-tab-panel name="create-action">
-            <action-setup v-model:changed="isChangeActions"/>
+            <q-scroll-area style="height: 100%;" :thumb-style="{width: '8px'}">
+              <action-setup v-if="true" v-model:changed="isChangeActions"/>
+            </q-scroll-area>
           </q-tab-panel>
 
           <q-tab-panel name="edit-action">
-            <action-edit v-model:changed="isChangeActions" :selectedAction="selectedAction" v-if="selectedAction"/>
+            <q-scroll-area style="height: 100%;" :thumb-style="{width: '8px'}" v-if="selectedAction">
+              <action-edit v-model:changed="isChangeActions" :selectedAction="selectedAction"/>
+            </q-scroll-area>
 
             <div v-else>
               Необходимо выбрать событие
@@ -142,8 +146,10 @@ watch(
           </q-tab-panel>
 
           <q-tab-panel name="preview-content">
-            <preview-contents :selectedAction="selectedAction" v-if="selectedAction"/>
-            
+            <q-scroll-area style="height: 100%;" :thumb-style="{width: '8px'}" v-if="selectedAction">
+              <preview-contents :selectedAction="selectedAction"/>
+            </q-scroll-area>
+
             <div v-else>
               Необходимо выбрать событие
             </div>
@@ -159,12 +165,20 @@ watch(
 .sidebar{
   height: 100%;
 
+  display: flex;
+  flex-direction: column;
+
   background-color: white;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   &__btn{
     transition: all 0.2s ease-in-out;
   }
   &__body{
+    flex: 1 1 100%;
+
+    display: flex;
+    flex-direction: column;
+
     &_hidden{
       transition: all 0.05s ease-in-out;
       opacity: 0;
