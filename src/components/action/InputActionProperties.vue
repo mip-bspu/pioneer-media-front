@@ -65,15 +65,25 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
   <template v-if="addFiles">
     <div class="properties__title">Контент</div>
     <div class="properties__block">
-      <ui-area-uploader class="properties__area-upload" v-model:files="setup.files">
-        <template #default="{ unselect }">
-          <div class="properties__content">
-            <file-item 
-                v-for="file in setup.files" 
-                :file="file"
-                class="properties__file-item"
-                :unselect="unselect"
-            />
+      <ui-area-uploader class="properties__area-upload area-upload" v-model:files="setup.files">
+        <template #default="{ unselect, activate, isDrag }">
+          <div :class="{'area-upload__wrapper': true, 'scroll-style': true, 'active': isDrag}" @click="activate">
+            <div class="area-upload__content">
+              <file-item 
+                  @click="(e)=>e.stopImmediatePropagation()"
+                  v-for="file in setup.files" 
+                  :file="file"
+                  class="area-upload__file-item"
+                  :unselect="unselect"
+              />
+            </div>
+
+            <div class="area-upload__bg">
+              <q-icon name="mdi-upload" class="area-upload__icon"/>
+              <div class="area-upload__description">
+                Нажмите или перетащите контент
+              </div>
+            </div>
           </div>
         </template>
       </ui-area-uploader>
@@ -103,11 +113,6 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
     }
   }
 
-  &__file-item{
-    width: 100%;
-    height: 100px;
-  }
-
   &__title{
     margin-top: 1.6rem;
     
@@ -127,16 +132,65 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
     width: 100%;
     min-height: 180px;
 
-    border: 1px solid rgba(0, 0, 0, 0.23);
-    border-radius: 0.4rem;
+ 
   }
+}
+.area-upload{
+  &__wrapper{
+    position: absolute;
+    top: 0; right: 0;
+    bottom: 0; left: 0;
+    overflow-y: auto;
 
+    height: 100%;
+    width: 100%;
+
+    border: 2px dashed rgba(0, 0, 0, 0.23);
+    border-radius: 0.4rem;
+
+    &.active{
+      border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+  }
   &__content{
+    position: relative;
+    z-index: 2;
+
     padding: 0.5rem;
+
+    background-color: rgba(255, 255, 255, 0);
 
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
     gap: 0.5rem;
+  }
+
+  &__file-item{
+    width: 100%;
+    height: 100px;
+  }
+
+  &__bg{
+    position: absolute;
+    top: 0; right: 0;
+    bottom: 0; left: 0;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__icon{
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 4rem;
+  }
+
+  &__description{
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 1rem;
   }
 }
 </style>

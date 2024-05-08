@@ -35,7 +35,6 @@ watch(
       let data = (await execGetListActions({
         tags: UserStore.getTags(), 
         page: newV[1]-1,
-        page: 20, 
         page_size: 8
       }))?.data
 
@@ -124,9 +123,9 @@ watch(
           dense class="tabs justify-start"
           color="primary" active-color="primary" indicator-color="primary"
         >
-          <q-tab name="create-action" label="Создание события"/>
-          <q-tab name="edit-action" label="Изменение события" :disable="!selectedAction"/>
-          <q-tab name="preview-content" label="Просмотр контента" :disable="!selectedAction"/>
+          <q-tab name="create-action" label="Создание"/>
+          <q-tab name="edit-action" label="Изменение" :disable="!selectedAction"/>
+          <q-tab name="preview-content" label="Просмотр" :disable="!selectedAction"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab">
@@ -144,6 +143,7 @@ watch(
 
           <q-tab-panel name="preview-content">
             <preview-contents :selectedAction="selectedAction" v-if="selectedAction"/>
+            
             <div v-else>
               Необходимо выбрать событие
             </div>

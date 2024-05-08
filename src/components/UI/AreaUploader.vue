@@ -8,6 +8,7 @@ let props = defineProps({
 let emit = defineEmits(['update:files']);
 
 let isDrag = ref(false)
+let inputRef = ref(null)
 
 const dragEnter = ()=>isDrag.value = true
 const dragLeaveOrDrop = ()=>isDrag.value = false
@@ -36,19 +37,21 @@ const unselectFile = (deleteFile)=>{
 
   emit('update:files', nFiles)
 }
+const activeMenuSelectFile = ()=>inputRef.value.click()
 </script>
 
 <template>
 <div class="uploader">
   <div class="uploader__wrapper" @dragenter="dragEnter" >
     <input 
+        ref="inputRef"
         type="file"
         :class="'uploader__input' + (isDrag ? ' uploader__input_active': '')"
         @change="uploadFile"
         @dragleave="dragLeaveOrDrop" 
         @drop="dragLeaveOrDrop"
     >
-      <slot name="default" :unselect="unselectFile"></slot>
+      <slot name="default" :unselect="unselectFile" :activate="activeMenuSelectFile" :is-drag="isDrag"></slot>
   </div>
 </div>
 </template>
@@ -67,7 +70,7 @@ const unselectFile = (deleteFile)=>{
   }
 
   &__input{
-    opacity: 0.1;
+    opacity: 0;
     background: silver;
 
     position: absolute;
@@ -76,7 +79,7 @@ const unselectFile = (deleteFile)=>{
     top: 0; bottom: 0;
 
     &_active{
-      z-index: 1;
+      z-index: 10;
     }
   }
 }
