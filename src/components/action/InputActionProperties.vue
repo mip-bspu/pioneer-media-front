@@ -162,7 +162,7 @@ const setTimeForImageFile = (v, file)=>{
     margin-top: 0.6rem;
 
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 1rem;
   }
   &__area-upload{

@@ -56,7 +56,7 @@ watch(
       tab.value = 'edit-action'
     }
 
-    if( curPage !== old[1] ){
+    if( curPage !== old[1] || !selected){
       tab.value = 'create-action'
     }
   }
@@ -137,7 +137,10 @@ watch(
 
           <q-tab-panel name="edit-action">
             <q-scroll-area style="height: 100%;" :thumb-style="{width: '8px'}" v-if="selectedAction">
-              <action-edit v-model:changed="isChangeActions" :selectedAction="selectedAction"/>
+              <action-edit 
+                  v-model:changed="isChangeActions" 
+                  v-model:selectedAction="selectedAction"
+              />
             </q-scroll-area>
 
             <div v-else>

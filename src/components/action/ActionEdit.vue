@@ -5,7 +5,7 @@ import { reactive, watch, computed } from 'vue'
 import { updateAction, deleteAction } from '@/services/action.service.js'
 import { useAsync } from '@/composables/useAsync';
 
-const emit = defineEmits(['update:changed'])
+const emit = defineEmits(['update:changed', 'update:selectedAction'])
 
 const props = defineProps({
   selectedAction: {type: Object, required: true}  
@@ -22,6 +22,7 @@ let {
 } = useAsync(deleteAction, {globalError: true, msgSuccess: "Событие успешно удаленно"})
 
 const reset = (obj = {})=>Object.assign(obj, props.selectedAction, {priority: props.selectedAction.priority.toString()})
+const resetSelectedAction = ()=>emit('update:selectedAction', null)
 
 let updates = reactive(reset())
 
@@ -45,6 +46,7 @@ const onDeleteAction = async ()=>{
 
   if(!stateDeleteAction.isError){
     emit('update:changed', true)
+    resetSelectedAction()
   }
 }
 </script>
