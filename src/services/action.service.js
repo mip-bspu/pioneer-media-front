@@ -1,4 +1,5 @@
 import client from '@/client'
+import { getNameFromTag } from '@/utils/format.util.js'
 
 export function createAction({name, from, to, tags = [], priority = 0, files}){
   let data = createFormForAction({name, from, to, priority, tags, files})
@@ -47,7 +48,7 @@ function createFormForAction({name, from, to, priority, tags = [], files = []}){
   }
 
   for(let tag of tags){
-    data.append('tags[]', tag.name)
+    data.append('tags[]', getNameFromTag(tag))
   }
 
   return data
