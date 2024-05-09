@@ -17,13 +17,13 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
 
 let showSetupImages = ref(false)
 
-const imageFiles = computed(()=>props.setup.files.filter(f=>f.type.includes("image")).map(f=>{  
+const imageFiles = props.addFiles && computed(()=>props.setup.files.filter(f=>f.type.includes("image")).map(f=>{  
   f.time ??= ref('00:15')
   return f
 }))
 
 watch(
-  ()=>imageFiles.value.length,
+  ()=>imageFiles?.value?.length || 0,
   (v)=>!v && (showSetupImages.value = false)
 )
 
