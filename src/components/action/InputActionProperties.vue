@@ -1,7 +1,7 @@
 <script setup>
 import FileItem from '@/components/FileItem.vue';
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { priorityMessage } from '@/utils/map.util.js'
 import { useStore } from '@/store/useStore.js'
 
@@ -18,13 +18,16 @@ const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: 
 let showSetupImages = ref(false)
 
 const imageFiles = computed(()=>props.setup.files.filter(f=>f.type.includes("image")).map(f=>{  
-  f.time ??= ref('00:05')
+  f.time ??= ref('00:15')
   return f
 }))
 
-const setTimeForImageFile = (v, file)=>{
-  file.time.value = v
-}
+watch(
+  ()=>imageFiles.value.length,
+  (v)=>!v && (showSetupImages.value = false)
+)
+
+const setTimeForImageFile = (v, file)=>file.time.value = v
 </script>
 
 <template>

@@ -68,7 +68,6 @@ const onDeleteAction = async ()=>{
       <q-btn outline color="primary" @click="onDeleteAction">Удалить</q-btn>
 
       <div class="edit__column">
-        <q-btn outline @click="reset">Сброс</q-btn>
         <q-btn color="primary" @click="onUpdateAction">Применить изменения</q-btn>
       </div>
     </div>
