@@ -44,6 +44,8 @@ function createFormForAction({name, from, to, priority, tags = [], files = []}){
   data.append('priority', priority)
 
   for(let file of files){
+    file?.time.value && data.append('times[]', `${file.name};${Date.getSecondsFromTime(file.time.value)}`)
+
     data.append('files[]', file)
   }
 

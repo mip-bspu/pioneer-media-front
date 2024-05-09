@@ -19,7 +19,7 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next)=>{
   if( to.meta?.isAvailable && !to.meta.isAvailable() ){
-    router.replace('/')
+    router.replace('/') // TODO: page not found
     return next(false)
   }
 

@@ -10,7 +10,12 @@ async function onLogin({login, password}){
     const { data } = await AuthService.login({login, password})
 
     await UserStore.setUser(data)
-    await router.replace("/")
+
+    if(data.groups.find(g=>g === "ADMIN")){
+      await router.replace("/users")
+    }else if(data.groups.find(g=>g === "USER")){
+      await router.replace("/actions")
+    }
   }catch(e){
     throw e
   }
