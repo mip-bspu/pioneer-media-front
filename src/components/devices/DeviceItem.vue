@@ -19,7 +19,10 @@ const close = ()=>{
 
     <q-icon name="mdi-dots-vertical" class="device__btn-edit device__icon" @click="showMenu = !showMenu"/>
 
-    <div class="device__description ellipsis q-mt-sm">{{ data.description }}</div>
+    <div class="device__description ellipsis q-mt-sm">
+      <div class="device__label">Описание:</div>
+      <div class="device__text">{{ data.description }}</div>
+    </div>
 
     <div class="device__row q-mt-sm">
       <div class="device__tags ellipsis">
@@ -98,10 +101,13 @@ const close = ()=>{
     width: 100%;
     padding: 0 2rem 0 1rem;
 
-    font-size: 1.2em;
     letter-spacing: 0.5px;
     color: $primary;
-    text-transform: lowercase;
+
+    .device__text{
+      line-height: 1.24em;
+      font-size: 1.1rem;
+    }
   }
 
   &__label{
