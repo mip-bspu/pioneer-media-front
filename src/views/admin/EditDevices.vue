@@ -17,7 +17,7 @@ const { devices, updateDevicesList } = useDevices({intervalUpdate: 15000})
 
   <q-card-section>
     <list-devices-wrapper>
-      <device-item v-for="device in devices" :data="device" class="devices__item">
+      <device-item v-for="device in devices" :data="device">
         <template #menu="{data, close}">
           <device-item-edit-menu :data="data" :close="close"/>
         </template>
@@ -30,9 +30,5 @@ const { devices, updateDevicesList } = useDevices({intervalUpdate: 15000})
 <style lang="scss" scoped>
 .devices{
   background-color: inherit;
-
-  &__item{
-    height: 120px;
-  }
 }
 </style>
