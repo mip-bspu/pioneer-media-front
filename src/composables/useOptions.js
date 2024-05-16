@@ -14,8 +14,10 @@ export function useOptions() {
  
   const onGetOptions = async ()=>{
     const nOptions = await execGetOptions()
+
     if(nOptions){
       Object.assign(options, nOptions)
+      options.groups = options.groups.filter(g => g !== "ADMIN")
     }
   }
   onGetOptions()
