@@ -70,3 +70,10 @@ export async function getOptions(){
   
   return options
 }
+
+export function createTag({name, type}) {
+  return client.post("/admin/tag", {
+    name,
+    type
+  })
+}

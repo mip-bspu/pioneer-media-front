@@ -30,3 +30,15 @@ export const dayOfWeek = {
   6: 'вс',
 }
 
+
+export const optionsTagType = [
+  { 
+    label: "тэг узла",
+    value: "node"
+  },
+  { 
+    label: "тэг устройства",
+    value: "device"
+  }
+]
+

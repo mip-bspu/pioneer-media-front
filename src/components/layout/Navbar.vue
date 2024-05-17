@@ -1,8 +1,11 @@
 <script setup>
+import CreateTag from '@/components/CreateTag.vue'
+
 import { navbar_routes } from '@/router';
 import { useStore } from '@/store/useStore'
 import { useAuth } from '@/composables/useAuth'
 
+const { inAnyGroup } = useAuth();
 const { store: UserStore } = useStore("user")
 
 const { onLogout } = useAuth()
@@ -14,6 +17,8 @@ const { onLogout } = useAuth()
     <div class="navbar__box">
       <nav>
         <ul class="navbar__items">
+          <create-tag v-if="inAnyGroup(['ADMIN'])"/>
+
           <li class="navbar__item" v-for="route in navbar_routes">
             <router-link :to="route.path">{{ route.meta.name }}</router-link>
           </li>
