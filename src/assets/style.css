@@ -97,6 +97,11 @@ a{
   align-items: center;
   gap: 0.6rem;
 }
+.page__banner{
+  max-width: 500px;
+  margin: 7vh auto;
+  height: 80px;
+}
 
 .banner_secondary{
   background-color: var(--blind-secondary);

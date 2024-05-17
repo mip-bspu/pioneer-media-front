@@ -1,7 +1,6 @@
 <script setup>
 import ListDevicesWrapper from '@/components/devices/ListDevicesWrapper.vue';
 import DeviceItem from '@/components/devices/DeviceItem.vue'
-import SplitPage from '@/components/layout/SplitPage.vue';
 import DeviceItemMenu from '@/components/devices/DeviceItemMenu.vue';
 
 import { useDevices } from '@/composables/useDevices';
@@ -28,7 +27,7 @@ const { devices, stateGetDevices } = useDevices({intervalUpdate: 15000})
       </device-item>
     </list-devices-wrapper>
 
-    <div class="device__banner banner" v-if="devices.length === 0 && !stateGetDevices.isLoading">
+    <div class="page__banner banner" v-if="devices.length === 0 && !stateGetDevices.isLoading">
       Устройств нет <q-icon name="mdi-cellphone-link" style="font-size: 1.8rem"/>
     </div>
   </q-card-section>
@@ -45,12 +44,6 @@ const { devices, stateGetDevices } = useDevices({intervalUpdate: 15000})
   }
   &__title{
     display: inline-block;
-  }
-
-  &__banner{
-    max-width: 500px;
-    margin: 7vh auto;
-    height: 80px;
   }
 }
 .sidebar{

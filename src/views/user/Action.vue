@@ -94,7 +94,7 @@ watch(
           <list-actions :actions="actions" v-model:selected="selectedAction"/>
         </div>
 
-        <div class="actions__banner banner" v-if="actions.length === 0 && !stateListActions.isLoading">
+        <div class="page__banner banner" v-if="actions.length === 0 && !stateListActions.isLoading">
           Список событий пуст <q-icon name="mdi-card-bulleted-off-outline" style="font-size: 1.8rem"/>
         </div>
       </q-card-section>
@@ -208,11 +208,6 @@ watch(
     position: relative;
 
     flex: 1 1 100%;
-  }
-  .actions__banner{
-    max-width: 500px;
-    margin: 7vh auto;
-    height: 80px;
   }
   &__items{
     padding: 1rem;

@@ -6,7 +6,7 @@ import DevicesToolbar from '@/components/devices/DevicesToolbar.vue';
 
 import { useDevices } from '@/composables/useDevices';
 
-const { devices, updateDevicesList } = useDevices({intervalUpdate: 15000})
+const { devices, updateDevicesList, stateGetDevices } = useDevices({intervalUpdate: 15000})
 </script>
 
 <template>
@@ -23,6 +23,10 @@ const { devices, updateDevicesList } = useDevices({intervalUpdate: 15000})
         </template>
       </device-item>
     </list-devices-wrapper>
+
+    <div class="page__banner banner" v-if="devices.length === 0 && !stateGetDevices.isLoading">
+      Устройств нет <q-icon name="mdi-cellphone-link" style="font-size: 1.8rem"/>
+    </div>
   </q-card-section>
 </q-card>
 </template>
