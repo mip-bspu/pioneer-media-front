@@ -6,34 +6,33 @@ import DeviceItemMenu from '@/components/devices/DeviceItemMenu.vue';
 
 import { useDevices } from '@/composables/useDevices';
 
-const { devices } = useDevices({intervalUpdate: 15000})
+const { devices, stateGetDevices } = useDevices({intervalUpdate: 15000})
 </script>
 
 <template>
-<split-page>
-  <template #default>
-    <q-card flat class="device">
-      <q-card-section>
-        <div class="device__toolbar">
-          <div class="device__title title">Устройства</div>
+<q-card flat class="device">
+  <q-card-section>
+    <div class="device__toolbar">
+      <div class="device__title title">Устройства</div>
 
-          <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
-        </div>
-      </q-card-section>
+      <q-separator vertical inset size="2px" color="primary" class="q-mx-lg"/>
+    </div>
+  </q-card-section>
 
-      <q-card-section>
-        <list-devices-wrapper>
-          <device-item v-for="device in devices" :data="device" >
-            <template #menu="{data, close}">
-              <device-item-menu :data="data" :close="close"/>
-            </template>
-          </device-item>
-        </list-devices-wrapper>
-      </q-card-section>
-    </q-card>
-  </template>
-</split-page>
+  <q-card-section>
+    <list-devices-wrapper>
+      <device-item v-for="device in devices" :data="device" >
+        <template #menu="{data, close}">
+          <device-item-menu :data="data" :close="close"/>
+        </template>
+      </device-item>
+    </list-devices-wrapper>
 
+    <div class="device__banner banner" v-if="devices.length === 0 && !stateGetDevices.isLoading">
+      Устройств нет <q-icon name="mdi-cellphone-link" style="font-size: 1.8rem"/>
+    </div>
+  </q-card-section>
+</q-card>
 </template>
 
 <style lang="scss" scoped>
@@ -46,6 +45,12 @@ const { devices } = useDevices({intervalUpdate: 15000})
   }
   &__title{
     display: inline-block;
+  }
+
+  &__banner{
+    max-width: 500px;
+    margin: 7vh auto;
+    height: 80px;
   }
 }
 .sidebar{
