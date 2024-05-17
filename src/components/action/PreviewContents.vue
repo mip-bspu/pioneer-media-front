@@ -2,8 +2,8 @@
 import PreviewContentItem from '@/components/PreviewContentItem.vue';
 import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
 
-import { getFile } from '@/services/files.service.js'
-import { ref, onUnmounted, watch, reactive } from 'vue'
+import { getUrlFile } from '@/services/files.service.js'
+import { ref, watch, reactive } from 'vue'
 
 const props = defineProps({
   selectedAction: {type: Object, required: true}
@@ -16,16 +16,6 @@ let player = reactive({
   file: null
 })
 
-async function getImage(uuid){
-  let res = await getFile(uuid)
-  //TODO: video preview
-  if( res.data.type.includes("image") ){
-    return URL.createObjectURL(res.data)
-  }else{
-    return null
-  }
-}
-
 watch(
   ()=>props.selectedAction,
   async ()=>{
@@ -33,14 +23,12 @@ watch(
     
     let imgs = []
     for(let file of props.selectedAction.files){
-      imgs.push({src: await getImage(file.id), file: file}) 
+      imgs.push({src: getUrlFile(file.id), file: file}) 
     }
     images.value = imgs
   },
   { immediate: true }
 )
-
-onUnmounted(()=>images.value.forEach(img=>URL.revokeObjectURL(img)))
 </script>
 
 <template>
@@ -71,6 +59,8 @@ onUnmounted(()=>images.value.forEach(img=>URL.revokeObjectURL(img)))
 
   <q-dialog v-model="player.play" full-width>
     <image-and-video-player 
+        class="content__player"
+        v-model:play="player.play"
         :file="player.file" 
         :content-type="player.file.content_type"
     />
