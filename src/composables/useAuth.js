@@ -15,6 +15,8 @@ async function onLogin({login, password}){
       await router.replace("/users")
     }else if(data.groups.find(g=>g === "USER")){
       await router.replace("/actions")
+    }else if(data.groups.find(g=>g === "VIEWER")){
+      await router.replace("/schedule")
     }
   }catch(e){
     throw e

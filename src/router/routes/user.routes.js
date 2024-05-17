@@ -37,7 +37,7 @@ export const routes = [
       name: "Расписание",
       layout: ["sidebar"],
       icon: "mdi-calendar-range-outline",
-      isAvailable: ()=>inAnyGroup(['USER'])
+      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
     }
   },
 ]
