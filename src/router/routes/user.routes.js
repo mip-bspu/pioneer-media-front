@@ -40,6 +40,18 @@ export const routes = [
       isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
     }
   },
+
+  {
+    name: "journal",
+    path: "/journal",
+    component: ()=>import('@/views/user/Journal.vue'),
+    meta: {
+      name: "История показа",
+      layout: ["sidebar"],
+      icon: "mdi-clipboard-text-clock-outline",
+      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
+    }
+  },
 ]
 
 export const user_routes_available = computed(()=>availableRoutes(routes))
