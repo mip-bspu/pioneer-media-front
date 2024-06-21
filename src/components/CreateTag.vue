@@ -39,7 +39,7 @@ let tag = reactive({
         />
 
         <q-btn 
-            dense outline
+            dense fill
             class="q-py-xs q-px-md" 
             color="primary"
             @click="()=>execCreateTag(tag)"
@@ -61,7 +61,7 @@ let tag = reactive({
     flex-direction: column;
     gap: 1rem;
     
-    background-color: rgb(246, 246, 246);
+    background-color: #FCFCFD;
   }
 
   &__row{

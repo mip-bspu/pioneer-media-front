@@ -240,6 +240,7 @@ const setTimeForImageFile = (v, file)=>file.time.value = v
     margin-bottom: 0.4rem;
 
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1.2rem;
   }
