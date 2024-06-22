@@ -5,6 +5,10 @@ export function getListDevices(){
   return client.get(`/devices`)
 }
 
+export function getMinListDevices(){
+  return client.get(`/devices/min`)
+}
+
 export function createDevice({description, token, tags}){
   return client.post(`/devices`, {
     description,

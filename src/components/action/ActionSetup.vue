@@ -10,7 +10,7 @@ const emit = defineEmits(['update:changed'])
 let {
   exec: execCreateAction,
   state: stateCreateAction
-} = useAsync(createAction)
+} = useAsync(createAction, {globalError: true})
 
 let nullSetup = {
   name: '',
