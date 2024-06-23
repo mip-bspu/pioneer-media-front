@@ -1,7 +1,8 @@
 <script setup>
 defineProps({
   headers: Array,
-  rows: Array
+  rows: Array,
+  headerSticky: {type: Boolean, default: false}
 })
 const emit = defineEmits(['update:select'])
 
@@ -14,7 +15,7 @@ const getStyle = (head)=>{
 
 <template>
 <q-markup-table>
-  <thead>
+  <thead :class="{'header-sticky': headerSticky}">
     <tr>
       <th v-for="header in headers" :style="getStyle(header)">
         {{ header.label }}
@@ -33,7 +34,19 @@ const getStyle = (head)=>{
 </q-markup-table>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.header-sticky{
+  tr th{
+    position: sticky;
+    z-index: 1;
+    background-color: white;
+  }
+
+  tr > *{
+    top: 0;
+  }
+}
+
 thead th{
   font-weight: 600;
   font-size: 0.88em;
