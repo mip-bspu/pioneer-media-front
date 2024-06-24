@@ -6,11 +6,17 @@ import { priorityMessage } from '@/utils/map.util.js'
 import { useStore } from '@/store/useStore.js'
 
 const { store: UserStore } = useStore("user")
+const { store: SetupStore } = useStore("setup")
 
 const props = defineProps({
   setup: {type: Object, required: true},
   addFiles: {type: Boolean}
 })
+
+const acceptFormats = computed(()=>[
+    ...SetupStore.getAvailableImageFormats(),
+    ...SetupStore.getAvailableVideoFormats()
+  ])
 
 const tagOptions = UserStore.getTags()
 const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: priorityMessage[key], value: key }})
@@ -102,7 +108,11 @@ const setTimeForImageFile = (v, file)=>file.time.value = v
     </div>
 
     <div class="properties__block" v-show="!showSetupImages">
-      <ui-area-uploader class="properties__area-upload area-upload" v-model:files="setup.files">
+      <ui-area-uploader 
+          class="properties__area-upload area-upload" 
+          v-model:files="setup.files" 
+          :accept="acceptFormats"
+      >
         <template #default="{ unselect, activate, isDrag }">
           <div :class="{'area-upload__wrapper': true, 'scroll-style': true, 'active': isDrag}" @click="activate">
             <div class="area-upload__content">
@@ -119,6 +129,9 @@ const setTimeForImageFile = (v, file)=>file.time.value = v
               <q-icon name="mdi-upload" class="area-upload__icon"/>
               <div class="area-upload__description">
                 Нажмите или перетащите контент
+              </div>
+              <div class="area-upload__formats">
+                Поддерживаемые форматы: {{ acceptFormats.map(f=>f.slice(1)).join(", ") }}
               </div>
             </div>
           </div>
@@ -229,6 +242,17 @@ const setTimeForImageFile = (v, file)=>file.time.value = v
   &__description{
     color: rgba(0, 0, 0, 0.4);
     font-size: 1rem;
+  }
+
+  &__formats{
+    margin-top: 0.2rem;
+
+    max-width: 300px;
+
+    line-height: 1.3;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 0.8rem;
   }
 }
 .set-images{

@@ -1,12 +1,15 @@
 import Notification from './interfaces/Notification'
 import User from './interfaces/User'
+import Setup from './interfaces/Setup'
 
 import { watch, reactive, toRef } from 'vue'
 
 const STORAGE_KEY = "pioneer_manage_media"
 
 let store = reactive({
-  localStorage: {},
+  localStorage: {
+    setup: {}
+  },
   
   sessionStorage: {
     notification: {
@@ -43,7 +46,8 @@ watch(
 
 const scopes = {
   "user": new User( toRef(store.sessionStorage, 'user') ),
-  "notification": new Notification( toRef(store.sessionStorage, 'notification')) 
+  "notification": new Notification( toRef(store.sessionStorage, 'notification')),
+  "setup": new Setup( toRef(store.localStorage, 'setup') )
 }
 
 export function isAuth(){

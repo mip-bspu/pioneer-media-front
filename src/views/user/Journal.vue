@@ -4,7 +4,7 @@ import { getJournal } from "@/services/journal.service"
 import { getMinListDevices } from "@/services/devices.service"
 import { useAsync } from "@/composables/useAsync"
 import { usePagination } from "@/composables/usePagination"
-import { getTypeByExt } from "@/utils/content.util.js"
+import { useStore } from "@/store/useStore"
 
 const {
   exec: execGetJournal,
@@ -21,6 +21,10 @@ const {
 
   exec: getPageJournal
 } = usePagination(execGetJournal, {page_size: 25})
+
+const {
+  store: SetupStore
+} = useStore("setup")
 
 const headers = [
   { field: "action", label: "Событие" },
@@ -99,7 +103,7 @@ watch(
           :rows="pagination.content"
       >
         <template #item.ext="{item: item}">
-          {{ getTypeByExt(item.ext) }}
+          {{ SetupStore.getTypeByExt(item.ext) }}
         </template>
 
         <template #item.time="{item: item}">

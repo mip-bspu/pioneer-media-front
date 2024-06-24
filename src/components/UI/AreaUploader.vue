@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 
 let props = defineProps({
-  files: {type: Array, default: []}
+  files: {type: Array, default: []},
+  accept: {type: Array, default: ['.png', '.jpg']}
 })
 // TODO: add many files drag and drop
 let emit = defineEmits(['update:files']);
@@ -50,6 +51,7 @@ const activeMenuSelectFile = ()=>inputRef.value.click()
         @change="uploadFile"
         @dragleave="dragLeaveOrDrop" 
         @drop="dragLeaveOrDrop"
+        :accept="accept.join(', ')"
     >
       <slot name="default" :unselect="unselectFile" :activate="activeMenuSelectFile" :is-drag="isDrag"></slot>
   </div>

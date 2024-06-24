@@ -2,13 +2,26 @@
 import Navbar from "@/components/layout/Navbar.vue"
 import Sidebar from "./components/layout/Sidebar.vue"
 
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import { useStore } from '@/store/useStore'
 import { router, onPage } from '@/router'
 import { showError, showSuccess, showInfo } from "@/services/notification.service"
+import { getSetup } from "@/services/server.service"
 
 const { store: UserStore } = useStore("user")
 const { store: NotificationStore } = useStore("notification")
+const { store: SetupStore } = useStore("setup")
+
+async function setup(){
+  let res = await getSetup()
+
+  if( res.status === 200 ){
+    SetupStore.setSetup(res.data)
+    return;
+  }
+  NotificationStore.setMessageError("Не удалось получить настройки сервера")
+}
+setup()
 
 if( !UserStore.isUser() ){
   router.replace("/auth")
