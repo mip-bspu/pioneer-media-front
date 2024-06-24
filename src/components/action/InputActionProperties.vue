@@ -4,6 +4,7 @@ import FileItem from '@/components/FileItem.vue';
 import { ref, computed, watch } from 'vue'
 import { priorityMessage } from '@/utils/map.util.js'
 import { useStore } from '@/store/useStore.js'
+import { assignTimeForImageFile } from '@/services/action.service'
 
 const { store: UserStore } = useStore("user")
 const { store: SetupStore } = useStore("setup")
@@ -19,21 +20,24 @@ const acceptFormats = computed(()=>[
   ])
 
 const tagOptions = UserStore.getTags()
-const priorityOptions = Object.keys(priorityMessage).map(key=>{ return { label: priorityMessage[key], value: key }})
+const priorityOptions = Object.keys(priorityMessage)
+  .map(key=>({ 
+    label: priorityMessage[key], 
+    value: key 
+  }))
 
 let showSetupImages = ref(false)
 
-const imageFiles = props.addFiles && computed(()=>props.setup.files.filter(f=>f.type.includes("image")).map(f=>{  
-  f.time ??= ref('00:15')
-  return f
-}))
+const imageFiles = props.addFiles && computed(()=>
+    props.setup.files
+      .filter(f=>f.type.includes('image'))
+      .map(f=>assignTimeForImageFile(f, '00:15'))
+  )
 
 watch(
   ()=>imageFiles?.value?.length || 0,
   (v)=>!v && (showSetupImages.value = false)
 )
-
-const setTimeForImageFile = (v, file)=>file.time.value = v
 </script>
 
 <template>
@@ -99,7 +103,7 @@ const setTimeForImageFile = (v, file)=>file.time.value = v
         <div v-for="file in imageFiles" class="set-images__item">
           <span class="ellipsis">{{ file.name }}</span>
           <q-input 
-              @update:modelValue="(v)=>setTimeForImageFile(v, file)" 
+              @update:modelValue="(v)=>assignTimeForImageFile(file, v)" 
               :modelValue="file.time"  
               dense outlined type="time"
           />

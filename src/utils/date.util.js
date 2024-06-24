@@ -13,6 +13,10 @@ Date.getSecondsFromTime = (time)=>{
   return times[0]*60 + times[1];
 }
 
+Date.getTimeFromSeconds = (time)=>{
+  return ("0"+Math.floor(time/60)).slice(-2) + ":" + ("0"+(time%60)).slice(-2);
+}
+
 Date.formatDateIso = (date, keepOffset = true) => {
   date = new Date(date);
 

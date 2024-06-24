@@ -9,6 +9,7 @@ import { useStore } from "@/store/useStore"
 const {
   exec: execGetJournal,
   state: stateGetJournal
+} = useAsync(getJournal, { globalError: true })
 
 const {
   exec: execGetDevices,
@@ -72,7 +73,8 @@ watch(
     
     <div class="journal__tools">
       <q-select
-          v-if="options.length > 0"
+          :disable="options.length == 0"
+          :loading="stateGetDevices.isLoading"
           class="journal__select" 
           :options="options"
           v-model="device"

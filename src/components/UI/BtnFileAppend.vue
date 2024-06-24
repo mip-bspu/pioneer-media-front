@@ -1,12 +1,19 @@
 <script setup>
-const emit = defineEmits('update:change')
+defineProps({
+  accept: {type: Array, default: ['.jpg', '.png']}
+})
+const emit = defineEmits(['update:change'])
 </script>
 
 <template>
 <button class="file-btn" v-ripple>
   <span>Добавить файл</span>
   <q-icon name="mdi-plus" class="file-btn__icon"/>
-  <input type="file" @change="(e)=>emit('update:change', e)">
+  <input 
+      type="file" 
+      @change="(e)=>emit('update:change', e)"
+      :accept="accept.join(', ')"
+  />
 </button>
 </template>
 

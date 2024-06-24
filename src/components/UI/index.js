@@ -1,6 +1,6 @@
 import DateInput from "./DateInput.vue";
 import FileUploader from "./FileUploader.vue";
-import InputFile from "./InputFile.vue";
+import BtnFileAppend from "./BtnFileAppend.vue";
 import AreaUploader from './AreaUploader.vue';
 import MonthlySwitch from "./MonthlySwitch.vue";
 import Table from "./Table.vue"
@@ -8,7 +8,7 @@ import Table from "./Table.vue"
 export default {
   "UiDateInput": DateInput,
   "UiFileUploader": FileUploader,
-  "UiInputFile": InputFile,
+  "UiBtnFileAppend": BtnFileAppend,
   "UiAreaUploader": AreaUploader,
   "UiMonthlySwitch": MonthlySwitch,
   "UiTable": Table,

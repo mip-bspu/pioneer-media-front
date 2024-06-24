@@ -1,9 +1,11 @@
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
 import { getUrlFile } from '@/services/files.service.js'
+import { toSrc } from '@/utils/file.util'
 
-const props = defineProps({
-  file: {type: Object}
+const { content, local } = defineProps({
+  content: {type: Object},
+  local: {type: Boolean, default: false}
 })
 
 const emit = defineEmits(["update:play"])
@@ -11,9 +13,11 @@ const emit = defineEmits(["update:play"])
 let src = ref(null)
 
 watch(
-  ()=>props.file,
+  ()=>content.file,
   ()=>{
-    src.value = getUrlFile(props.file.id)
+    src.value = !local ? 
+        getUrlFile(content.file.id) : 
+        content.src
   },
   { deep: true, immediate: true }
 )
@@ -30,11 +34,11 @@ const close = ()=>emit("update:play", false)
       </q-btn>
     </div>
 
-    <div class="content__image content__item" v-if="file.content_type.includes('image') && src">
+    <div class="content__image content__item" v-if="content.type.includes('image') && src">
       <img :src="src"/>
     </div>
 
-    <div class="content__video content__item" v-if="file.content_type.includes('video') && src">
+    <div class="content__video content__item" v-if="content.type.includes('video') && src">
       <video width="100%" controls autoplay :src="src"></video>
     </div>
   </div>

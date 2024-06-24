@@ -1,8 +1,14 @@
 <script setup>
-defineProps({
+import { ref } from 'vue'
+import { assignTimeForImageFile } from "@/services/action.service"
+
+let props = defineProps({
   srcImage: {type: String},
-  dataFile: {type: Object}
+  dataFile: {type: Object},
+  time: {type: Boolean, default: false}
 })
+
+let active = ref(false)
 </script>
 
 <template>
@@ -19,8 +25,29 @@ defineProps({
     <q-icon name="mdi-play-circle"></q-icon>
   </div>
 
-  <div class="preview__description">
-    <div class="preview__name">{{ dataFile.name }}</div>
+  <div class="preview__description" @click.stop>
+    <div v-if="!time" class="preview__name">
+      <span>{{ dataFile.name }}</span>
+    </div>
+
+    <template v-else>
+      <button class="preview__btn" @click="active = !active">
+        <span>{{ dataFile.name }}</span>
+        <q-icon 
+            name="mdi-chevron-down" 
+            :class="['preview__arrow', active ? 'active' : '']"
+        />
+      </button>
+
+      <q-input 
+          type="time"
+          dense outlined
+          bg-color="white"
+          v-show="active"
+          @update:modelValue="(v)=>assignTimeForImageFile(dataFile, v)" 
+          :modelValue="dataFile.time"
+      />
+    </template>
   </div>
 </div>
 </template>
@@ -80,14 +107,51 @@ defineProps({
     }
   }
 
+  &__btn{
+    cursor: pointer;
+
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+
+    color: rgb(213, 213, 213);
+    font-size: 0.9rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover{
+      color: rgb(247, 247, 247);
+      background-color: rgba(213, 213, 213, 0.291);
+    }
+  }
+
+  &__name{
+    color: rgb(213, 213, 213);
+    font-size: 0.9rem;
+  }
+
+  &__arrow{
+    font-size: 1.2rem;
+
+    transition: all 0.2s ease;
+    &.active{
+      transform: rotate(180deg);
+    }
+  }
+
   &__description{
-    padding: 0.4rem;
-    width: 100%;
     position: absolute;
     z-index: 2;
     bottom: 0;
 
-    color: rgb(213, 213, 213);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    padding: 0.4rem;
+    width: 100%;
+
     font-size: 0.8em;
     user-select: none;
 
