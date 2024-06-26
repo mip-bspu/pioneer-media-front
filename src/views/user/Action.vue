@@ -150,7 +150,7 @@ watch(
 
           <q-tab-panel name="preview-content">
             <q-scroll-area style="height: 100%;" :thumb-style="{width: '8px'}" v-if="selectedAction">
-              <preview-contents :selectedAction="selectedAction"/>
+              <preview-contents v-model:selectedAction="selectedAction"/>
             </q-scroll-area>
 
             <div v-else>

@@ -3,18 +3,26 @@ import PreviewContentItem from '@/components/PreviewContentItem.vue';
 import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
 
 import { getUrlFile } from '@/services/files.service.js'
-import { ref, watch, reactive, computed } from 'vue'
-import { toSrc } from '@/utils/file.util.js'
-import { useStore } from '@/store/useStore'
-import { assignTimeForImageFile } from '@/services/action.service';
+import { assignTimeForImageFile, updateAction } from '@/services/action.service';
+import { ref, watch, reactive, computed } from 'vue';
+import { toSrc } from '@/utils/file.util.js';
+import { useStore } from '@/store/useStore';
+import { useAsync } from '@/composables/useAsync';
 
 const props = defineProps({
   selectedAction: {type: Object, required: true}
 })
 
+const emit = defineEmits(['update:selectedAction'])
+
 const {
   store: SetupStore
 } = useStore("setup")
+
+const {
+  exec: execUpdateContent,
+  state: stateUpdateContent
+} = useAsync(updateAction, { globalError: true, msgSuccess: "Контент успешно изменён" })
 
 const acceptFormats = computed(()=>[
     ...SetupStore.getAvailableImageFormats(),
@@ -23,6 +31,7 @@ const acceptFormats = computed(()=>[
 
 let remoteFiles = ref([])
 let appendedFiles = ref([])
+let willDeleteFileUUIDs = ref([])
 
 let player = reactive({
   play: false,
@@ -54,16 +63,42 @@ watch(
 function onAppendFile(event) {
   const file = event.target.files[0]
 
-  appendedFiles.value = [...appendedFiles.value].push({
+  appendedFiles.value = [...appendedFiles.value, {
     src: toSrc(file),
     file: assignTimeForImageFile(file),
     local: true,
     type: file.type
-  })
+  }]
 }
 
-function onSubmit() {
+function onDeleteOrCancelFile(file, selected){
+  if( file?.id ){
+    !selected ? 
+      willDeleteFileUUIDs.value = [...willDeleteFileUUIDs.value, file.id] : 
+      willDeleteFileUUIDs.value = willDeleteFileUUIDs.value.filter(u=>u !== file.id);
+    
+    return;
+  }
 
+  appendedFiles.value = appendedFiles.value.filter(c=>c.file.name.localeCompare(file.name))
+}
+
+async function onSubmit() {
+  const res = await execUpdateContent(
+    props.selectedAction.id, {
+      append_files: appendedFiles.value,
+      delete_files: willDeleteFileUUIDs.value
+  })
+
+  if( res?.status == 200 ){
+    emit('update:selectedAction', res.data)
+    cancelChanges()
+  }
+}
+
+function cancelChanges(){
+  appendedFiles.value = []
+  willDeleteFileUUIDs.value = []
 }
 </script>
 
@@ -86,23 +121,32 @@ function onSubmit() {
             player.content = c
           }"
           :time="c.type.includes('image')"
+          :selected="willDeleteFileUUIDs.indexOf(c.file.id) !== -1"
+          :onDelete="onDeleteOrCancelFile"
       />
     </div>
 
     <q-separator class="q-mb-md q-mt-md"/>
 
-    <div class="content__btns">
+    <div class="content__actions">
       <ui-btn-file-append 
           class="content__append"
           @update:change="onAppendFile"
           :accept="acceptFormats"
       />
 
-      <q-btn
-          color="primary" outline
-          :disable="appendedFiles.length == 0"
-          @click="onSubmit"
-      >сохранить</q-btn>
+      <div class="content__btns">
+        <q-btn outline @click="cancelChanges">
+          отмена
+        </q-btn>
+
+        <q-btn
+            :loading="stateUpdateContent.isLoading"
+            color="primary" outline
+            :disable="appendedFiles.length == 0 && willDeleteFileUUIDs.length == 0"
+            @click="onSubmit"
+        >сохранить</q-btn>
+      </div>
     </div>
   </template>
 
@@ -136,12 +180,19 @@ function onSubmit() {
   }
 
   &__append{
-    padding: 0.6rem 1.6rem;
+    padding: 0.4rem 1.6rem;
+  }
+
+  &__actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
   }
 
   &__btns{
     display: flex;
-    gap: 1rem;
+    gap: 0.8rem;
 
     button{
       border-radius: 0.4rem;

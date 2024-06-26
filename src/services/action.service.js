@@ -3,7 +3,8 @@ import { getNameFromTag } from '@/utils/format.util.js'
 import { ref, isRef } from 'vue'
 
 export function createAction({name, from, to, tags = [], priority = 0, files}){
-  let data = createFormForAction({name, from, to, priority, tags, files})
+  let data = createFormForAction({name, from, to, priority, tags})
+  data = appendFilesWithTimes(data, files)
 
   return client.post('/action', data, {
     Headers: {
@@ -22,18 +23,13 @@ export function getListActions({tags, page, page_size = 20}){
   })
 }
 
-export function updateAction(id, {name, from, to, priority, tags}){
-  let data = createFormForAction({name, from, to, priority, tags})
+export function updateAction(id, {name, from, to, priority, tags, append_files, delete_files}){
+  let data = createFormForAction({name, from, to, priority, tags});
+  data = appendFilesWithTimes(data, append_files, 'append_files[]');
+  console.log(delete_files)
+  data = deleteFiles(data, delete_files, 'delete_files[]');
 
   return client.put(`/action/${id}`, data, {
-    Headers: {
-      "Content-Type": "multipart/form-data"
-    }
-  })
-}
-
-export function updateActionContent(id, files) {
-  return client.put(`/action/${id}`, appendFilesToFormData(files), {
     Headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -44,25 +40,31 @@ export function deleteAction(id){
   return client.delete(`/action/${id}`)
 }
 
-function appendFilesToFormData(formData, files) {
+function appendFilesWithTimes(formData, files = [], key = 'files[]') {
   for(let file of files){
-    file?.time?.value && data.append('times[]', `${file.name};${Date.getSecondsFromTime(file.time.value)}`)
+    file?.time?.value && formData.append('times[]', `${file.name};${Date.getSecondsFromTime(file.time.value)}`)
 
-    data.append('files[]', file)
+    formData.append(key, file)
   }
 
   return formData
 }
 
-function createFormForAction({name, from, to, priority, tags = [], files = []}){
+function deleteFiles(formData, fileUUIDs, key = 'files[]') {
+  for( let uuid of fileUUIDs ) {
+    formData.append(key, uuid)
+  }
+
+  return formData;
+}
+
+function createFormForAction({name, from, to, priority, tags = []}){
   let data = new FormData()
 
-  data.append("name", name)
-  data.append('from', from)
-  data.append('to', to)
-  data.append('priority', priority)
-
-  appendFilesToFormData(data, files)
+  name != undefined && data.append('name', name)
+  from != undefined && data.append('from', from)
+  to != undefined && data.append('to', to)
+  priority != undefined && data.append('priority', priority)
 
   for(let tag of tags){
     data.append('tags[]', getNameFromTag(tag))
