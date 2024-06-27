@@ -101,7 +101,7 @@ const startPlayer = (content)=>{
           :data-file="c.file"
           @click="()=>startPlayer(c)"
           class="content__preview"
-          :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(80%)' : 'grayscale(0)'}"
+          :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(90%)' : 'grayscale(0)'}"
       >
         <template #icons>
           <div class="content__icons">
@@ -116,34 +116,34 @@ const startPlayer = (content)=>{
         </template>
       </preview-content-item>
     </div>
-
-    <q-separator class="q-mb-md q-mt-md"/>
-
-    <div class="content__actions">
-      <ui-btn-file-append 
-          class="content__append"
-          @update:change="onAppendFile"
-          :accept="acceptFormats"
-      />
-
-      <div class="content__btns">
-        <q-btn outline @click="clearChanges">
-          отмена
-        </q-btn>
-
-        <q-btn
-            :loading="stateUpdateContent.isLoading"
-            color="primary" outline
-            :disable="appendedFiles.length == 0 && willDeleteFiles.length == 0"
-            @click="onSubmit"
-        >сохранить</q-btn>
-      </div>
-    </div>
   </template>
 
   <template v-else>
     К текущему событию не привязан контент
   </template>
+
+  <q-separator class="q-mb-md q-mt-md"/>
+
+  <div class="content__actions">
+    <ui-btn-file-append 
+        class="content__append"
+        @update:change="onAppendFile"
+        :accept="acceptFormats"
+    />
+
+    <div class="content__btns" v-show="contents.length > 0">
+      <q-btn outline @click="clearChanges">
+        отмена
+      </q-btn>
+
+      <q-btn
+          :loading="stateUpdateContent.isLoading"
+          color="primary" outline
+          :disable="appendedFiles.length == 0 && willDeleteFiles.length == 0"
+          @click="onSubmit"
+      >сохранить</q-btn>
+    </div>
+  </div>
 
   <q-dialog v-model="player.play" full-width>
     <image-and-video-player 
