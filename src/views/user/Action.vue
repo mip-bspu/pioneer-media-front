@@ -17,7 +17,7 @@ let tab = ref('create-action')
 let {
   exec: execGetListActions,
   state: stateListActions
-} = useAsync(getListActions)
+} = useAsync(getListActions, {globalError: true, delay: 2000})
 
 let isChangeActions = ref(true)
 let actions = ref([]);
@@ -70,8 +70,6 @@ watch(
     }
   }
 )
-
-// TODO: update Content
 </script>
 
 <template>
@@ -125,7 +123,7 @@ watch(
         >
           <q-tab name="create-action" label="Создание"/>
           <q-tab name="edit-action" label="Изменение" :disable="!selectedAction"/>
-          <q-tab name="preview-content" label="Просмотр" :disable="!selectedAction"/>
+          <q-tab name="preview-content" label="Контент" :disable="!selectedAction"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab" style="flex: 1 1 100%">

@@ -2,12 +2,10 @@
 import PreviewContentItem from '@/components/PreviewContentItem.vue';
 import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
 
-import { getUrlFile } from '@/services/files.service.js'
-import { assignTimeForImageFile, updateAction } from '@/services/action.service';
 import { ref, watch, reactive, computed } from 'vue';
-import { toSrc } from '@/utils/file.util.js';
 import { useStore } from '@/store/useStore';
 import { useAsync } from '@/composables/useAsync';
+import { useUpdateContent } from '@/composables/useUpdateContent'
 
 const props = defineProps({
   selectedAction: {type: Object, required: true}
@@ -20,85 +18,70 @@ const {
 } = useStore("setup")
 
 const {
+  onUpdateActionContent,
+  appendedFiles, willDeleteFiles,
+  transformFile, 
+  addInAppending, removeFromAppending, 
+  addInDeleting, removeFromDeleting,
+  isDeleting, clearChanges
+} = useUpdateContent()
+
+const {
   exec: execUpdateContent,
   state: stateUpdateContent
-} = useAsync(updateAction, { globalError: true, msgSuccess: "Контент успешно изменён" })
+} = useAsync(onUpdateActionContent, { globalError: true, msgSuccess: "Контент успешно изменён" })
 
 const acceptFormats = computed(()=>[
     ...SetupStore.getAvailableImageFormats(),
     ...SetupStore.getAvailableVideoFormats()
   ])
 
-let remoteFiles = ref([])
-let appendedFiles = ref([])
-let willDeleteFileUUIDs = ref([])
-
 let player = reactive({
   play: false,
   content: null
 })
 
+let remoteFiles = ref([])
 let contents = computed(()=>[...remoteFiles.value, ...appendedFiles.value])
 
 watch(
   ()=>props.selectedAction,
   async ()=>{
-    if( !props.selectedAction?.files ) return; 
-    
-    let fileViews = []
-    for(let file of props.selectedAction.files){
-      fileViews.push({
-        src: getUrlFile(file.id), 
-        file: assignTimeForImageFile(file, file.time), 
-        local: false,
-        type: file.content_type
-      }) 
-    }
+    clearChanges();
 
-    remoteFiles.value = fileViews
+    if( !props.selectedAction?.files ) return; 
+    let files = props.selectedAction.files
+
+    remoteFiles.value = files.map((file)=>transformFile(file, false));
   },
   { immediate: true }
 )
 
 function onAppendFile(event) {
-  const file = event.target.files[0]
-
-  appendedFiles.value = [...appendedFiles.value, {
-    src: toSrc(file),
-    file: assignTimeForImageFile(file),
-    local: true,
-    type: file.type
-  }]
+  addInAppending(event.target.files[0])
+  event.target.value = ''
 }
 
-function onDeleteOrCancelFile(file, selected){
-  if( file?.id ){
-    !selected ? 
-      willDeleteFileUUIDs.value = [...willDeleteFileUUIDs.value, file.id] : 
-      willDeleteFileUUIDs.value = willDeleteFileUUIDs.value.filter(u=>u !== file.id);
-    
-    return;
+function onDeleteOrCancelFile(file, local){
+  if( !local ){
+    isDeleting(file) ? removeFromDeleting(file) : addInDeleting(file);
+  }else{
+    removeFromAppending(file);
   }
-
-  appendedFiles.value = appendedFiles.value.filter(c=>c.file.name.localeCompare(file.name))
 }
 
 async function onSubmit() {
-  const res = await execUpdateContent(
-    props.selectedAction.id, {
-      append_files: appendedFiles.value,
-      delete_files: willDeleteFileUUIDs.value
-  })
+  const res = await execUpdateContent(props.selectedAction.id)
 
   if( res?.status == 200 ){
     emit('update:selectedAction', res.data)
-    cancelChanges()
+    clearChanges()
   }
 }
 
-function cancelChanges(){
-  appendedFiles.value = []
-  willDeleteFileUUIDs.value = []
+const startPlayer = (content)=>{
+  player.play = true
+  player.content = content
 }
 </script>
 
@@ -116,14 +99,22 @@ function cancelChanges(){
           v-for="c in contents"
           :src-image="c.src"
           :data-file="c.file"
-          @click="()=>{
-            player.play = true
-            player.content = c
-          }"
-          :time="c.type.includes('image')"
-          :selected="willDeleteFileUUIDs.indexOf(c.file.id) !== -1"
-          :onDelete="onDeleteOrCancelFile"
-      />
+          @click="()=>startPlayer(c)"
+          class="content__preview"
+          :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(80%)' : 'grayscale(0)'}"
+      >
+        <template #icons>
+          <div class="content__icons">
+            <q-icon
+                :name="isDeleting(c.file) ? 'mdi-close-circle-outline' : 'mdi-delete-circle-outline'"
+                :class="{'content__deleting': isDeleting(c.file)}"
+                @click.stop="()=>onDeleteOrCancelFile(c.file, c.local)"
+            />
+
+            <q-icon name="mdi-play-circle"/>
+          </div>
+        </template>
+      </preview-content-item>
     </div>
 
     <q-separator class="q-mb-md q-mt-md"/>
@@ -136,14 +127,14 @@ function cancelChanges(){
       />
 
       <div class="content__btns">
-        <q-btn outline @click="cancelChanges">
+        <q-btn outline @click="clearChanges">
           отмена
         </q-btn>
 
         <q-btn
             :loading="stateUpdateContent.isLoading"
             color="primary" outline
-            :disable="appendedFiles.length == 0 && willDeleteFileUUIDs.length == 0"
+            :disable="appendedFiles.length == 0 && willDeleteFiles.length == 0"
             @click="onSubmit"
         >сохранить</q-btn>
       </div>
@@ -196,6 +187,23 @@ function cancelChanges(){
 
     button{
       border-radius: 0.4rem;
+    }
+  }
+
+  &__preview{
+    & .content__icons{
+      padding: 0.25rem 0.5rem;
+
+      display: flex;
+      justify-content: space-between;
+
+      font-size: 1.7rem;
+
+      color: rgba(255, 255, 255, 0.29);
+    }
+
+    &:hover .content__icons{
+      color: rgba(255, 255, 255, 0.83);
     }
   }
 }

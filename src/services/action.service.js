@@ -1,17 +1,7 @@
 import client from '@/client'
 import { getNameFromTag } from '@/utils/format.util.js'
 import { ref, isRef } from 'vue'
-
-export function createAction({name, from, to, tags = [], priority = 0, files}){
-  let data = createFormForAction({name, from, to, priority, tags})
-  data = appendFilesWithTimes(data, files)
-
-  return client.post('/action', data, {
-    Headers: {
-      "Content-Type": "multipart/form-data"
-    }
-  })
-}
+import { pipe } from '@/utils/functional.util.js'
 
 export function getListActions({tags, page, page_size = 20}){
   return client.get('/action', {
@@ -23,11 +13,28 @@ export function getListActions({tags, page, page_size = 20}){
   })
 }
 
-export function updateAction(id, {name, from, to, priority, tags, append_files, delete_files}){
-  let data = createFormForAction({name, from, to, priority, tags});
-  data = appendFilesWithTimes(data, append_files, 'append_files[]');
-  console.log(delete_files)
-  data = deleteFiles(data, delete_files, 'delete_files[]');
+export function createAction({name, from, to, tags = [], priority = 0, files}){
+  let data = createFormForAction({name, from, to, priority, tags})
+  data = appendFiles(data, files)
+
+  return client.post('/action', data, {
+    Headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  })
+}
+
+export function updateAction(id, {
+  name, from, to, priority, tags, 
+  append_files: append_files = [], 
+  delete_files: delete_files = []
+}){
+  const data = pipe(
+    [ {name, from, to, priority, tags} ],
+    createFormForAction,
+    (d)=>appendItemsByKey(d, append_files, 'append_files[]'),
+    (d)=>appendItemsByKey(d, delete_files, 'delete_files[]'),
+  )
 
   return client.put(`/action/${id}`, data, {
     Headers: {
@@ -40,31 +47,27 @@ export function deleteAction(id){
   return client.delete(`/action/${id}`)
 }
 
-function appendFilesWithTimes(formData, files = [], key = 'files[]') {
-  for(let file of files){
-    file?.time?.value && formData.append('times[]', `${file.name};${Date.getSecondsFromTime(file.time.value)}`)
-
-    formData.append(key, file)
+function appendItemsByKey(formData, items = [], key = 'files[]') {
+  for(let item of items){
+    formData.append(key, item)
   }
 
   return formData
 }
 
-function deleteFiles(formData, fileUUIDs, key = 'files[]') {
-  for( let uuid of fileUUIDs ) {
-    formData.append(key, uuid)
-  }
-
-  return formData;
+const appendTime = (formData, file, key = 'times[]')=>{
+  formData.append(
+    key, `${file?.id || file.name};${Date.getSecondsFromTime(file.time)}`
+  )
 }
 
 function createFormForAction({name, from, to, priority, tags = []}){
   let data = new FormData()
 
-  name != undefined && data.append('name', name)
-  from != undefined && data.append('from', from)
-  to != undefined && data.append('to', to)
-  priority != undefined && data.append('priority', priority)
+  name     !== undefined && data.append('name', name)
+  from     !== undefined && data.append('from', from)
+  to       !== undefined && data.append('to', to)
+  priority !== undefined && data.append('priority', priority)
 
   for(let tag of tags){
     data.append('tags[]', getNameFromTag(tag))
@@ -81,7 +84,8 @@ export function assignTimeForImageFile(file, time = '00:15') {
   if( isRef(file.time) ){
     file.time.value = time
   }else{
-    file.time = ref(time)
+    file.time = ref(time),
+    file.defaultTime ??= time
   }
     
   return file;
