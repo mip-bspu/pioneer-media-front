@@ -1,5 +1,6 @@
 <script setup>
 import FileItem from '@/components/FileItem.vue';
+import ImageTimesSetup from '@/components/action/ImageTimesSetup.vue'
 
 import { ref, computed, watch } from 'vue'
 import { priorityMessage } from '@/utils/map.util.js'
@@ -90,26 +91,11 @@ watch(
   <template v-if="addFiles">
     <div class="properties__title">Контент</div>
 
-    <q-toggle
-        v-model="showSetupImages" 
-        class="q-my-sm"
+    <image-times-setup
         :disable="!imageFiles.length"
-    > 
-      <span class="properties__span">Настроить время показа изображений</span>
-    </q-toggle>
-
-    <div class="properties__block" v-show="showSetupImages">
-      <div class="properties__set-images set-images__wrapper">
-        <div v-for="file in imageFiles" class="set-images__item">
-          <span class="ellipsis">{{ file.name }}</span>
-          <q-input 
-              @update:modelValue="(v)=>assignTimeForImageFile(file, v)" 
-              :modelValue="file.time"  
-              dense outlined type="time"
-          />
-        </div>
-      </div>
-    </div>
+        :imageFiles="imageFiles"
+        v-model="showSetupImages"
+    />
 
     <div class="properties__block" v-show="!showSetupImages">
       <ui-area-uploader 
@@ -257,20 +243,6 @@ watch(
     text-align: center;
     color: rgba(0, 0, 0, 0.4);
     font-size: 0.8rem;
-  }
-}
-.set-images{
-  &__wrapper{
-    display: flex;
-    flex-direction: column;
-  }
-  &__item{
-    margin-bottom: 0.4rem;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.2rem;
   }
 }
 </style>

@@ -1,11 +1,13 @@
 <script setup>
 import PreviewContentItem from '@/components/PreviewContentItem.vue';
 import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
+import ImageTimesSetup from '@/components/action/ImageTimesSetup.vue';
 
 import { ref, watch, reactive, computed } from 'vue';
 import { useStore } from '@/store/useStore';
 import { useAsync } from '@/composables/useAsync';
-import { useUpdateContent } from '@/composables/useUpdateContent'
+import { useUpdateContent } from '@/composables/useUpdateContent';
+import { updateActionImageTimes, resetTimeForImageFiles } from '@/services/action.service.js';
 
 const props = defineProps({
   selectedAction: {type: Object, required: true}
@@ -31,6 +33,11 @@ const {
   state: stateUpdateContent
 } = useAsync(onUpdateActionContent, { globalError: true, msgSuccess: "Контент успешно изменён" })
 
+const {
+  exec: execUpdateTimes,
+  state: stateUpdateTimes
+} = useAsync(updateActionImageTimes, { globalError: true, msgSuccess: "Длительность показа изображений обновлена"})
+
 const acceptFormats = computed(()=>[
     ...SetupStore.getAvailableImageFormats(),
     ...SetupStore.getAvailableVideoFormats()
@@ -43,6 +50,12 @@ let player = reactive({
 
 let remoteFiles = ref([])
 let contents = computed(()=>[...remoteFiles.value, ...appendedFiles.value])
+
+let showTimesSetup = ref(false)
+let imageFiles = computed(()=>remoteFiles.value
+    .filter(c=>c.type.includes('image'))
+    .map(c=>c.file) 
+  )
 
 watch(
   ()=>props.selectedAction,
@@ -79,6 +92,17 @@ async function onSubmit() {
   }
 }
 
+async function onUpdateTimes() {
+  const res = await execUpdateTimes(props.selectedAction.id, imageFiles.value)
+
+  if(!stateUpdateTimes.isError){
+    emit('update:selectedAction', res.data)
+    clearChanges()
+  }
+}
+
+const resetUpdatesTime = () => resetTimeForImageFiles(imageFiles.value)
+
 const startPlayer = (content)=>{
   player.play = true
   player.content = content
@@ -93,57 +117,79 @@ const startPlayer = (content)=>{
 
   <q-separator class="q-mb-lg q-mt-md"/>
 
-  <template v-if="contents.length > 0">
-    <div class="content__images">
-      <preview-content-item
-          v-for="c in contents"
-          :src-image="c.src"
-          :data-file="c.file"
-          @click="()=>startPlayer(c)"
-          class="content__preview"
-          :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(90%)' : 'grayscale(0)'}"
-      >
-        <template #icons>
-          <div class="content__icons">
-            <q-icon
-                :name="isDeleting(c.file) ? 'mdi-close-circle-outline' : 'mdi-delete-circle-outline'"
-                :class="{'content__deleting': isDeleting(c.file)}"
-                @click.stop="()=>onDeleteOrCancelFile(c.file, c.local)"
-            />
+  <image-times-setup
+      :disable="imageFiles.length == 0"
+      :imageFiles="imageFiles"
+      v-model="showTimesSetup"
+  />
 
-            <q-icon name="mdi-play-circle"/>
-          </div>
-        </template>
-      </preview-content-item>
+  <template v-if="showTimesSetup">
+    <q-separator class="q-mb-md q-mt-md"/>
+
+    <div class="content__actions content__right">
+      <div class="content__btns">
+        <q-btn outline @click="resetUpdatesTime">отмена</q-btn>
+
+        <q-btn
+            :loading="stateUpdateTimes.isLoading"
+            color="primary" outline
+            @click="onUpdateTimes"
+        >сохранить</q-btn>
+      </div>
     </div>
   </template>
 
   <template v-else>
-    К текущему событию не привязан контент
-  </template>
+    <template v-if="contents.length > 0">
+      <div class="content__images">
+        <preview-content-item
+            v-for="c in contents"
+            :src-image="c.src"
+            :data-file="c.file"
+            @click="()=>startPlayer(c)"
+            class="content__preview"
+            :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(90%)' : 'grayscale(0)'}"
+        >
+          <template #icons>
+            <div class="content__icons">
+              <q-icon
+                  :name="isDeleting(c.file) ? 'mdi-close-circle-outline' : 'mdi-delete-circle-outline'"
+                  :class="{'content__deleting': isDeleting(c.file)}"
+                  @click.stop="()=>onDeleteOrCancelFile(c.file, c.local)"
+              />
 
-  <q-separator class="q-mb-md q-mt-md"/>
+              <q-icon name="mdi-play-circle"/>
+            </div>
+          </template>
+        </preview-content-item>
+      </div>
+    </template>
 
-  <div class="content__actions">
-    <ui-btn-file-append 
-        class="content__append"
-        @update:change="onAppendFile"
-        :accept="acceptFormats"
-    />
+    <template v-else>
+      К текущему событию не привязан контент
+    </template>
 
-    <div class="content__btns" v-show="contents.length > 0">
-      <q-btn outline @click="clearChanges">
-        отмена
-      </q-btn>
+    <q-separator class="q-mb-md q-mt-md"/>
 
-      <q-btn
-          :loading="stateUpdateContent.isLoading"
-          color="primary" outline
-          :disable="appendedFiles.length == 0 && willDeleteFiles.length == 0"
-          @click="onSubmit"
-      >сохранить</q-btn>
+    <div class="content__actions">
+      <ui-btn-file-append 
+          class="content__append"
+          @update:change="onAppendFile"
+          :accept="acceptFormats"
+      />
+
+      <div class="content__btns" v-show="contents.length > 0">
+        <q-btn outline @click="clearChanges">отмена</q-btn>
+
+        <q-btn
+            :loading="stateUpdateContent.isLoading"
+            color="primary" outline
+            :disable="appendedFiles.length == 0 && willDeleteFiles.length == 0"
+            @click="onSubmit"
+        >сохранить</q-btn>
+      </div>
     </div>
-  </div>
+  </template>
 
   <q-dialog v-model="player.play" full-width>
     <image-and-video-player 
@@ -159,6 +205,8 @@ const startPlayer = (content)=>{
 <style lang="scss" scoped>
 .content{
   &__images{
+    margin-top: 0.6rem;
+
     display: grid;
     gap: 1rem;
 
@@ -179,6 +227,10 @@ const startPlayer = (content)=>{
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: space-between;
+  }
+
+  &__right{
+    justify-content: flex-end;
   }
 
   &__btns{

@@ -2,6 +2,7 @@ import { getUrlFile } from '@/services/files.service.js'
 import { toSrc } from '@/utils/file.util.js';
 import { ref } from 'vue';
 import { updateAction } from '@/services/action.service';
+import { assignTimeForImageFile } from '@/services/action.service'
 
 function transformFile(file, local = false) {
   return local ? 
@@ -13,7 +14,7 @@ function transformFile(file, local = false) {
     } :
     {
       src: getUrlFile(file.id),
-      file: file,
+      file: assignTimeForImageFile(file, file.time),
       local: false,
       type: file.content_type,
     }
