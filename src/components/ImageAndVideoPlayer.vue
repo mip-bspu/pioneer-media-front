@@ -58,19 +58,17 @@ const close = ()=>emit("update:play", false)
 
   &__item{
     display: flex;
-    width: 100%;
-    height: 100%;
-    max-width: 900px;
-    max-height: 600px;
-
+    
     border-radius: 4px;
     overflow: hidden;
-  }
 
-  &__image{
-    img{
+    img, video{
+      height: 100%;
       width: 100%;
-      object-fit: cover;
+      object-fit: contain;
+
+      max-width: 80vw;
+      max-height: 80vh;
     }
   }
 
