@@ -45,7 +45,7 @@ export function createUser({login, password, tags, groups}){
   })
 }
 
-export function getTags({tags = null, types = null}){
+export function getTags(tags = null, types = null){
   let params = {}
   if( tags ) params["tags"] = tags.join(",")
   if( types ) params["types"] = types.join(",")
@@ -53,6 +53,10 @@ export function getTags({tags = null, types = null}){
   return client.get(`/admin/tags`, {
     params: params
   })
+}
+
+export function deleteTag(id){
+  return client.delete(`/admin/tag/${id}`)
 }
 
 export function getGroups(){
@@ -65,7 +69,7 @@ export async function getOptions(){
     groups: []
   }
   
-  options.tags = (await getTags({})).data
+  options.tags = (await getTags()).data
   options.groups = (await getGroups()).data
   
   return options

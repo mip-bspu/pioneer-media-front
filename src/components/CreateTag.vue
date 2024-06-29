@@ -4,15 +4,31 @@ import { useAsync } from "@/composables/useAsync"
 import { createTag } from "@/services/admin.service.js"
 import { optionsTagType } from "@/utils/map.util.js"
 
+const emit = defineEmits(['update:created'])
+
 const {
   state: stateCreateTag,
   exec: execCreateTag
-} = useAsync(createTag)
+} = useAsync(createTag, {globalError: true, msgSuccess: "Тэг успешно создан"})
 
 let tag = reactive({
   name: "",
-  type: ""
+  type: optionsTagType[0].value
 })
+
+const reset = ()=>{
+  tag.name = "",
+  tag.type = optionsTagType[0].value
+}
+
+async function onCreateTag(){
+  await execCreateTag(tag)
+
+  if( !stateCreateTag.isError ){
+    emit('update:created', true);
+    reset()
+  }
+}
 </script>
 
 <template>
@@ -42,7 +58,7 @@ let tag = reactive({
             dense fill
             class="q-py-xs q-px-md" 
             color="primary"
-            @click="()=>execCreateTag(tag)"
+            @click="onCreateTag"
         >Создать</q-btn>
       </div>
 

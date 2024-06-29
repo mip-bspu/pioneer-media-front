@@ -42,3 +42,8 @@ export const optionsTagType = [
   }
 ]
 
+export const typeTag = {
+  node: "Узел",
+  device: "Устройство"
+}
+

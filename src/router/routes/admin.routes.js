@@ -28,6 +28,18 @@ export const routes = [
       layout: ["sidebar"]
     }
   },
+
+  {
+    name: 'manage-tags',
+    path: '/manage-tags',
+    component: ()=>import('@/views/admin/ManageTags.vue'),
+    meta: {
+      icon: "mdi-tag-multiple-outline",
+      name: "Tags",
+      isAvailable: ()=>inAnyGroup(['ADMIN']),
+      layout: ["sidebar"]
+    }
+  }
 ]
 
 export const admin_routes_available = computed(()=>availableRoutes(routes))
