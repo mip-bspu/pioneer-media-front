@@ -21,7 +21,13 @@ async function setup(){
   }
   NotificationStore.setMessageError("Не удалось получить настройки сервера")
 }
-setup()
+
+watch(
+  ()=>UserStore.isUser(),
+  (isUser)=>{
+    isUser && setup()
+  }
+)
 
 if( !UserStore.isUser() ){
   router.replace("/auth")
