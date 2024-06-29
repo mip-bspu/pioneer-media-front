@@ -43,7 +43,7 @@ defineProps({
       border: 1px solid $primary;
 
       .preview__icons{
-        background: linear-gradient(180deg, rgba(51, 51, 51, 0.588) 20%, rgba(0, 0, 0, 0.068));
+        background: linear-gradient(180deg, rgba(51, 51, 51, 0.451) 20%, rgba(0, 0, 0, 0));
       }
  
       img{

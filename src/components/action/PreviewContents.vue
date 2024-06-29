@@ -13,7 +13,7 @@ const props = defineProps({
   selectedAction: {type: Object, required: true}
 })
 
-const emit = defineEmits(['update:selectedAction'])
+const emit = defineEmits(['update:changed', 'update:selectedAction'])
 
 const {
   store: SetupStore
@@ -88,6 +88,8 @@ async function onSubmit() {
 
   if( res?.status == 200 ){
     emit('update:selectedAction', res.data)
+    emit('update:changed', true)
+
     clearChanges()
   }
 }
@@ -97,6 +99,8 @@ async function onUpdateTimes() {
 
   if(!stateUpdateTimes.isError){
     emit('update:selectedAction', res.data)
+    emit('update:changed', true)
+
     clearChanges()
   }
 }
@@ -141,7 +145,7 @@ const startPlayer = (content)=>{
 
   <template v-else>
     <template v-if="contents.length > 0">
-      <div class="content__images">
+      <div class="content__images content__block">
         <preview-content-item
             v-for="c in contents"
             :src-image="c.src"
@@ -166,7 +170,9 @@ const startPlayer = (content)=>{
     </template>
 
     <template v-else>
-      К текущему событию не привязан контент
+      <div class="content__block">
+        К текущему событию не привязан контент
+      </div>
     </template>
 
     <q-separator class="q-mb-md q-mt-md"/>
@@ -205,8 +211,6 @@ const startPlayer = (content)=>{
 <style lang="scss" scoped>
 .content{
   &__images{
-    margin-top: 0.6rem;
-
     display: grid;
     gap: 1rem;
 
@@ -231,6 +235,10 @@ const startPlayer = (content)=>{
 
   &__right{
     justify-content: flex-end;
+  }
+
+  &__block{
+    margin-top: 0.8rem;
   }
 
   &__btns{
