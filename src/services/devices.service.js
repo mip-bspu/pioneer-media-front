@@ -17,3 +17,11 @@ export function createDevice({description, token, tags}){
   })
 }
 
+export function updateDevice(old_token, {token, description, tags}){
+  return client.put(`/devices/${old_token}`, {
+    new_token: token,
+    description,
+    tags: tags.map(t=>getNameFromTag(t)),
+  })
+}
+

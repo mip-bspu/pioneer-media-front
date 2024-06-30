@@ -20,7 +20,7 @@ export const routes = [
   {
     name: "edit-devices",
     path: "/edit-devices",
-    component: ()=>import('@/views/admin/EditDevices.vue'),
+    component: ()=>import('@/views/admin/ManageDevices.vue'),
     meta: {
       icon: "mdi-monitor-multiple",
       name: "Devices",
