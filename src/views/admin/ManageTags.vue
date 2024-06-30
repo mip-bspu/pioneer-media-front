@@ -67,6 +67,10 @@ async function onDeleteTag(id){
           :headers="headers"
           :rows="listTags"
       >
+        <template #item.name="{item: item}">
+          <span class="tags__name">{{ item.name }}</span>
+        </template>
+
         <template #item.owner="{item: item}">
           {{ item.owner === null ? "Текущий сервер" : item.owner }}
         </template>
@@ -97,6 +101,10 @@ async function onDeleteTag(id){
 
   display: flex;
   flex-direction: column;
+
+  &__name{
+    text-transform: uppercase;
+  }
 
   &__delete{
     color: rgb(220, 111, 111);
