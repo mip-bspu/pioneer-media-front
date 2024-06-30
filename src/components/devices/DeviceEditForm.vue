@@ -23,7 +23,7 @@ let data = reactive(Object.assign({}, device));
 const reset = ()=>Object.assign(data, device)
 
 async function onSubmit(){
-  const res = await execUpdateDevice(device.token, data)
+  const res = await execUpdateDevice(device.id, data)
 
   if( res?.status === 200 ){
 
