@@ -9,17 +9,6 @@ const {
   state: stateGetUsers
 } = useAsync(getUsers)
 
-const {
-  exec: execSetActive,
-  state: stateSetActive
-} = useAsync(setActiveUser)
-
-const {
-  exec: execUpdateUser,
-  state: stateUpdateUser
-} = useAsync(updateUser)
-
-
 async function onGetUsers(){
   const response = await execGetUsers()
 
@@ -31,32 +20,41 @@ const updateUsersList = ()=>onGetUsers()
 
 const getUserById = (userId) => users.value.find(u=>u.id == userId)
 
-async function onSetActive(userId, val){
-  await execSetActive({id: userId, active: val})
-
-  if( !stateSetActive.isError ){
-    let user = toRef(getUserById(userId))
-
-    user.value.active = val
-  }
-}
-
-async function onUpdateUser(userId, {tags, groups}){
-  const res = await execUpdateUser({
-    id: userId,
-    groups: groups,
-    tags: tags
-  })
-
-  if( !stateUpdateUser.isError ){
-    const { data: nUser } = res;
-
-    let user = toRef(getUserById(userId))
-    Object.assign(user.value, nUser)
-  }
-}
-
 export function useUsers(){
+  const {
+    exec: execSetActive,
+    state: stateSetActive
+  } = useAsync(setActiveUser)
+  
+  const {
+    exec: execUpdateUser,
+    state: stateUpdateUser
+  } = useAsync(updateUser)
+
+  async function onUpdateUser(userId, {tags, groups}){
+    const res = await execUpdateUser({
+      id: userId,
+      groups: groups,
+      tags: tags
+    })
+  
+    if( !stateUpdateUser.isError ){
+      const { data: nUser } = res;
+  
+      let user = toRef(getUserById(userId))
+      Object.assign(user.value, nUser)
+    }
+  }
+
+  async function onSetActive(userId, val){
+    await execSetActive({id: userId, active: val})
+  
+    if( !stateSetActive.isError ){
+      let user = toRef(getUserById(userId))
+  
+      user.value.active = val
+    }
+  }
 
   return {
     users,
