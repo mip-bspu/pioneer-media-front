@@ -48,7 +48,11 @@ const close = ()=>showEditDevice.value = false
   </q-card-section>
 
   <q-dialog v-model="showEditDevice">
-    <device-edit-form :device="selectedDevice" :close="close"/>
+    <device-edit-form 
+        :device="selectedDevice" 
+        :close="close"
+        @update:changed="updateDevicesList"
+    />
   </q-dialog>
 </q-card>
 </template>

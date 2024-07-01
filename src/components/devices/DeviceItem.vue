@@ -17,7 +17,14 @@ const close = ()=>{
   <div :class="['device__wrapper', showMenu ? 'active' : '']">
     <div :class="['device__status',  Date.diffWithNow(new Date(data?.last_active)) < 120 ? 'device__status_active' : '']"></div>
 
-    <q-icon name="mdi-dots-vertical" class="device__btn-edit device__icon" @click="showMenu = !showMenu"/>
+    <div class="device__icons">
+      <q-btn dense rounded @click="showMenu = !showMenu">
+        <q-icon name="mdi-dots-vertical-circle-outline"/>
+      </q-btn>
+
+      <slot name="icons" :data="data"></slot>
+    </div>
+
 
     <div class="device__description ellipsis q-mt-sm">
       <div class="device__label">Описание:</div>
@@ -78,23 +85,13 @@ const close = ()=>{
     padding: 0 1rem;
   }
 
-  &__icon{
+  &__icons{
+    display: flex;
+    gap: 0.4rem;
+
+    padding: 0 0.6rem;
+
     font-size: 1.4rem;
-  }
-
-  &__btn-edit{
-    margin-left: 0.4em;
-
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.1s ease;
-
-    &:hover{
-      background-color: $grey-3;
-    }
-    &:active{
-      background-color: $grey-4;
-    }
   }
 
   &__description{

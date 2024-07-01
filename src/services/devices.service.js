@@ -18,7 +18,7 @@ export function createDevice({description, token, tags}){
 }
 
 export function deleteDevice(id){
-  return client.delete(`/device/${id}`)
+  return client.delete(`/devices/${id}`)
 }
 
 export function updateDevice(id, {token, description, tags}){

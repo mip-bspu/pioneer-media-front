@@ -21,7 +21,7 @@ defineProps({
     <slot name="inputs"></slot>
   </q-card-section>
 
-  <q-card-section class="common-form__btns q-py-lg">
+  <q-card-section class="common-form__btns q-py-lg q-pt-xl">
     <slot name="btns"></slot>
   </q-card-section>
 </q-card>
