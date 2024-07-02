@@ -46,10 +46,10 @@ export const routes = [
     path: "/journal",
     component: ()=>import('@/views/user/Journal.vue'),
     meta: {
-      name: "История показа",
+      name: "History",
       layout: ["sidebar"],
       icon: "mdi-clipboard-text-clock-outline",
-      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
+      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER', 'ADMIN'])
     }
   },
 ]
