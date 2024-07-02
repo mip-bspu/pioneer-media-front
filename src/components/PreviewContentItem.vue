@@ -1,13 +1,14 @@
 <script setup>
 defineProps({
-  srcImage: {type: String},
-  dataFile: {type: Object}
+  srcImage: { type: String },
+  dataFile: { type: Object },
+  bgStyle: { type: Object, default: null}
 })
 </script>
 
 <template>
 <div class="preview preview__wrapper">
-  <div class="preview__image">
+  <div class="preview__image" :style="bgStyle">
     <img :src="srcImage" v-if="srcImage"/>
 
     <div class="preview__background">
@@ -15,12 +16,14 @@ defineProps({
     </div>
   </div>
 
-  <div class="preview__icon">
-    <q-icon name="mdi-play-circle"></q-icon>
+  <div class="preview__icons">
+    <slot name="icons"></slot>
   </div>
 
-  <div class="preview__description">
-    <div class="preview__name">{{ dataFile.name }}</div>
+  <div class="preview__description" @click.stop>
+    <div class="preview__name">
+      <span>{{ dataFile.name }}</span>
+    </div>
   </div>
 </div>
 </template>
@@ -39,8 +42,8 @@ defineProps({
     &:hover{
       border: 1px solid $primary;
 
-      .preview__icon{
-        color: rgba(255, 255, 255, 0.8);
+      .preview__icons{
+        background: linear-gradient(180deg, rgba(51, 51, 51, 0.451) 20%, rgba(0, 0, 0, 0));
       }
  
       img{
@@ -65,12 +68,13 @@ defineProps({
   }
 
   &__image{
+    width: 100%;
+    height: 140px;
+
     position: relative;
     z-index: 1;
 
-    height: 150px;
-    width: 200px;
-
+    transition: all 0.2s ease;
     img{
       transition: all 0.2s ease;
 
@@ -80,30 +84,37 @@ defineProps({
     }
   }
 
+  &__name{
+    color: rgb(213, 213, 213);
+    font-size: 0.9rem;
+  }
+
   &__description{
-    padding: 0.4rem;
-    width: 100%;
     position: absolute;
     z-index: 2;
     bottom: 0;
 
-    color: rgb(213, 213, 213);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    padding: 0.4rem;
+    width: 100%;
+
     font-size: 0.8em;
     user-select: none;
 
     background-color: #363E4E;
   }
 
-  &__icon{
+  &__icons{
     position: absolute;
     z-index: 2;
-    top: 0;
-    right: 0.5rem;
+    top: 0; left: 0;
 
-    font-size: 1.7rem;
-    color: rgba(255, 255, 255, 0.4);
+    width: 100%;
 
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
   }
 }
 </style>

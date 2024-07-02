@@ -1,8 +1,8 @@
 export const priorityMessage = {
-  0: 'обычный',
-  1: 'важный',
-  2: 'крайне важный',
-  3: 'экстренный'
+  1: 'обычный',
+  2: 'важный',
+  3: 'крайне важный',
+  4: 'экстренный'
 }
 
 export const monthName = {
@@ -28,5 +28,22 @@ export const dayOfWeek = {
   4: 'пт',
   5: 'сб',
   6: 'вс',
+}
+
+
+export const optionsTagType = [
+  { 
+    label: "тэг узла",
+    value: "node"
+  },
+  { 
+    label: "тэг устройства",
+    value: "device"
+  }
+]
+
+export const typeTag = {
+  node: "Узел",
+  device: "Устройство"
 }
 

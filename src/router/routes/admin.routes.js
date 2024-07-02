@@ -15,6 +15,30 @@ export const routes = [
       isAvailable: ()=>inAnyGroup(['ADMIN']),
       layout: ["sidebar"]
     }
+  },
+
+  {
+    name: "edit-devices",
+    path: "/edit-devices",
+    component: ()=>import('@/views/admin/ManageDevices.vue'),
+    meta: {
+      icon: "mdi-monitor-multiple",
+      name: "Devices",
+      isAvailable: ()=>inAnyGroup(['ADMIN']),
+      layout: ["sidebar"]
+    }
+  },
+
+  {
+    name: 'manage-tags',
+    path: '/manage-tags',
+    component: ()=>import('@/views/admin/ManageTags.vue'),
+    meta: {
+      icon: "mdi-tag-multiple-outline",
+      name: "Tags",
+      isAvailable: ()=>inAnyGroup(['ADMIN']),
+      layout: ["sidebar"]
+    }
   }
 ]
 

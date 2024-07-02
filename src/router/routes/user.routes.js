@@ -8,7 +8,7 @@ export const routes = [
   {
     name: "actions",
     path: "/actions",
-    component: ()=>import('@/views/Action.vue'),
+    component: ()=>import('@/views/user/Action.vue'),
     meta: {
       name: "События",
       layout: ["sidebar"],
@@ -20,7 +20,7 @@ export const routes = [
   {
     name: "devices",
     path: "/devices",
-    component: ()=>import('@/views/Device.vue'),
+    component: ()=>import('@/views/user/Device.vue'),
     meta: {
       name: "Устройства",
       layout: ["sidebar"],
@@ -32,12 +32,24 @@ export const routes = [
   {
     name: "schedule",
     path: "/schedule",
-    component: ()=>import('@/views/Schedule.vue'),
+    component: ()=>import('@/views/user/Schedule.vue'),
     meta: {
       name: "Расписание",
       layout: ["sidebar"],
       icon: "mdi-calendar-range-outline",
-      isAvailable: ()=>inAnyGroup(['USER'])
+      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
+    }
+  },
+
+  {
+    name: "journal",
+    path: "/journal",
+    component: ()=>import('@/views/user/Journal.vue'),
+    meta: {
+      name: "История показа",
+      layout: ["sidebar"],
+      icon: "mdi-clipboard-text-clock-outline",
+      isAvailable: ()=>inAnyGroup(['USER', 'VIEWER'])
     }
   },
 ]

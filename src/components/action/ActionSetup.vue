@@ -10,14 +10,14 @@ const emit = defineEmits(['update:changed'])
 let {
   exec: execCreateAction,
   state: stateCreateAction
-} = useAsync(createAction)
+} = useAsync(createAction, {globalError: true})
 
 let nullSetup = {
   name: '',
   tags: [],
   from: Date.today(),
   to: Date.today(),
-  priority: "0",
+  priority: "1",
   files: []
 }
 
@@ -35,7 +35,7 @@ const addAction = async ()=>{
 <template>
 <div class="setup">
   <div class="setup__wrapper">
-    <input-action-properties v-model:setup="setup"/>
+    <input-action-properties v-model:setup="setup"  :add-files="true"/>
 
     <q-separator class="q-mt-lg"/>
 

@@ -1,13 +1,13 @@
 import client from '@/client'
 import { monthName } from '@/utils/map.util.js'
-
+import { getNameFromTag } from '../utils/format.util';
 
 const GAP_TIMELINES = 4;
 
 const createPeriodMonths = (year, month)=>{
   return ({
     begin: new Date(year, month, 1),
-    end: new Date(year, month + 1, Date.lastDateOfMonth(year, month + 1))
+    end: Date.lastDateOfMonth(year, month + 1)
   })
 }
 
@@ -27,19 +27,24 @@ const getRandomColor = ()=>{
 }
 
 const createDataActionForRender = (period, action, index)=>{
-  // TODO: if action before 'from'
   let from = new Date(action["from"]); from.setHours(0)
   let to =   new Date(action["to"]);   to.setHours(0)
 
+  if( to < period.begin ){
+    return null
+  }
+
+  from = from < period.begin ? period.begin : from;
   let diff = to > period.end ? Date.diff(period.end, from) + 1: Date.diff(to, from) + 1;
 
   return {
     data: {
+      from: from,
       name: action["name"],
       tags: action["tags"]
     },
     style: {
-      top: (36 + GAP_TIMELINES) * index + 'px',
+      top: 20 + (36 + GAP_TIMELINES) * index + 'px',
       width: diff * 40 + 'px',
       backgroundColor: getRandomColor()
     }
@@ -51,7 +56,7 @@ const createDataDayForRender = (curDate, dataActions = [])=>{
     actions: dataActions,
     date: curDate.getDate(), 
     day: curDate.getDay(),
-    isToday: Date.formatDateIso(curDate) == Date.today(),
+    isToday: Date.toLocaleDate(curDate) == Date.toLocaleDate(Date.today()),
     monthName: curDate.getDate() == 1 ? monthName[curDate.getMonth()] : null
   })
 }
@@ -63,16 +68,19 @@ function createTimeline(year, month, actions){
   let range = []
 
   actions.forEach((action, index)=>{
-    let data = createDataActionForRender(period, action, index)
-    let from = Date.formatDateIso(action["from"])
+    let transformAction = createDataActionForRender(period, action, index)
 
-    mapActions[from] =  mapActions[from] ? [...mapActions[from], data]  : [data]
+    if(transformAction === null) return;
+
+    let from = Date.toLocaleDate(transformAction.data["from"])
+    
+    mapActions[from] =  mapActions[from] ? [...mapActions[from], transformAction]  : [transformAction]
   })
 
   let iterDate = new Date(period.begin)
 
   while(iterDate <= period.end){
-    let data = createDataDayForRender(iterDate, mapActions[Date.formatDateIso(iterDate)])
+    let data = createDataDayForRender(iterDate, mapActions[Date.toLocaleDate(iterDate)])
     range.push(data)
 
     iterDate.setDate(iterDate.getDate()+1)
@@ -86,7 +94,7 @@ function getActionsFromPeriod({tags, from, to}){
     params: {
       from: Date.formatDateIso(from),
       to: Date.formatDateIso(to),
-      tags: tags.join(",")
+      tags: tags.map(t=>getNameFromTag(t)).join(",")
     }
   })
 }

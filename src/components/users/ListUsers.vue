@@ -1,31 +1,13 @@
 <script setup>
 import UserCard from '@/components/users/UserCard.vue';
 
-import { useAsync } from '@/composables/useAsync';
-import { getOptions } from '@/services/admin.service.js'
-import { ref, reactive } from 'vue'
+import { useOptions } from "@/composables/useOptions";
 
 defineProps({
   users: {type: Object, default: []}
 })
 
-const {
-  exec: execGetOptions
-} = useAsync(getOptions, {globalError: true})
-
-let options = reactive({
-  tags: [],
-  groups: []
-})
-
-
-const onGetOptions = async ()=>{
-  const nOptions = await execGetOptions()
-  if(nOptions){
-    Object.assign(options, nOptions)
-  }
-}
-onGetOptions()
+const { options } = useOptions()
 </script>
 
 <template>

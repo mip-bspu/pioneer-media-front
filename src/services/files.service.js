@@ -5,3 +5,7 @@ export function getFile(uuid){
     responseType: 'blob'
   })
 }
+
+export function getUrlFile(uuid) {
+  return `${client.getUri()}/files/${uuid}/file`
+}

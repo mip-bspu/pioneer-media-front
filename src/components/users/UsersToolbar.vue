@@ -2,9 +2,10 @@
 import CreateUserForm from './CreateUserForm.vue'; 
 
 import { ref } from 'vue'
-import { useStore } from '@/store/useStore'
 
-const { store: NotificationStore } = useStore("notification")
+defineProps({
+  updateList: {type: Function}
+})
 
 let showCreateUser = ref(false)
 </script>
@@ -20,7 +21,7 @@ let showCreateUser = ref(false)
     >Создать пользователя</q-btn>
 
     <q-dialog v-model="showCreateUser">
-      <create-user-form/>
+      <create-user-form :update="updateList"/>
     </q-dialog>
   </q-card-section>
 </q-card>

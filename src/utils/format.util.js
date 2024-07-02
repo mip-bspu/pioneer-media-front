@@ -5,3 +5,7 @@ export const getMessageError = (error)=>{
     ?? error?.errors?.message 
     ?? error?.message ?? "Error";
 }
+
+export const getNameFromTag = (tag) => {
+  return tag.name ?? tag
+}

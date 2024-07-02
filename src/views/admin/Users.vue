@@ -4,25 +4,15 @@
 import ListUsers from '@/components/users/ListUsers.vue'
 import UsersToolbar from '@/components/users/UsersToolbar.vue'
 
-import { watch } from 'vue'
 import { useUsers } from '@/composables/useUsers';
 
-const { users } = useUsers()
-
-
-watch(()=>users.value.length,
-  ()=>{
-    if(users.value.length != 0){
-      users.value = Array(10).fill(users.value[0])
-    }
-  }
-)
+const { users, updateUsersList } = useUsers()
 </script>
 
 <template>
 <q-card flat class="users">
   <q-card-section>
-    <users-toolbar/>
+    <users-toolbar :update-list="updateUsersList"/>
   </q-card-section>
 
   <q-card-section flat class="users__list q-px-none q-pt-none">
