@@ -3,7 +3,8 @@ import FileUploader from "./FileUploader.vue";
 import BtnFileAppend from "./BtnFileAppend.vue";
 import AreaUploader from './AreaUploader.vue';
 import MonthlySwitch from "./MonthlySwitch.vue";
-import Table from "./Table.vue"
+import Table from "./Table.vue";
+import CommonForm from "./CommonForm.vue";
 
 export default {
   "UiDateInput": DateInput,
@@ -12,4 +13,5 @@ export default {
   "UiAreaUploader": AreaUploader,
   "UiMonthlySwitch": MonthlySwitch,
   "UiTable": Table,
+  "UiCommonForm": CommonForm
 }

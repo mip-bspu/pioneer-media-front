@@ -5,7 +5,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:selected'])
 
-const getPeriod = (action)=> `${Date.formatDateIso(action.from)} \u2013 ${Date.formatDateIso(action.to)}`
+const getPeriod = (action)=> `${Date.toLocaleDate(action.from)} \u2013 ${Date.toLocaleDate(action.to)}`
 </script>
 
 <template>

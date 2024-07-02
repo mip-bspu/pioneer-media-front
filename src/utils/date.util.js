@@ -1,11 +1,7 @@
-Date.applyOffset = (date) =>{
-  const offset = date.getTimezoneOffset() * 60 * 1000;
-  date.setTime(date.getTime() + offset);
-}
 
-Date.toLocale = (date) => {
-  return new Date(date).toLocaleString();
-}
+Date.toLocale = (date) => new Date(date).toLocaleString();
+
+Date.toLocaleDate = (date) => Date.toLocale(date).split(", ")[0]
 
 Date.getSecondsFromTime = (time)=>{
   let times = time.split(":").map((i)=>parseInt(i))
@@ -17,12 +13,8 @@ Date.getTimeFromSeconds = (time)=>{
   return ("0"+Math.floor(time/60)).slice(-2) + ":" + ("0"+(time%60)).slice(-2);
 }
 
-Date.formatDateIso = (date, keepOffset = true) => {
+Date.formatDateIso = (date) => {
   date = new Date(date);
-
-  if (keepOffset) {
-    Date.applyOffset(date);
-  }
 
   return date.toISOString().substring(0, 10);
 };
@@ -32,16 +24,7 @@ Date.today = ()=>{
 }
 
 Date.lastDateOfMonth = (year, month)=>{
-  let count = 28
-  let date = new Date(year, month, count)
-
-  date.setDate(date.getDate() + 1)
-  while( date.getMonth() == month ) {
-    count++;
-    date.setDate(date.getDate() + 1)
-  }
-  
-  return count;
+  return new Date(year, month+1, 0);
 }
 
 Date.diffWithNow = (date, level = "minutes") => Date.diff(new Date(), date, level)

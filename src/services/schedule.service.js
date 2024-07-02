@@ -7,7 +7,7 @@ const GAP_TIMELINES = 4;
 const createPeriodMonths = (year, month)=>{
   return ({
     begin: new Date(year, month, 1),
-    end: new Date(year, month + 1, Date.lastDateOfMonth(year, month + 1))
+    end: Date.lastDateOfMonth(year, month + 1)
   })
 }
 
@@ -30,9 +30,13 @@ const createDataActionForRender = (period, action, index)=>{
   let from = new Date(action["from"]); from.setHours(0)
   let to =   new Date(action["to"]);   to.setHours(0)
 
+  if( to < period.begin ){
+    return null
+  }
+
   from = from < period.begin ? period.begin : from;
   let diff = to > period.end ? Date.diff(period.end, from) + 1: Date.diff(to, from) + 1;
-  
+
   return {
     data: {
       from: from,
@@ -46,13 +50,13 @@ const createDataActionForRender = (period, action, index)=>{
     }
   }
 }
-// TODO: bug in show actions
+
 const createDataDayForRender = (curDate, dataActions = [])=>{
   return ({
     actions: dataActions,
     date: curDate.getDate(), 
     day: curDate.getDay(),
-    isToday: Date.formatDateIso(curDate) == Date.today(),
+    isToday: Date.toLocaleDate(curDate) == Date.toLocaleDate(Date.today()),
     monthName: curDate.getDate() == 1 ? monthName[curDate.getMonth()] : null
   })
 }
@@ -65,7 +69,10 @@ function createTimeline(year, month, actions){
 
   actions.forEach((action, index)=>{
     let transformAction = createDataActionForRender(period, action, index)
-    let from = Date.formatDateIso(transformAction.data["from"])
+
+    if(transformAction === null) return;
+
+    let from = Date.toLocaleDate(transformAction.data["from"])
     
     mapActions[from] =  mapActions[from] ? [...mapActions[from], transformAction]  : [transformAction]
   })
@@ -73,7 +80,7 @@ function createTimeline(year, month, actions){
   let iterDate = new Date(period.begin)
 
   while(iterDate <= period.end){
-    let data = createDataDayForRender(iterDate, mapActions[Date.formatDateIso(iterDate)])
+    let data = createDataDayForRender(iterDate, mapActions[Date.toLocaleDate(iterDate)])
     range.push(data)
 
     iterDate.setDate(iterDate.getDate()+1)
