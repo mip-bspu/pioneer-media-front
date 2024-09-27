@@ -1,5 +1,5 @@
 <script setup>
-import { assignTimeForImageFile } from '@/services/action.service'
+import TimeInput from '@/components/UI/TimeInput.vue'
 
 defineProps({
   modelValue: { type: Boolean },
@@ -23,14 +23,13 @@ const emit = defineEmits(['update:modelValue'])
 
   <div class="image-setup__block" v-show="modelValue">
     <div class="image-setup__times image-setup__wrapper">
-      <div v-for="file in imageFiles" class="image-setup__item">
+      <div 
+          v-for="file in imageFiles.sort((a, b)=>a.name.localeCompare(b.name))" 
+          class="image-setup__item"
+      >
         <span class="ellipsis">{{ file.name }}</span>
 
-        <q-input 
-            @update:modelValue="(v)=>assignTimeForImageFile(file, v)" 
-            :modelValue="file.time"  
-            dense outlined type="time"
-        />
+        <time-input v-model="file.time"/>
       </div>
     </div>
   </div>
