@@ -62,6 +62,7 @@ watch(
   ()=>props.selectedAction,
   async ()=>{
     clearChanges();
+    showTimesSetup.value = false
 
     if( !props.selectedAction?.files ) return; 
     let files = props.selectedAction.files
