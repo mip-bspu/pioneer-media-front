@@ -15,7 +15,8 @@ export function getListActions({tags, page, page_size = 20}){
 
 export function createAction({name, from, to, tags = [], priority = 0, files}){
   let data = createFormForAction({name, from, to, priority, tags})
- 
+  data = appendItemsByKey(data, files)
+  
   files.forEach(file => {
     appendTime(data, file)
   })
