@@ -1,6 +1,8 @@
 <script setup>
 import TimeInput from '@/components/UI/TimeInput.vue'
 
+import { isRef } from 'vue'
+
 defineProps({
   modelValue: { type: Boolean },
   disable: { type: Boolean },
@@ -29,7 +31,12 @@ const emit = defineEmits(['update:modelValue'])
       >
         <span class="ellipsis">{{ file.name }}</span>
 
-        <time-input v-model="file.time"/>
+        <template v-if="isRef(file.time)"> <!-- I don't know why such a difference appeared -->
+          <time-input v-model="file.time.value"/>
+        </template>
+        <template v-else>
+          <time-input v-model="file.time"/>
+        </template>
       </div>
     </div>
   </div>

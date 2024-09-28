@@ -14,12 +14,15 @@ export function getListActions({tags, page, page_size = 20}){
 }
 
 export function createAction({name, from, to, tags = [], priority = 0, files}){
-  let data = createFormForAction({name, from, to, priority, tags})
-  data = appendItemsByKey(data, files)
-  
-  files.forEach(file => {
-    appendTime(data, file)
-  })
+  const data = pipe(
+    [{name, from, to, priority, tags}],
+    createFormForAction,
+    (d)=>appendItemsByKey(d, files),
+    (d)=>{
+      files.forEach(file => appendTime(d, file))
+      return d
+    }
+  )
 
   return client.post('/action', data, {
     Headers: {
@@ -67,7 +70,7 @@ function appendItemsByKey(formData, items = [], key = 'files[]') {
 
 const appendTime = (formData, file, key = 'times[]')=>{
   formData.append(
-    key, `${file?.id || file.name};${file.time.value}`
+    key, `${file?.id || file.name};${Date.getSecondsFromTime(file.time.value)}`
   )
 }
 
@@ -90,7 +93,7 @@ const isImageFile = (file)=>(file?.type ?? file?.content_type).includes("image")
 
 export function assignTimeForImageFile(file, time = '00:15') {
   if( !isImageFile(file) ) return file;
-
+  
   time = Number.isInteger(time) ? Date.getTimeFromSeconds(time) : time;
 
   if( isRef(file.time) ){

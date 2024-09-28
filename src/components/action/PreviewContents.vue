@@ -1,7 +1,7 @@
 <script setup>
 import PreviewContentItem from '@/components/PreviewContentItem.vue';
 import ImageAndVideoPlayer from '@/components/ImageAndVideoPlayer.vue';
-import ImageTimesSetup from '@/components/action/ImageTimesSetup.vue';
+import ImageTimeInputs from '@/components/action/ImageTimeInputs.vue';
 
 import { ref, watch, reactive, computed } from 'vue';
 import { useStore } from '@/store/useStore';
@@ -52,6 +52,7 @@ let remoteFiles = ref([])
 let contents = computed(()=>[...remoteFiles.value, ...appendedFiles.value])
 
 let showTimesSetup = ref(false)
+
 let imageFiles = computed(()=>remoteFiles.value
     .filter(c=>c.type.includes('image'))
     .map(c=>c.file) 
@@ -121,7 +122,7 @@ const startPlayer = (content)=>{
 
   <q-separator class="q-mb-lg q-mt-md"/>
 
-  <image-times-setup
+  <image-time-inputs
       :disable="imageFiles.length == 0"
       :imageFiles="imageFiles"
       v-model="showTimesSetup"
