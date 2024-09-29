@@ -23,6 +23,10 @@ function onClick(event, typeTime = typeTime.SECONDS){
     let values = props.modelValue.split(":")
     values[typeTime] = ("00"+value).slice(-2)
 
+    if(values.join(":") == "00:00"){
+      return;
+    }
+
     emit('update:modelValue', values.join(":"))
   }
 }

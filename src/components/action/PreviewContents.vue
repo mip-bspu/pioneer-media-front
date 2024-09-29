@@ -59,10 +59,14 @@ let imageFiles = computed(()=>remoteFiles.value
   )
 
 watch(
+  ()=>imageFiles.value.length,
+  (length) => length == 0 && (showTimesSetup.value = false)
+)
+
+watch(
   ()=>props.selectedAction,
   async ()=>{
     clearChanges();
-    showTimesSetup.value = false
 
     if( !props.selectedAction?.files ) return; 
     let files = props.selectedAction.files

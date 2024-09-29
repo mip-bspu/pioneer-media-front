@@ -47,7 +47,12 @@ watch(
   <div class="properties__block">
     <label class="properties__input">
       <span>Название</span>
-      <q-input outlined dense v-model="setup.name"/>
+      <q-input 
+          outlined dense 
+          v-model="setup.name"
+          :rules="[val => val.length >= 3 || 'Имя должно быть не менее 3 символов']"
+          lazy-rules
+      />
     </label>
   </div>
 
