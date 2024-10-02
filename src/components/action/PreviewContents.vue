@@ -53,7 +53,7 @@ let contents = computed(()=>[...remoteFiles.value, ...appendedFiles.value])
 
 let showTimesSetup = ref(false)
 
-let imageFiles = computed(()=>remoteFiles.value
+let imageFiles = computed(()=>contents.value
     .filter(c=>c.type.includes('image'))
     .map(c=>c.file) 
   )
