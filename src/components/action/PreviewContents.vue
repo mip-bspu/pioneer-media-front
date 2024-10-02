@@ -53,7 +53,7 @@ let contents = computed(()=>[...remoteFiles.value, ...appendedFiles.value])
 
 let showTimesSetup = ref(false)
 
-let imageFiles = computed(()=>contents.value
+let imageFiles = computed(()=>remoteFiles.value
     .filter(c=>c.type.includes('image'))
     .map(c=>c.file) 
   )
@@ -144,16 +144,16 @@ const startPlayer = (content)=>{
             :loading="stateUpdateTimes.isLoading"
             color="primary" outline
             @click="onUpdateTimes"
-        >сохранить</q-btn>
+        >обновить длительность</q-btn>
       </div>
     </div>
   </template>
 
   <template v-else>
-    <template v-if="contents.length > 0">
+    <template v-if="remoteFiles.length > 0">
       <div class="content__images content__block">
         <preview-content-item
-            v-for="c in contents"
+            v-for="c in remoteFiles"
             :src-image="c.src"
             :data-file="c.file"
             @click="()=>startPlayer(c)"
@@ -173,6 +173,35 @@ const startPlayer = (content)=>{
           </template>
         </preview-content-item>
       </div>
+
+      <template v-if="appendedFiles.length > 0">
+        <q-separator class="q-my-md"/>
+
+        <span>Загрузить файлы:</span>
+
+        <div class="content__images content__block">
+          <preview-content-item
+              v-for="c in appendedFiles"
+              :src-image="c.src"
+              :data-file="c.file"
+              @click="()=>startPlayer(c)"
+              class="content__preview"
+              :bgStyle="{filter: isDeleting(c.file) ? 'grayscale(90%)' : 'grayscale(0)'}"
+          >
+            <template #icons>
+              <div class="content__icons">
+                <q-icon
+                    :name="isDeleting(c.file) ? 'mdi-close-circle-outline' : 'mdi-delete-circle-outline'"
+                    :class="{'content__deleting': isDeleting(c.file)}"
+                    @click.stop="()=>onDeleteOrCancelFile(c.file, c.local)"
+                />
+
+                <q-icon name="mdi-play-circle"/>
+              </div>
+            </template>
+          </preview-content-item>
+        </div>
+      </template>
     </template>
 
     <template v-else>
