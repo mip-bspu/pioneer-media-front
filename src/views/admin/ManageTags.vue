@@ -3,13 +3,13 @@ import ManageTagsToolbar from '@/components/tags/ManageTagsToolbar.vue'
 
 import { ref, watch } from 'vue'
 import { typeTag } from '@/utils/map.util.js'
-import { getTags, deleteTag } from '@/services/admin.service.js'
+import { getAllTags, deleteTag } from '@/services/admin.service.js'
 import { useAsync } from '@/composables/useAsync'
 
 
 const {
   exec: execGetTags
-} = useAsync(getTags, {globalError: true})
+} = useAsync(getAllTags, {globalError: true})
 
 const {
   exec: execDeleteTag

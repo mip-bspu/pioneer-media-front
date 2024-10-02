@@ -1,5 +1,7 @@
 <script setup>
-import { assignTimeForImageFile } from '@/services/action.service'
+import TimeInput from '@/components/UI/TimeInput.vue'
+
+import { isRef } from 'vue'
 
 defineProps({
   modelValue: { type: Boolean },
@@ -21,16 +23,24 @@ const emit = defineEmits(['update:modelValue'])
     <span class="image-setup__label">Настроить время показа изображений</span>
   </q-toggle>
 
-  <div class="image-setup__block" v-show="modelValue">
-    <div class="image-setup__times image-setup__wrapper">
-      <div v-for="file in imageFiles" class="image-setup__item">
-        <span class="ellipsis">{{ file.name }}</span>
+  <div v-show="modelValue">
+    <div class="image-setup__warn">Время не может быть равным 00:00</div>
 
-        <q-input 
-            @update:modelValue="(v)=>assignTimeForImageFile(file, v)" 
-            :modelValue="file.time"  
-            dense outlined type="time"
-        />
+    <div class="image-setup__block">
+      <div class="image-setup__times image-setup__wrapper">
+        <div 
+            v-for="file in imageFiles.sort((a, b)=>a.name.localeCompare(b.name))" 
+            class="image-setup__item"
+        >
+          <span class="ellipsis">{{ file.name }}</span>
+
+          <template v-if="isRef(file.time)"> <!-- I don't know why such a difference appeared -->
+            <time-input v-model="file.time.value"/>
+          </template>
+          <template v-else>
+            <time-input v-model="file.time"/>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +52,13 @@ const emit = defineEmits(['update:modelValue'])
   &__wrapper{
     display: flex;
     flex-direction: column;
+  }
+
+  &__warn{
+    color: rgb(138, 138, 138);;
+    font-size: 0.86rem;
+
+    padding: 0.8rem 0 0 0;
   }
 
   &__block{

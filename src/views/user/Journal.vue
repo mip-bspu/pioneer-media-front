@@ -43,6 +43,10 @@ async function onGetDevices(){
   if( !stateGetDevices.isError ){
     let opts = res.data.map(d=>({value: d.id, label: d.description}))
     
+    if( opts.length == 0 ){
+      return;
+    }
+
     options.value = opts
     device.value = opts[0].value
   }

@@ -1,6 +1,6 @@
 <script setup>
 import FileItem from '@/components/FileItem.vue';
-import ImageTimesSetup from '@/components/action/ImageTimesSetup.vue'
+import ImageTimeInputs from '@/components/action/ImageTimeInputs.vue'
 
 import { ref, computed, watch } from 'vue'
 import { priorityMessage } from '@/utils/map.util.js'
@@ -36,7 +36,7 @@ const imageFiles = props.addFiles && computed(()=>
   )
 
 watch(
-  ()=>imageFiles?.value?.length || 0,
+  ()=>imageFiles.value?.length || 0,
   (v)=>!v && (showSetupImages.value = false)
 )
 </script>
@@ -47,7 +47,12 @@ watch(
   <div class="properties__block">
     <label class="properties__input">
       <span>Название</span>
-      <q-input outlined dense v-model="setup.name"/>
+      <q-input 
+          outlined dense 
+          v-model="setup.name"
+          :rules="[val => val.length >= 3 || 'Имя должно быть не менее 3 символов']"
+          lazy-rules
+      />
     </label>
   </div>
 
@@ -91,7 +96,7 @@ watch(
   <template v-if="addFiles">
     <div class="properties__title">Контент</div>
 
-    <image-times-setup
+    <image-time-inputs
         :disable="!imageFiles.length"
         :imageFiles="imageFiles"
         v-model="showSetupImages"

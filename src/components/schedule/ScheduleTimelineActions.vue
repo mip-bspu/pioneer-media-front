@@ -21,10 +21,10 @@ watch(
   async (month)=>{
     const period = createPeriodMonths(month.year, month.current)
     const { data } = await getActionsFromPeriod({
-        tags: UserStore.getTags(), 
-        from: period.begin, 
-        to: period.end
-    }) // TODO: async request
+      tags: UserStore.getTags(), 
+      from: period.begin.setDate(period.begin.getDate()+1), 
+      to: period.end.setDate(period.end.getDate()+1)
+    })
 
     rangeDays.value = createTimeline(month.year, month.current, data)
   },

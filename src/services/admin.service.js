@@ -55,6 +55,10 @@ export function getTags(tags = null, types = null){
   })
 }
 
+export function getAllTags(){
+  return client.get(`/admin/tags/all`)
+}
+
 export function deleteTag(id){
   return client.delete(`/admin/tag/${id}`)
 }
