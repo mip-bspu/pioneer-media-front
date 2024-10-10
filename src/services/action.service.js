@@ -56,7 +56,7 @@ export function deleteAction(id){
 
 export function updateActionImageTimes(id, files) {
   return client.put(`/action/${id}/files`, {
-    times: files.map(f=>({ uuid: f.id, time: Date.getSecondsFromTime(f.time) })) 
+    times: files.map(f=>({ uuid: f.id, time: Date.getSecondsFromTime(getFileTime(f)) })) 
   })
 }
 
@@ -69,8 +69,12 @@ function appendItemsByKey(formData, items = [], key = 'files[]') {
 }
 
 const appendTime = (formData, file, key = 'times[]')=>{
+  let time = getFileTime(file)
+  if(!time){
+    return
+  }
   formData.append(
-    key, `${file?.id || file.name};${Date.getSecondsFromTime(file.time.value)}`
+    key, `${file?.id || file.name};${Date.getSecondsFromTime(time)}`
   )
 }
 
@@ -88,6 +92,8 @@ function createFormForAction({name, from, to, priority, tags = []}){
 
   return data
 }
+
+const getFileTime = (file) => file.time?.value || file.time
 
 const isImageFile = (file)=>(file?.type ?? file?.content_type).includes("image")
 
